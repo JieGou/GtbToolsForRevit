@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RevitAddIns>
   <AddIn Type="Application">
-    <Name>GTB</Name>
-    <Assembly>GTB.dll</Assembly>
-    <AddInId>391067E6-979B-43EF-86AD-7B67B4FB0E96</AddInId>
-    <FullClassName>DockableDialog.Ribbon</FullClassName>
+    <Name>GTB Tools</Name>
+    <Assembly>GtbTools.dll</Assembly>
+    <AddInId>7F37305F-BC7B-496F-BDAC-D1D3E27B9973</AddInId>
+    <FullClassName>GtbTools.App</FullClassName>
     <VendorId>GTB</VendorId>
     <VendorDescription>GTB Berlin</VendorDescription>
   </AddIn>
