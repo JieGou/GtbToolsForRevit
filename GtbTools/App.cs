@@ -7,6 +7,7 @@ using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using GtbTools.Forms;
 
 namespace GtbTools
 {
@@ -28,9 +29,7 @@ namespace GtbTools
         #endregion 
 
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
-
         RibbonItem _button;
-        PushButtonData _pushButtonData;
 
         /// <summary>
         /// Singleton external application class instance.
@@ -50,12 +49,10 @@ namespace GtbTools
             _app = this;
             string path = Assembly.GetExecutingAssembly().Location;
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
-
-            PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ImportCsvTables");
+            PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
             pushButtonGtbPanelControl.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbInactive.png"));
-
             _button = gtbPanel.AddItem(pushButtonGtbPanelControl);
-            _pushButtonData = pushButtonGtbPanelControl;
+            RegisterDockableWindow(application);
 
             return Result.Succeeded;
         }
@@ -65,24 +62,48 @@ namespace GtbTools
             return Result.Succeeded;
         }
 
-        public void Toggle()
+        public void Toggle(ExternalCommandData commandData)
         {
             if(_button.ItemText == "Anzeigen")
             {
                 _button.ItemText = "Ausblenden";
                 PushButton pb = _button as PushButton;
                 pb.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbActive.png"));
-
-                //_pushButtonData.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbActive.png"));
-
+                ShowDockableWindow(commandData);
             }
             else
             {
                 _button.ItemText = "Anzeigen";
                 PushButton pb = _button as PushButton;
                 pb.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbInactive.png"));
-                //_pushButtonData.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbInactive.png"));
+                HideDockableWindow(commandData);
             }
+        }
+
+        private void RegisterDockableWindow(UIControlledApplication app)
+        {
+            DockablePaneProviderData data = new DockablePaneProviderData();
+            GtbDockPage GtbDockableWindow = new GtbDockPage();
+            data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
+            data.InitialState = new DockablePaneState();
+            data.InitialState.DockPosition = DockPosition.Floating;
+            data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser;
+            DockablePaneId dpid = new DockablePaneId(new Guid("{B77218E1-927B-4E18-BF23-016E6EECA726}"));
+            app.RegisterDockablePane(dpid, "GTB-Berlin", GtbDockableWindow as IDockablePaneProvider);
+        }
+
+        private void ShowDockableWindow(ExternalCommandData commandData)
+        {
+            DockablePaneId dpid = new DockablePaneId(new Guid("{B77218E1-927B-4E18-BF23-016E6EECA726}"));
+            DockablePane dp = commandData.Application.GetDockablePane(dpid);
+            dp.Show();
+        }
+
+        private void HideDockableWindow(ExternalCommandData commandData)
+        {
+            DockablePaneId dpid = new DockablePaneId(new Guid("{B77218E1-927B-4E18-BF23-016E6EECA726}"));
+            DockablePane dp = commandData.Application.GetDockablePane(dpid);
+            dp.Hide();
         }
 
         private BitmapSource GetEmbeddedImage(string name)

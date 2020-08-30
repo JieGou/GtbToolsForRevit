@@ -1,0 +1,20 @@
+﻿<Page x:Class="GtbTools.Forms.GtbDockPage"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        Title="Dockable Dialogs"  Height="400" Width="200"
+        x:Name="DockableDialogs"  Background="White" Loaded="DockableDialogs_Loaded">
+    <Grid>
+
+        <StackPanel>
+            <Button Name="btn_stats" Click="PaneInfoButton_Click">Button 1</Button>
+            <Button Name="btn_wpf_stats" Click="wpf_stats_Click">Button 2</Button>
+            <Button Name="btn_getById" Click="btn_getById_Click">Button 3</Button>
+            <Button Name="btn_listTabs" Click="btn_listTabs_Click">Button 4</Button>
+        </StackPanel>
+        <Image Source="C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GTB_logo_org.png" VerticalAlignment="Bottom"></Image>
+    </Grid>
+
+</Page>
