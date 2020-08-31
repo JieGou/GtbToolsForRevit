@@ -78,7 +78,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\GTB_logo_new.png" />
+    <EmbeddedResource Include="Resources\GTB_logo_new.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
