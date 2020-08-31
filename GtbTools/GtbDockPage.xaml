@@ -12,9 +12,9 @@
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Background="LightGray">
-            <TabControl Background="LightGray" Height="250" HorizontalAlignment="Right" Width="200">
+            <TabControl Background="LightGray" Height="250">
                 <TabItem Header="Ansicht Tools">
-                    <Grid Background="White" HorizontalAlignment="Right" Width="194" Height="222" VerticalAlignment="Bottom">
+                    <Grid Background="White">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*"></RowDefinition>
@@ -25,7 +25,7 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="TabItem">
+                <TabItem Header="Info">
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
             </TabControl>
