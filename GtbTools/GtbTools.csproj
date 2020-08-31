@@ -68,8 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\GtbInactive.png" />
-    <EmbeddedResource Include="Resources\GTB_logo_org.jpg" />
-    <EmbeddedResource Include="Resources\GTB_logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="GtbDockPage.xaml">
@@ -78,7 +76,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\GTB_logo_new.png" />
+    <Resource Include="Resources\GTB_logo_new.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
