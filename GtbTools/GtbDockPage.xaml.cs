@@ -68,22 +68,7 @@ namespace GtbTools.Forms
             m_targetGuid = targetGuid;
         }
 
-        private void PaneInfoButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void wpf_stats_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btn_getById_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btn_listTabs_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
 
         }

@@ -8,6 +8,7 @@ using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using GtbTools.Forms;
+using Autodesk.Revit.UI.Events;
 
 namespace GtbTools
 {
@@ -31,14 +32,8 @@ namespace GtbTools
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
         RibbonItem _button;
 
-        /// <summary>
-        /// Singleton external application class instance.
-        /// </summary>
         internal static App _app = null;
 
-        /// <summary>
-        /// Provide access to singleton class instance.
-        /// </summary>
         public static App Instance
         {
             get { return _app; }
@@ -97,6 +92,26 @@ namespace GtbTools
             DockablePaneId dpid = new DockablePaneId(new Guid("{B77218E1-927B-4E18-BF23-016E6EECA726}"));
             DockablePane dp = commandData.Application.GetDockablePane(dpid);
             dp.Show();
+
+            commandData.Application.DockableFrameVisibilityChanged += new EventHandler<DockableFrameVisibilityChangedEventArgs>(Application_DockableFrameVisibilityChanged);
+
+            void Application_DockableFrameVisibilityChanged(object sender, DockableFrameVisibilityChangedEventArgs e)
+            {
+                if (dp.IsShown())
+                {
+                    _button.ItemText = "Ausblenden";
+                    PushButton pb = _button as PushButton;
+                    pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
+                    ShowDockableWindow(commandData);
+                }
+                else
+                {
+                    _button.ItemText = "Anzeigen";
+                    PushButton pb = _button as PushButton;
+                    pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
+                    HideDockableWindow(commandData);
+                }
+            }
         }
 
         private void HideDockableWindow(ExternalCommandData commandData)
