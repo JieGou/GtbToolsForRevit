@@ -14,7 +14,7 @@
             <Button Name="btn_getById" Click="btn_getById_Click">Button 3</Button>
             <Button Name="btn_listTabs" Click="btn_listTabs_Click">Button 4</Button>
         </StackPanel>
-        <Image Source="C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GTB_logo_org.jpg" VerticalAlignment="Bottom"></Image>
+        <Image Source="GtbTools\Resources\GTB_logo_org.jpg" VerticalAlignment="Bottom"></Image>
     </Grid>
 
 </Page>

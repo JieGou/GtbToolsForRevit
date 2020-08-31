@@ -50,7 +50,7 @@ namespace GtbTools
             string path = Assembly.GetExecutingAssembly().Location;
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
-            pushButtonGtbPanelControl.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbInactive.png"));
+            pushButtonGtbPanelControl.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
             _button = gtbPanel.AddItem(pushButtonGtbPanelControl);
             RegisterDockableWindow(application);
 
@@ -68,14 +68,14 @@ namespace GtbTools
             {
                 _button.ItemText = "Ausblenden";
                 PushButton pb = _button as PushButton;
-                pb.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbActive.png"));
+                pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
                 ShowDockableWindow(commandData);
             }
             else
             {
                 _button.ItemText = "Anzeigen";
                 PushButton pb = _button as PushButton;
-                pb.LargeImage = new BitmapImage(new Uri(@"C:\Users\Work\source\repos\GtbTools\GtbTools\Resources\GtbInactive.png"));
+                pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
                 HideDockableWindow(commandData);
             }
         }
