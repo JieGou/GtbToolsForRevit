@@ -93,25 +93,25 @@ namespace GtbTools
             DockablePane dp = commandData.Application.GetDockablePane(dpid);
             dp.Show();
 
-            commandData.Application.DockableFrameVisibilityChanged += new EventHandler<DockableFrameVisibilityChangedEventArgs>(Application_DockableFrameVisibilityChanged);
+            //commandData.Application.DockableFrameVisibilityChanged += new EventHandler<DockableFrameVisibilityChangedEventArgs>(Application_DockableFrameVisibilityChanged);
 
-            void Application_DockableFrameVisibilityChanged(object sender, DockableFrameVisibilityChangedEventArgs e)
-            {
-                if (dp.IsShown())
-                {
-                    _button.ItemText = "Ausblenden";
-                    PushButton pb = _button as PushButton;
-                    pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
-                    ShowDockableWindow(commandData);
-                }
-                else
-                {
-                    _button.ItemText = "Anzeigen";
-                    PushButton pb = _button as PushButton;
-                    pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
-                    HideDockableWindow(commandData);
-                }
-            }
+            //void Application_DockableFrameVisibilityChanged(object sender, DockableFrameVisibilityChangedEventArgs e)
+            //{
+            //    if (dp.IsShown())
+            //    {
+            //        _button.ItemText = "Ausblenden";
+            //        PushButton pb = _button as PushButton;
+            //        pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
+            //        ShowDockableWindow(commandData);
+            //    }
+            //    else
+            //    {
+            //        _button.ItemText = "Anzeigen";
+            //        PushButton pb = _button as PushButton;
+            //        pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
+            //        HideDockableWindow(commandData);
+            //    }
+            //}
         }
 
         private void HideDockableWindow(ExternalCommandData commandData)
