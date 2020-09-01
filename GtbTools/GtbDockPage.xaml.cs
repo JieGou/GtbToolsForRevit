@@ -29,6 +29,7 @@ namespace GtbTools.Forms
     {
         #region Data
         ExternalEvent _exEvent;
+        ExternalEvent _exEvent2;
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -36,9 +37,10 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(ExternalEvent exEvent)
+        public GtbDockPage(ExternalEvent exEvent, ExternalEvent exEvent2)
         {
             _exEvent = exEvent;
+            _exEvent2 = exEvent2;
             InitializeComponent();
         }
         public void SetupDockablePane(DockablePaneProviderData data)
@@ -69,7 +71,6 @@ namespace GtbTools.Forms
             m_bottom = bottom;
             m_targetGuid = targetGuid;
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _exEvent.Raise();
@@ -78,6 +79,11 @@ namespace GtbTools.Forms
         private void DockableDialogs_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            _exEvent2.Raise();
         }
     }
 }

@@ -14,7 +14,7 @@ using System.Linq;
 using System.ComponentModel;
 using System.Windows.Threading;
 
-namespace GtbMakros
+namespace GtbTools
 {
 	/// <summary>
 	/// This class will be used to link with GTB dock panel. Implement InotifyProperty change on VS

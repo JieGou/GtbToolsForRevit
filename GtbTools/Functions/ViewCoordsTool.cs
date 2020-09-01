@@ -14,7 +14,7 @@ using System.Linq;
 using System.Windows.Threading;
 using System.IO;
 
-namespace GtbMakros
+namespace GtbTools
 {
 	/// <summary>
 	/// To be used in actual dll
@@ -199,8 +199,8 @@ namespace GtbMakros
 		private bool IsFloorOrCeilingView(UIView uiView)
 		{
 			bool result = false;
-			View view = _uiDoc.Document.GetElement(uiView.ViewId) as View;
-			if(view.ViewType == ViewType.FloorPlan || view.ViewType == ViewType.CeilingPlan) result = true;
+			View v = _uiDoc.Document.GetElement(uiView.ViewId) as View;
+            if(v.ViewType == ViewType.FloorPlan || v.ViewType == ViewType.CeilingPlan || v.ViewType == ViewType.EngineeringPlan || v.ViewType == ViewType.AreaPlan) result = true;
 			return result;
 		}
 		

@@ -17,7 +17,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.ComponentModel;
 
-namespace GtbMakros
+namespace GtbTools
 {
 	/// <summary>
 	/// Interaction logic for ZoomWindow.xaml - must apply inotify property changed

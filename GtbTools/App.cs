@@ -30,6 +30,7 @@ namespace GtbTools
         #endregion 
 
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
+        public ErrorLog ErrorLog { get; set; }
         RibbonItem _button;
 
         internal static App _app = null;
@@ -42,6 +43,7 @@ namespace GtbTools
         public Result OnStartup(UIControlledApplication application)
         {
             _app = this;
+            ErrorLog = new ErrorLog();
             string path = Assembly.GetExecutingAssembly().Location;
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
@@ -57,7 +59,7 @@ namespace GtbTools
             return Result.Succeeded;
         }
 
-        public void Toggle(ExternalCommandData commandData)
+        public void Toggle(ExternalCommandData commandData, ErrorLog errorLog)
         {
             if(_button.ItemText == "Anzeigen")
             {
@@ -79,8 +81,12 @@ namespace GtbTools
         {
             IExternalEventHandler handler_event = new ExternalEventMy();
             ExternalEvent exEvent = ExternalEvent.Create(handler_event);
+
+            IExternalEventHandler handler_event2 = new ExternalEventMy2();
+            ExternalEvent exEvent2 = ExternalEvent.Create(handler_event2);
+
             DockablePaneProviderData data = new DockablePaneProviderData();
-            GtbDockPage GtbDockableWindow = new GtbDockPage(exEvent);
+            GtbDockPage GtbDockableWindow = new GtbDockPage(exEvent, exEvent2);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;

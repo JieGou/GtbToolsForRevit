@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 
-namespace GtbMakros
+namespace GtbTools
 {
 	/// <summary>
 	/// This class will be used to link with GTB dock panel. ModelView is used in OpenViewsTool class to create list for ZoomWindow.

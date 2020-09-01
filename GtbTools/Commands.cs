@@ -1,9 +1,6 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
-//temporary using gtbmakros
-using GtbMakros;
-
 
 namespace GtbTools
 {
@@ -31,7 +28,7 @@ namespace GtbTools
             //OpenViewsTool here and Zoomwindow
             ErrorLog errorLog = App.Instance.ErrorLog;
         	errorLog.WriteToLog("Initiated open view tools...");
-            OpenViewsTool openViewsTool = new OpenViewsTool(commandData.Application.ActiveUIDocument);
+            OpenViewsTool openViewsTool = new OpenViewsTool(commandData.Application.ActiveUIDocument, errorLog);
             openViewsTool.CreateModelViewList();
             
             ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
@@ -52,7 +49,7 @@ namespace GtbTools
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             //ViewCoordsTool here
-            ViewCoordsTool vct = new ViewCoordsTool(ActiveUIDocument);
+            ViewCoordsTool vct = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
 			vct.LoadCoordinatesFrom();
             return Result.Succeeded;
         }
@@ -66,7 +63,7 @@ namespace GtbTools
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             //ViewCoordsTool here
-            ViewCoordsTool vct = new ViewCoordsTool(ActiveUIDocument);
+            ViewCoordsTool vct = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
 			vct.SaveCurrentCoordinatesAs();
             return Result.Succeeded;
         }
@@ -80,9 +77,46 @@ namespace GtbTools
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             //ViewCoordsTool here
-            ViewCoordsTool vct = new ViewCoordsTool(ActiveUIDocument);
+            ViewCoordsTool vct = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
 			vct.ApplyCoordsToViews();
             return Result.Succeeded;
+        }
+    }
+
+    class ExternalEventMy : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+            vct.ApplyCoordsToViews();
+            TaskDialog.Show("info", "OK");
+        }
+        public string GetName()
+        {
+            return "1";
+        }
+    }
+
+    class ExternalEventMy2 : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Initiated open view tools...");
+            OpenViewsTool openViewsTool = new OpenViewsTool(uiapp.ActiveUIDocument, errorLog);
+            openViewsTool.CreateModelViewList();
+
+            ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
+            zoomWindow.ShowDialog();
+            if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
+            if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
+            ViewCoordsTool viewCoordsTool = new ViewCoordsTool(uiapp.ActiveUIDocument);
+            viewCoordsTool.ApplyCoordsToViews();
+            TaskDialog.Show("info", "OK2");
+        }
+        public string GetName()
+        {
+            return "1";
         }
     }
 }
