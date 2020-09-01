@@ -9,6 +9,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using GtbTools.Forms;
 using Autodesk.Revit.UI.Events;
+using GtbMakros;
 
 namespace GtbTools
 {
@@ -28,7 +29,8 @@ namespace GtbTools
         public const string AssemblyBuildVersion = "0";
         public const string AssemblyRevisionVersion = "0";
         #endregion 
-
+        
+        public ErrorLog ErrorLog {get; set;}
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
         RibbonItem _button;
 
@@ -42,11 +44,15 @@ namespace GtbTools
         public Result OnStartup(UIControlledApplication application)
         {
             _app = this;
+            ErrorLog = new ErrorLog();
             string path = Assembly.GetExecutingAssembly().Location;
+            ErrorLog.WriteToLog("Creating GTB ribbon panel in ad-ins tab...");
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
+            ErrorLog.WriteToLog("Creating GTB show hide dock button...");
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
             pushButtonGtbPanelControl.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
             _button = gtbPanel.AddItem(pushButtonGtbPanelControl);
+            ErrorLog.WriteToLog("Registering dockable window...");
             RegisterDockableWindow(application);
 
             return Result.Succeeded;
@@ -54,13 +60,15 @@ namespace GtbTools
 
         public Result OnShutdown(UIControlledApplication application)
         {
+        	ErrorLog.DeleteLog();
             return Result.Succeeded;
         }
 
-        public void Toggle(ExternalCommandData commandData)
+        public void Toggle(ExternalCommandData commandData, ErrorLog errorLog)
         {
             if(_button.ItemText == "Anzeigen")
             {
+            	errorLog.WriteToLog("Dock panel has been hidden");
                 _button.ItemText = "Ausblenden";
                 PushButton pb = _button as PushButton;
                 pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
@@ -68,6 +76,7 @@ namespace GtbTools
             }
             else
             {
+            	errorLog.WriteToLog("Dock panel has been shown");
                 _button.ItemText = "Anzeigen";
                 PushButton pb = _button as PushButton;
                 pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
