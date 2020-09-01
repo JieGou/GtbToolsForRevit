@@ -28,6 +28,7 @@ namespace GtbTools.Forms
     public partial class GtbDockPage : Page, Autodesk.Revit.UI.IDockablePaneProvider
     {
         #region Data
+        ExternalEvent _exEvent;
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -35,8 +36,9 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage()
+        public GtbDockPage(ExternalEvent exEvent)
         {
+            _exEvent = exEvent;
             InitializeComponent();
         }
         public void SetupDockablePane(DockablePaneProviderData data)
@@ -70,7 +72,7 @@ namespace GtbTools.Forms
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            _exEvent.Raise();
         }
 
         private void DockableDialogs_Loaded(object sender, RoutedEventArgs e)

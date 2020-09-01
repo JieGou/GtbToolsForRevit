@@ -14,4 +14,28 @@ namespace GtbTools
             return Result.Succeeded;
         }
     }
+
+    class ExternalEventMy : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            UIDocument uidoc = uiapp.ActiveUIDocument;
+            if (null == uidoc)
+            {
+                return; // no document, nothing to do
+            }
+            Document doc = uidoc.Document;
+            using (Transaction tx = new Transaction(doc))
+            {
+                tx.Start("MyEvent");
+                // Action within valid Revit API context thread
+                tx.Commit();
+            }
+            TaskDialog.Show("Info", "It's working");
+        }
+        public string GetName()
+        {
+            return "my event";
+        }
+    }
 }

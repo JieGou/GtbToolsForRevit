@@ -77,8 +77,10 @@ namespace GtbTools
 
         private void RegisterDockableWindow(UIControlledApplication app)
         {
+            IExternalEventHandler handler_event = new ExternalEventMy();
+            ExternalEvent exEvent = ExternalEvent.Create(handler_event);
             DockablePaneProviderData data = new DockablePaneProviderData();
-            GtbDockPage GtbDockableWindow = new GtbDockPage();
+            GtbDockPage GtbDockableWindow = new GtbDockPage(exEvent);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;
