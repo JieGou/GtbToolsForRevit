@@ -1,41 +1,88 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+//temporary using gtbmakros
+using GtbMakros;
+
 
 namespace GtbTools
 {
+	//Shows and hides GTB Dock Panel
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
     public class ShowHideDock : IExternalCommand
     {
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            App.Instance.Toggle(commandData);
+        	ErrorLog errorLog = App.Instance.ErrorLog;
+        	errorLog.WriteToLog("Changing DockPanel visibility state");
+            App.Instance.Toggle(commandData, errorLog);
             return Result.Succeeded;
         }
     }
-
-    class ExternalEventMy : IExternalEventHandler
+    
+    //Opens a new window where the user can choose which views to open
+    [Transaction(TransactionMode.Manual)]
+    [Regeneration(RegenerationOption.Manual)]
+    public class OpenViews : IExternalCommand
     {
-        public void Execute(UIApplication uiapp)
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            UIDocument uidoc = uiapp.ActiveUIDocument;
-            if (null == uidoc)
-            {
-                return; // no document, nothing to do
-            }
-            Document doc = uidoc.Document;
-            using (Transaction tx = new Transaction(doc))
-            {
-                tx.Start("MyEvent");
-                // Action within valid Revit API context thread
-                tx.Commit();
-            }
-            TaskDialog.Show("Info", "It's working");
+            //OpenViewsTool here and Zoomwindow
+            ErrorLog errorLog = App.Instance.ErrorLog;
+        	errorLog.WriteToLog("Initiated open view tools...");
+            OpenViewsTool openViewsTool = new OpenViewsTool(commandData.Application.ActiveUIDocument);
+            openViewsTool.CreateModelViewList();
+            
+            ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
+            if(openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
+            if(openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
+            ViewCoordsTool viewCoordsTool = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
+            viewCoordsTool.ApplyCoordsToViews();
+            
+            return Result.Succeeded;
         }
-        public string GetName()
+    }
+    
+    //Loads coordinates from file
+    [Transaction(TransactionMode.Manual)]
+    [Regeneration(RegenerationOption.Manual)]
+    public class LoadCoords : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
-            return "my event";
+            //ViewCoordsTool here
+            ViewCoordsTool vct = new ViewCoordsTool(ActiveUIDocument);
+			vct.LoadCoordinatesFrom();
+            return Result.Succeeded;
+        }
+    }
+    
+    //Saves coordinates to file
+    [Transaction(TransactionMode.Manual)]
+    [Regeneration(RegenerationOption.Manual)]
+    public class SaveCoords : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            //ViewCoordsTool here
+            ViewCoordsTool vct = new ViewCoordsTool(ActiveUIDocument);
+			vct.SaveCurrentCoordinatesAs();
+            return Result.Succeeded;
+        }
+    }
+    
+    //Copy current coordinates to all open views
+    [Transaction(TransactionMode.Manual)]
+    [Regeneration(RegenerationOption.Manual)]
+    public class CopyCoords : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            //ViewCoordsTool here
+            ViewCoordsTool vct = new ViewCoordsTool(ActiveUIDocument);
+			vct.ApplyCoordsToViews();
+            return Result.Succeeded;
         }
     }
 }
