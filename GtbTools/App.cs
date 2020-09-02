@@ -56,10 +56,11 @@ namespace GtbTools
 
         public Result OnShutdown(UIControlledApplication application)
         {
+            ErrorLog.DeleteLog();
             return Result.Succeeded;
         }
 
-        public void Toggle(ExternalCommandData commandData, ErrorLog errorLog)
+        public void Toggle(ExternalCommandData commandData)
         {
             if(_button.ItemText == "Anzeigen")
             {
@@ -79,25 +80,34 @@ namespace GtbTools
 
         private void RegisterDockableWindow(UIControlledApplication app)
         {
-            IExternalEventHandler handler_event = new ExternalEventMy();
+            IExternalEventHandler handler_event = new ExternalEventApplyCoordsToViews();
             ExternalEvent exEvent = ExternalEvent.Create(handler_event);
 
-            IExternalEventHandler handler_event2 = new ExternalEventMy2();
+            IExternalEventHandler handler_event2 = new ExternalEventOpenViews();
             ExternalEvent exEvent2 = ExternalEvent.Create(handler_event2);
 
+            IExternalEventHandler handler_event3 = new ExternalEventSaveCoords();
+            ExternalEvent exEvent3 = ExternalEvent.Create(handler_event3);
+
+            IExternalEventHandler handler_event4 = new ExternalEventOpenCoords();
+            ExternalEvent exEvent4 = ExternalEvent.Create(handler_event4);
+
             DockablePaneProviderData data = new DockablePaneProviderData();
-            GtbDockPage GtbDockableWindow = new GtbDockPage(exEvent, exEvent2);
+
+            GtbDockPage GtbDockableWindow = new GtbDockPage(exEvent, exEvent2, exEvent3, exEvent4);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
-            data.InitialState.DockPosition = DockPosition.Floating;
+            data.InitialState.DockPosition = DockPosition.Tabbed;
             data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser;
-            DockablePaneId dpid = new DockablePaneId(new Guid("{B77218E1-927B-4E18-BF23-016E6EECA726}"));
+
+            DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
+            
             app.RegisterDockablePane(dpid, "GTB-Berlin", GtbDockableWindow as IDockablePaneProvider);
         }
 
         private void ShowDockableWindow(ExternalCommandData commandData)
         {
-            DockablePaneId dpid = new DockablePaneId(new Guid("{B77218E1-927B-4E18-BF23-016E6EECA726}"));
+            DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             DockablePane dp = commandData.Application.GetDockablePane(dpid);
             dp.Show();
 
@@ -124,7 +134,7 @@ namespace GtbTools
 
         private void HideDockableWindow(ExternalCommandData commandData)
         {
-            DockablePaneId dpid = new DockablePaneId(new Guid("{B77218E1-927B-4E18-BF23-016E6EECA726}"));
+            DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             DockablePane dp = commandData.Application.GetDockablePane(dpid);
             dp.Hide();
         }

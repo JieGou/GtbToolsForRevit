@@ -13,7 +13,7 @@ namespace GtbTools
         {
         	ErrorLog errorLog = App.Instance.ErrorLog;
         	errorLog.WriteToLog("Changing DockPanel visibility state");
-            App.Instance.Toggle(commandData, errorLog);
+            App.Instance.Toggle(commandData);
             return Result.Succeeded;
         }
     }
@@ -83,21 +83,20 @@ namespace GtbTools
         }
     }
 
-    class ExternalEventMy : IExternalEventHandler
+    class ExternalEventApplyCoordsToViews : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
             vct.ApplyCoordsToViews();
-            TaskDialog.Show("info", "OK");
         }
         public string GetName()
         {
-            return "1";
+            return "Applied coords to views";
         }
     }
 
-    class ExternalEventMy2 : IExternalEventHandler
+    class ExternalEventOpenViews : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
@@ -111,12 +110,41 @@ namespace GtbTools
             if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
             if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
             ViewCoordsTool viewCoordsTool = new ViewCoordsTool(uiapp.ActiveUIDocument);
-            viewCoordsTool.ApplyCoordsToViews();
-            TaskDialog.Show("info", "OK2");
+            if (openViewsTool.WindowResult == WindowResult.UserApply) viewCoordsTool.ApplyCoordsToViews();
         }
         public string GetName()
         {
-            return "1";
+            return "Opened multiple views";
+        }
+    }
+
+    class ExternalEventSaveCoords : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Saving coordinates to file...");
+            ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+            vct.SaveCurrentCoordinatesAs();
+        }
+        public string GetName()
+        {
+            return "Saved coordinates";
+        }
+    }
+
+    class ExternalEventOpenCoords : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Loading coordinates from file...");
+            ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+            vct.LoadCoordinatesFrom();
+        }
+        public string GetName()
+        {
+            return "Loaded coordinates";
         }
     }
 }

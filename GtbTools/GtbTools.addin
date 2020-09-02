@@ -3,7 +3,7 @@
   <AddIn Type="Application">
     <Name>GTB Tools</Name>
     <Assembly>GtbTools.dll</Assembly>
-    <AddInId>7F37305F-BC7B-496F-BDAC-D1D3E27B9973</AddInId>
+    <AddInId>DCBCD363-075C-45FB-908C-37F056A76861</AddInId>
     <FullClassName>GtbTools.App</FullClassName>
     <VendorId>GTB</VendorId>
     <VendorDescription>GTB Berlin</VendorDescription>

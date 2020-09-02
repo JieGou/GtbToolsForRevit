@@ -178,6 +178,7 @@ namespace GtbTools
 	}
 	public enum WindowResult
 	{
+        None,
 		UserApply,
 		UserClosed
 	}

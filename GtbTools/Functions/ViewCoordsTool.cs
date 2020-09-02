@@ -107,8 +107,9 @@ namespace GtbTools
 			dlg.FileName = name; // Default file name
 			dlg.DefaultExt = ".txt"; // Default file extension
 			dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
-			dlg.InitialDirectory = @"H:\Revit\Makros\Gemeinsam genutzte Dateien\Koordinaten";
-			Nullable<bool> result =  dlg.ShowDialog();
+            string initialDirectory = Path.Combine(@"H:\Revit\Makros\Gemeinsam genutzte Dateien", Environment.UserName);
+            if (Directory.Exists(initialDirectory)) dlg.InitialDirectory = initialDirectory;
+            Nullable<bool> result =  dlg.ShowDialog();
 			
 			if (result == true)
 			{
@@ -122,8 +123,11 @@ namespace GtbTools
 		{
 			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 			dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
-			dlg.InitialDirectory = @"H:\Revit\Makros\Gemeinsam genutzte Dateien\Koordinaten";
-			Nullable<bool> result = dlg.ShowDialog();
+
+            string initialDirectory = Path.Combine(@"H:\Revit\Makros\Gemeinsam genutzte Dateien", Environment.UserName);
+            if (Directory.Exists(initialDirectory)) dlg.InitialDirectory = initialDirectory;
+
+            Nullable<bool> result = dlg.ShowDialog();
 			
 			if (result == true)
 			{

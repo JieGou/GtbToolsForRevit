@@ -4,15 +4,15 @@
         xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
-        Title="Dockable Dialogs"  Height="360" Width="200"
+        Title="Dockable Dialogs"  Height="{Binding SystemParameters.PrimaryScreenHeight}" Width="{Binding SystemParameters.PrimaryScreenWidth}" MinHeight="360" MinWidth="250"
         x:Name="DockableDialogs"  Background="White" Loaded="DockableDialogs_Loaded">
-    <Grid Background="LightGray">
+    <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"></RowDefinition>
             <RowDefinition Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Background="LightGray">
-            <TabControl Background="LightGray" Margin="0">
+        <StackPanel Background="White">
+            <TabControl Background="White" Margin="0">
                 <TabItem Header="Ansicht Tools">
                     <Grid Background="White" Height="270">
                         <Grid.RowDefinitions>
@@ -23,10 +23,10 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Button Content="Ansichten Öffnen" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_1"/>
-                        <Button Content="Koordinaten laden aus" Margin="5,5,6,5" Grid.Row="2"/>
-                        <Button Content="Koordinate speichern unter" Margin="5,5,6,5" Grid.Row="3"/>
-                        <Button Content="Koordinaten kopieren in alle Ansichten" Margin="5,5,6,5" Grid.Row="4"/>
+                        <Button Content="Ansichten Öffnen" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_OpenViews"/>
+                        <Button Content="Koordinaten laden aus" Margin="5,5,6,5" Grid.Row="2" Click="Button_Click_LoadCoords"/>
+                        <Button Content="Koordinaten speichern unter" Margin="5,5,6,5" Grid.Row="3" Click="Button_Click_SaveCoords"/>
+                        <Button Content="Koordinaten kopieren in alle Ansichten" Margin="5,5,6,5" Grid.Row="4" Click="Button_Click_CopyCoords"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="...">

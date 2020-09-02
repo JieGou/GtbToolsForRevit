@@ -28,8 +28,10 @@ namespace GtbTools.Forms
     public partial class GtbDockPage : Page, Autodesk.Revit.UI.IDockablePaneProvider
     {
         #region Data
-        ExternalEvent _exEvent;
-        ExternalEvent _exEvent2;
+        ExternalEvent _exEventCopyCoords;
+        ExternalEvent _exEventOpenViews;
+        ExternalEvent _exEventSaveCoords;
+        ExternalEvent _exEventLoadCoords;
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -37,10 +39,12 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(ExternalEvent exEvent, ExternalEvent exEvent2)
+        public GtbDockPage(ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords)
         {
-            _exEvent = exEvent;
-            _exEvent2 = exEvent2;
+            _exEventCopyCoords = exEventCopyCoords;
+            _exEventOpenViews = exEventOpenViews;
+            _exEventLoadCoords = exEventLoadCoords;
+            _exEventSaveCoords = exEventSaveCoords;
             InitializeComponent();
         }
         public void SetupDockablePane(DockablePaneProviderData data)
@@ -71,19 +75,30 @@ namespace GtbTools.Forms
             m_bottom = bottom;
             m_targetGuid = targetGuid;
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            _exEvent.Raise();
-        }
 
         private void DockableDialogs_Loaded(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Button_Click_OpenViews(object sender, RoutedEventArgs e)
         {
-            _exEvent2.Raise();
+            _exEventOpenViews.Raise();
+        }
+
+        private void Button_Click_CopyCoords(object sender, RoutedEventArgs e)
+        {
+            _exEventCopyCoords.Raise();
+        }
+
+        private void Button_Click_SaveCoords(object sender, RoutedEventArgs e)
+        {
+            _exEventSaveCoords.Raise();
+        }
+
+        private void Button_Click_LoadCoords(object sender, RoutedEventArgs e)
+        {
+            _exEventLoadCoords.Raise();
         }
     }
 }
