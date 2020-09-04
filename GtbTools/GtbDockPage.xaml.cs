@@ -19,6 +19,7 @@ using System.Configuration;
 using System.Collections.Generic;
 using Autodesk.Revit.UI;
 using System.Text;
+using GtbTools.Excel;
 
 namespace GtbTools.Forms
 {
@@ -32,6 +33,7 @@ namespace GtbTools.Forms
         ExternalEvent _exEventOpenViews;
         ExternalEvent _exEventSaveCoords;
         ExternalEvent _exEventLoadCoords;
+        ExternalEvent _exEventExcel;
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -39,12 +41,13 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords)
+        public GtbDockPage(ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
             _exEventLoadCoords = exEventLoadCoords;
             _exEventSaveCoords = exEventSaveCoords;
+            _exEventExcel = exEventExcel;
             InitializeComponent();
         }
         public void SetupDockablePane(DockablePaneProviderData data)
@@ -99,6 +102,11 @@ namespace GtbTools.Forms
         private void Button_Click_LoadCoords(object sender, RoutedEventArgs e)
         {
             _exEventLoadCoords.Raise();
+        }
+
+        private void Button_Click_ExcelDataImport(object sender, RoutedEventArgs e)
+        {
+            _exEventExcel.Raise();
         }
     }
 }

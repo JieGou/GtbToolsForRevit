@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using GtbTools.GUI;
 
 namespace GtbTools
 {
@@ -145,6 +146,21 @@ namespace GtbTools
         public string GetName()
         {
             return "Loaded coordinates";
+        }
+    }
+
+    
+
+    class ExternalEventExcelDataImporter : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ExcelDataImport excelDataImport = new ExcelDataImport();
+            excelDataImport.ShowDialog();
+        }
+        public string GetName()
+        {
+            return "Excel data import";
         }
     }
 }

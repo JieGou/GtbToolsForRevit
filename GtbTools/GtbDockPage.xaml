@@ -4,7 +4,7 @@
         xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
-        Title="Dockable Dialogs"  Height="{Binding SystemParameters.PrimaryScreenHeight}" Width="{Binding SystemParameters.PrimaryScreenWidth}" MinHeight="360" MinWidth="250"
+        Title="Dockable Dialogs" Height="360" Width="250"
         x:Name="DockableDialogs"  Background="White" Loaded="DockableDialogs_Loaded">
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -29,9 +29,9 @@
                         <Button Content="Koordinaten kopieren in alle Ansichten" Margin="5,5,6,5" Grid.Row="4" Click="Button_Click_CopyCoords"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="...">
+                <TabItem Header="Excel Tools">
                     <Grid Background="White">
-
+                        <Button Content="Excel Cell Data Insert" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_ExcelDataImport"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">
