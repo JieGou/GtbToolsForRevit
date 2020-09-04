@@ -7,7 +7,6 @@ using System.Windows;
 
 namespace GtbTools
 {
-	//Shows and hides GTB Dock Panel
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
     public class ShowHideDock : IExternalCommand
@@ -27,7 +26,6 @@ namespace GtbTools
                 errorLog.WriteToLog(ex.ToString());
                 return Result.Failed;
             }
-
         }
     }
 
@@ -41,13 +39,13 @@ namespace GtbTools
             {
                 ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
                 vct.ApplyCoordsToViews();
-            }
+        }
             catch (Exception ex)
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
                 errorLog.WriteToLog(ex.ToString());
             }
-        }
+}
         public string GetName()
         {
             return "Applied coords to views";
@@ -128,9 +126,7 @@ namespace GtbTools
         {
             return "Loaded coordinates";
         }
-    }
-
-    
+    }        
 
     class ExternalEventExcelDataImporter : IExternalEventHandler
     {

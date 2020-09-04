@@ -25,8 +25,8 @@ namespace GtbTools
         public const string AssemblyYear = "2020";
 #endif
         public const string AssemblyMinorVersion = "1";
-        public const string AssemblyBuildVersion = "0";
-        public const string AssemblyRevisionVersion = "0";
+        public const string AssemblyBuildVersion = "1";
+        public const string AssemblyRevisionVersion = "1";
         #endregion
 
         public static string PlugInVersion
@@ -109,7 +109,7 @@ namespace GtbTools
 
             DockablePaneProviderData data = new DockablePaneProviderData();
 
-            GtbDockPage GtbDockableWindow = new GtbDockPage(exEvent, exEvent2, exEvent3, exEvent4, exEvent5);
+            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Tabbed;

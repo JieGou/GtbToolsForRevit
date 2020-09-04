@@ -41,7 +41,7 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -49,12 +49,13 @@ namespace GtbTools.Forms
             _exEventSaveCoords = exEventSaveCoords;
             _exEventExcel = exEventExcel;
             InitializeComponent();
+            LblVersion.Content += plugInVersion;
         }
         public void SetupDockablePane(DockablePaneProviderData data)
         {
             data.FrameworkElement = this as FrameworkElement;
             data.InitialState = new Autodesk.Revit.UI.DockablePaneState();
-            data.InitialState.DockPosition = DockPosition.Floating;
+            data.InitialState.DockPosition = DockPosition.Tabbed;
             //DockablePaneId targetPane;
             //if (m_targetGuid == Guid.Empty)
             //    targetPane = null;

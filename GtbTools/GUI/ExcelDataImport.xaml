@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="ExcelDataInsert" Height="462" Width="814"
         WindowStartupLocation="CenterScreen"
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown"
+        ResizeMode="NoResize">
     <Grid x:Name="myGrid" Focusable="True">
         <ListBox x:Name="CheckBoxList" ItemsSource="{Binding ExcelDataImporter.FileList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="445">
             <ListBox.ItemTemplate>
