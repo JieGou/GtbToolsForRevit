@@ -45,7 +45,9 @@ namespace GtbTools.Excel
 
         public void CreateExcelPathList()
         {
-            _excelPathList = Directory.GetFiles(_searchDirectory, "*.xlsx", SearchOption.AllDirectories);
+            _excelPathList = Directory.EnumerateFiles(_searchDirectory, "*.xlsx", SearchOption.AllDirectories).Take(20).ToArray();
+            if (_excelPathList.Length == 20) MessageBox.Show("Fur die Sicherheit die Anzahl der Dateien wurde auf 20 begrentz.");
+            //_excelPathList = Directory.GetFiles(_searchDirectory, "*.xlsx", SearchOption.AllDirectories);
             //MessageBox.Show(_excelPathList.Length.ToString());
         }
 

@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using GtbTools.Excel;
 using System.ComponentModel;
 
@@ -36,8 +28,6 @@ namespace GtbTools.GUI
             }
         }
         public bool ClearSelectAllEnabled { get; set; } = false;
-        private bool _userAllowed;
-        private bool _processApproved;
         public bool ProcessApproved
         {
             get => _processApproved;
@@ -50,6 +40,7 @@ namespace GtbTools.GUI
                 }
             }
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {
@@ -60,7 +51,10 @@ namespace GtbTools.GUI
         bool _isInteger = false;
         bool _isLetter = false;
 
-        public ExcelDataImport()
+        private bool _userAllowed;
+        private bool _processApproved;
+
+        public ExcelDataImport(IntPtr windowHandle)
         {
             DataContext = this;
             Topmost = true;
@@ -86,7 +80,6 @@ namespace GtbTools.GUI
                 }
             }
             if (string.IsNullOrEmpty(searchDirectory)) return;
-            //MessageBox.Show(searchDirectory);
             ExcelDataImporter = new ExcelDataImporter(searchDirectory, filter);
         }
 

@@ -136,7 +136,7 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated excel data import");
             try
             {
-                ExcelDataImport excelDataImport = new ExcelDataImport();
+                ExcelDataImport excelDataImport = new ExcelDataImport(uiapp.MainWindowHandle);
                 excelDataImport.ShowDialog();
             }
             catch (Exception ex)

@@ -33,6 +33,7 @@ namespace GtbTools
 			InitializeComponent();
 			DataContext = this;
 			Topmost = true;
+            
 		}
 		
 		public void FilterList(string filter)

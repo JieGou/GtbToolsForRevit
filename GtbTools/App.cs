@@ -112,7 +112,8 @@ namespace GtbTools
             GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
-            data.InitialState.DockPosition = DockPosition.Tabbed;
+            data.InitialState.DockPosition = DockPosition.Floating;
+            data.InitialState.SetFloatingRectangle(new Autodesk.Revit.DB.Rectangle(100, 100, 360, 540));
             data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser;
 
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));

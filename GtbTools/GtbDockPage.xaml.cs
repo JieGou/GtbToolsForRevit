@@ -55,16 +55,16 @@ namespace GtbTools.Forms
         {
             data.FrameworkElement = this as FrameworkElement;
             data.InitialState = new Autodesk.Revit.UI.DockablePaneState();
-            data.InitialState.DockPosition = DockPosition.Tabbed;
+            data.InitialState.DockPosition = DockPosition.Floating;
             //DockablePaneId targetPane;
             //if (m_targetGuid == Guid.Empty)
             //    targetPane = null;
             //else targetPane = new DockablePaneId(m_targetGuid);
             //if (m_position == DockPosition.Tabbed)
-            data.InitialState.TabBehind = Autodesk.Revit.UI.DockablePanes.BuiltInDockablePanes.ProjectBrowser;
+            //data.InitialState.TabBehind = Autodesk.Revit.UI.DockablePanes.BuiltInDockablePanes.ProjectBrowser;
             //if (m_position == DockPosition.Floating)
             //{
-            //data.InitialState.SetFloatingRectangle(new Autodesk.Revit.UI.Rectangle(10, 710, 10, 710));
+            data.InitialState.SetFloatingRectangle(new Autodesk.Revit.DB.Rectangle(100, 100, 360, 540));
             //data.InitialState.DockPosition = DockPosition.Tabbed;
             //}
             //Log.Message("***Intial docking parameters***");

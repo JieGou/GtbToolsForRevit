@@ -14,14 +14,13 @@
         <StackPanel Background="White">
             <TabControl Background="White" Margin="0" SelectedIndex="3">
                 <TabItem Header="Ansicht Tools">
-                    <Grid Background="White" Height="270">
+                    <Grid Background="White">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button Content="Ansichten Öffnen" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_OpenViews"/>
                         <Button Content="Koordinaten laden aus" Margin="5,5,6,5" Grid.Row="2" Click="Button_Click_LoadCoords"/>
