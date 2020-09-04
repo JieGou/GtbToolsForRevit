@@ -2,6 +2,8 @@
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using GtbTools.GUI;
+using System;
+using System.Windows;
 
 namespace GtbTools
 {
@@ -14,73 +16,18 @@ namespace GtbTools
         {
         	ErrorLog errorLog = App.Instance.ErrorLog;
         	errorLog.WriteToLog("Changing DockPanel visibility state");
-            App.Instance.Toggle(commandData);
-            return Result.Succeeded;
-        }
-    }
-    
-    //Opens a new window where the user can choose which views to open
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
-    public class OpenViews : IExternalCommand
-    {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
-            //OpenViewsTool here and Zoomwindow
-            ErrorLog errorLog = App.Instance.ErrorLog;
-        	errorLog.WriteToLog("Initiated open view tools...");
-            OpenViewsTool openViewsTool = new OpenViewsTool(commandData.Application.ActiveUIDocument, errorLog);
-            openViewsTool.CreateModelViewList();
-            
-            ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
-            if(openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
-            if(openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
-            ViewCoordsTool viewCoordsTool = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
-            viewCoordsTool.ApplyCoordsToViews();
-            
-            return Result.Succeeded;
-        }
-    }
-    
-    //Loads coordinates from file
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
-    public class LoadCoords : IExternalCommand
-    {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
-            //ViewCoordsTool here
-            ViewCoordsTool vct = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
-			vct.LoadCoordinatesFrom();
-            return Result.Succeeded;
-        }
-    }
-    
-    //Saves coordinates to file
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
-    public class SaveCoords : IExternalCommand
-    {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
-            //ViewCoordsTool here
-            ViewCoordsTool vct = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
-			vct.SaveCurrentCoordinatesAs();
-            return Result.Succeeded;
-        }
-    }
-    
-    //Copy current coordinates to all open views
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
-    public class CopyCoords : IExternalCommand
-    {
-        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-        {
-            //ViewCoordsTool here
-            ViewCoordsTool vct = new ViewCoordsTool(commandData.Application.ActiveUIDocument);
-			vct.ApplyCoordsToViews();
-            return Result.Succeeded;
+            try
+            {
+                App.Instance.Toggle(commandData);
+                return Result.Succeeded;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                return Result.Failed;
+            }
+
         }
     }
 
@@ -88,8 +35,18 @@ namespace GtbTools
     {
         public void Execute(UIApplication uiapp)
         {
-            ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
-            vct.ApplyCoordsToViews();
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Multi apply coords to view");
+            try
+            {
+                ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                vct.ApplyCoordsToViews();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+            }
         }
         public string GetName()
         {
@@ -103,15 +60,23 @@ namespace GtbTools
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
             errorLog.WriteToLog("Initiated open view tools...");
-            OpenViewsTool openViewsTool = new OpenViewsTool(uiapp.ActiveUIDocument, errorLog);
-            openViewsTool.CreateModelViewList();
+            try
+            {
+                OpenViewsTool openViewsTool = new OpenViewsTool(uiapp.ActiveUIDocument, errorLog);
+                openViewsTool.CreateModelViewList();
 
-            ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
-            zoomWindow.ShowDialog();
-            if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
-            if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
-            ViewCoordsTool viewCoordsTool = new ViewCoordsTool(uiapp.ActiveUIDocument);
-            if (openViewsTool.WindowResult == WindowResult.UserApply) viewCoordsTool.ApplyCoordsToViews();
+                ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
+                zoomWindow.ShowDialog();
+                if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
+                if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
+                ViewCoordsTool viewCoordsTool = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                if (openViewsTool.WindowResult == WindowResult.UserApply) viewCoordsTool.ApplyCoordsToViews();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+            }
         }
         public string GetName()
         {
@@ -125,8 +90,16 @@ namespace GtbTools
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
             errorLog.WriteToLog("Saving coordinates to file...");
-            ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
-            vct.SaveCurrentCoordinatesAs();
+            try
+            {
+                ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                vct.SaveCurrentCoordinatesAs();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+            }
         }
         public string GetName()
         {
@@ -140,8 +113,16 @@ namespace GtbTools
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
             errorLog.WriteToLog("Loading coordinates from file...");
-            ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
-            vct.LoadCoordinatesFrom();
+            try
+            {
+                ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                vct.LoadCoordinatesFrom();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+            }
         }
         public string GetName()
         {
@@ -155,8 +136,18 @@ namespace GtbTools
     {
         public void Execute(UIApplication uiapp)
         {
-            ExcelDataImport excelDataImport = new ExcelDataImport();
-            excelDataImport.ShowDialog();
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Initiated excel data import");
+            try
+            {
+                ExcelDataImport excelDataImport = new ExcelDataImport();
+                excelDataImport.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+            }
         }
         public string GetName()
         {

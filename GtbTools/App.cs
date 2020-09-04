@@ -24,10 +24,22 @@ namespace GtbTools
 #elif DEBUG2020 || RELEASE2020
         public const string AssemblyYear = "2020";
 #endif
-        public const string AssemblyMinorVersion = "0";
+        public const string AssemblyMinorVersion = "1";
         public const string AssemblyBuildVersion = "0";
         public const string AssemblyRevisionVersion = "0";
-        #endregion 
+        #endregion
+
+        public static string PlugInVersion
+        {
+            get
+            {
+                return string.Format("{0}.{1}.{2}.{3}",
+                                AssemblyYear,
+                                AssemblyMinorVersion,
+                                AssemblyBuildVersion,
+                                AssemblyRevisionVersion);
+            }
+        }
 
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
         public ErrorLog ErrorLog { get; set; }
@@ -113,26 +125,6 @@ namespace GtbTools
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             DockablePane dp = commandData.Application.GetDockablePane(dpid);
             dp.Show();
-
-            //commandData.Application.DockableFrameVisibilityChanged += new EventHandler<DockableFrameVisibilityChangedEventArgs>(Application_DockableFrameVisibilityChanged);
-
-            //void Application_DockableFrameVisibilityChanged(object sender, DockableFrameVisibilityChangedEventArgs e)
-            //{
-            //    if (dp.IsShown())
-            //    {
-            //        _button.ItemText = "Ausblenden";
-            //        PushButton pb = _button as PushButton;
-            //        pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
-            //        ShowDockableWindow(commandData);
-            //    }
-            //    else
-            //    {
-            //        _button.ItemText = "Anzeigen";
-            //        PushButton pb = _button as PushButton;
-            //        pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
-            //        HideDockableWindow(commandData);
-            //    }
-            //}
         }
 
         private void HideDockableWindow(ExternalCommandData commandData)
