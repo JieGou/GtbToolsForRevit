@@ -1,9 +1,12 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Functions;
 using GtbTools.GUI;
+using GUI;
 using System;
 using System.Windows;
+using ViewModels;
 
 namespace GtbTools
 {
@@ -154,6 +157,32 @@ namespace GtbTools
         public string GetName()
         {
             return "Excel data import";
+        }
+    }
+
+    class ExternalEventSymbolHandler : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Initiated symbol handler");
+            try
+            {
+                OpeningWindowMainViewModel openingWindowMainViewModel = OpeningWindowMainViewModel.Initialize(uiapp.ActiveUIDocument.Document);
+                OpeningsMainWindow openingsMainWindow = new OpeningsMainWindow(openingWindowMainViewModel);
+                openingsMainWindow.ShowDialog();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Symbol handler";
         }
     }
 }

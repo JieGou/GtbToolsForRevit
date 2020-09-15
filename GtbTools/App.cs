@@ -9,6 +9,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using GtbTools.Forms;
 using Autodesk.Revit.UI.Events;
+using ViewModels;
 
 namespace GtbTools
 {
@@ -107,9 +108,13 @@ namespace GtbTools
             IExternalEventHandler handler_event5 = new ExternalEventExcelDataImporter();
             ExternalEvent exEvent5 = ExternalEvent.Create(handler_event5);
 
+            IExternalEventHandler handler_event6 = new ExternalEventSymbolHandler();
+            ExternalEvent exEvent6 = ExternalEvent.Create(handler_event6);
+
+
             DockablePaneProviderData data = new DockablePaneProviderData();
 
-            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5);
+            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;

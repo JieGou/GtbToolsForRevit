@@ -66,17 +66,29 @@
     <Compile Include="Excel\ExcelFileData.cs" />
     <Compile Include="Excel\ExcelWrapper.cs" />
     <Compile Include="Excel\Report.cs" />
+    <Compile Include="Functions\OpeningSymbolTool.cs" />
     <Compile Include="Functions\OpenViewsTool.cs" />
     <Compile Include="Functions\ViewCoordsTool.cs" />
     <Compile Include="GUI\ExcelDataImport.xaml.cs">
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\OpeningsMainWindow.xaml.cs">
+      <DependentUpon>OpeningsMainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ZoomWindow.xaml.cs" />
+    <Compile Include="OpeningSymbol\PlanView.cs" />
+    <Compile Include="OpeningSymbol\SectionView.cs" />
+    <Compile Include="OpeningSymbol\SymbolVisibility.cs" />
+    <Compile Include="OpeningSymbol\RectangularOpening.cs" />
+    <Compile Include="OpeningSymbol\RoundOpening.cs" />
+    <Compile Include="OpeningSymbol\ViewDirection.cs" />
+    <Compile Include="OpeningSymbol\ViewDiscipline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GtbDockPage.xaml.cs">
       <DependentUpon>GtbDockPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ModelView.cs" />
+    <Compile Include="ViewModels\OpeningWindowMainViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -94,6 +106,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\ExcelDataImport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\OpeningsMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

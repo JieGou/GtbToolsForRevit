@@ -33,13 +33,18 @@
                         <Button Content="Excel Cell Data Insert" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_ExcelDataImport"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="...">
+                <TabItem Header="Durchbrüche">
                     <Grid Background="White">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Label Content="Durchbruch sichtbar kontrol in progress..." Grid.Row="1"/>
+                        <Button x:Name="SymbolMainWindow" Content="Set symbol settings on views" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="180" Click="SymbolMainWindow_Click"/>
+                        <Button Content="Switch on ARC for all" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="180"/>
+                        <Button Content="Switch on TGA for all" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="180"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">
