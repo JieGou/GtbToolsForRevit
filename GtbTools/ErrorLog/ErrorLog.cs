@@ -22,6 +22,7 @@ namespace GtbTools
 		public string PersonalDirPath {get; private set;}
 		public string FilePath{get; private set;}
 		public bool LogCreated {get; private set;}
+		public bool RemoveLog { get; set; } = true;
 		
 		
 		public ErrorLog()
@@ -39,7 +40,7 @@ namespace GtbTools
 		
 		public void DeleteLog()
 		{
-			if(LogCreated) File.Delete(FilePath);
+			if(LogCreated && RemoveLog) File.Delete(FilePath);
 		}
 		
 		private void CreateLog()

@@ -24,6 +24,7 @@ namespace GtbTools
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
                 errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
                 return Result.Failed;
             }
         }
@@ -44,6 +45,7 @@ namespace GtbTools
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
                 errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
             }
 }
         public string GetName()
@@ -74,6 +76,7 @@ namespace GtbTools
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
                 errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
             }
         }
         public string GetName()
@@ -97,6 +100,7 @@ namespace GtbTools
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
                 errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
             }
         }
         public string GetName()
@@ -120,6 +124,7 @@ namespace GtbTools
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
                 errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
             }
         }
         public string GetName()
@@ -143,6 +148,7 @@ namespace GtbTools
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
                 errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
             }
         }
         public string GetName()

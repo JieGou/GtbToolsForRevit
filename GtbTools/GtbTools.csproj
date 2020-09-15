@@ -15,7 +15,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProjectGuid>{7C6686D0-91F9-4807-B013-532F77086E60}</ProjectGuid>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
