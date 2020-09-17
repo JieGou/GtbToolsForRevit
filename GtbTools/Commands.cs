@@ -171,7 +171,10 @@ namespace GtbTools
                 OpeningWindowMainViewModel openingWindowMainViewModel = OpeningWindowMainViewModel.Initialize(uiapp.ActiveUIDocument.Document);
                 OpeningsMainWindow openingsMainWindow = new OpeningsMainWindow(openingWindowMainViewModel);
                 openingsMainWindow.ShowDialog();
-
+                if (openingsMainWindow.OpeningSymbolTool != null)
+                {
+                    openingsMainWindow.OpeningSymbolTool.ProcessSelectedViews();
+                }
             }
             catch (Exception ex)
             {

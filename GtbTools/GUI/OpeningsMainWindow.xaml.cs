@@ -24,6 +24,7 @@ namespace GUI
     public partial class OpeningsMainWindow : Window, INotifyPropertyChanged
     {
         public OpeningWindowMainViewModel OpeningWindowMainViewModel { get; set; }
+        public OpeningSymbolTool OpeningSymbolTool { get; set; }
 
         private bool _processApproved;
         public bool ProcessApproved
@@ -51,6 +52,7 @@ namespace GUI
             ProcessApproved = false;
             InitializeComponent();
             DataContext = this;
+            Topmost = true;
         }
 
         private void BtnSelectPlans_Click(object sender, RoutedEventArgs e)
@@ -87,8 +89,8 @@ namespace GUI
 
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
-            OpeningSymbolTool openingSymbolTool = OpeningSymbolTool.Initialize(OpeningWindowMainViewModel);
-            openingSymbolTool.ProcessSectionViews();
+            OpeningSymbolTool = OpeningSymbolTool.Initialize(OpeningWindowMainViewModel);
+            this.Close();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)

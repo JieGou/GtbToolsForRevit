@@ -25,7 +25,7 @@ namespace GtbTools
 #elif DEBUG2020 || RELEASE2020
         public const string AssemblyYear = "2020";
 #endif
-        public const string AssemblyMinorVersion = "1";
+        public const string AssemblyMinorVersion = "2";
         public const string AssemblyBuildVersion = "1";
         public const string AssemblyRevisionVersion = "1";
         #endregion
@@ -130,6 +130,7 @@ namespace GtbTools
         {
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             DockablePane dp = commandData.Application.GetDockablePane(dpid);
+            
             dp.Show();
         }
 

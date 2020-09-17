@@ -20,6 +20,10 @@ namespace OpeningSymbol
         double _x;
         double _y;
         double _z;
+        double _absoluteCutPlane;
+        double _absoluteOpeningLevel;
+        double _diameter;
+        double _depth;
 
         private RoundOpening()
         {
@@ -37,6 +41,50 @@ namespace OpeningSymbol
             result.FindElementHost();
             result.SetSymbolVisibility();
             return result;
+        }
+
+        public static RoundOpening Initialize(FamilyInstance familyInstance, ViewDirection viewDirection, ViewDiscipline viewDiscipline, double absoluteCutPlane)
+        {
+            RoundOpening result = new RoundOpening();
+            result.FamilyInstance = familyInstance;
+            result._viewDirection = viewDirection;
+            result._viewDiscipline = viewDiscipline;
+            result._absoluteCutPlane = absoluteCutPlane;
+            //result.SetInstanceXYZ();
+            result.FindElementHost();
+            result.SetOpeningDimensions();
+            result.CheckCutPlane();
+            result.SetSymbolVisibility();
+            return result;
+        }
+
+        private void SetOpeningDimensions()
+        {
+            Parameter parDiameter = FamilyInstance.LookupParameter("Diameter");
+            Parameter parDepth = FamilyInstance.LookupParameter("Depth");
+            _diameter = parDiameter.AsDouble() * 304.8;
+            _depth = parDepth.AsDouble() * 304.8;
+            LocationPoint lp = FamilyInstance.Location as LocationPoint;
+            _absoluteOpeningLevel = lp.Point.Z * 304.8;
+        }
+
+        private void CheckCutPlane()
+        {
+            _isCutByView = false;
+            if(OpeningHost == OpeningHost.Wall)
+            {
+                if(Math.Abs(_absoluteCutPlane - _absoluteOpeningLevel) < 0.5*_diameter)
+                {
+                    _isCutByView = true;
+                }
+            }
+            if (OpeningHost == OpeningHost.FloorOrCeiling)
+            {
+                if (_absoluteCutPlane - _absoluteOpeningLevel < 0 && Math.Abs(_absoluteCutPlane - _absoluteOpeningLevel) < _depth)
+                {
+                    _isCutByView = true;
+                }
+            }
         }
 
         private void SetInstanceXYZ()
@@ -169,6 +217,10 @@ namespace OpeningSymbol
                     {
                         parLR.Set(1);
                     }
+                    if (SymbolVisibility == SymbolVisibility.TopSymbol)
+                    {
+                        parTop.Set(1);
+                    }
                 }
                 if (OpeningHost == OpeningHost.FloorOrCeiling && !_isCutByView)
                 {
@@ -179,6 +231,10 @@ namespace OpeningSymbol
                     if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
                     {
                         parLR.Set(0);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.TopSymbol)
+                    {
+                        parTop.Set(0);
                     }
                 }
             }
