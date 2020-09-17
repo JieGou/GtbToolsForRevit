@@ -71,7 +71,7 @@ namespace OpeningSymbol
             {
                 bool isCutOnSection = Equals(recFamIns, _cutElements);
                 
-                if (isCutOnSection) MessageBox.Show("Element is cut");
+                //if (isCutOnSection) MessageBox.Show("Element is cut");
                 RectangularOpening rectangularOpening = RectangularOpening.Initialize(recFamIns, _viewDirection, ViewDiscipline.ARC, isCutOnSection);
                 RectangularOpenings.Add(rectangularOpening);
             }
@@ -79,7 +79,7 @@ namespace OpeningSymbol
             {
                 bool isCutOnSection = Equals(roundFamIns, _cutElements);
 
-                if (isCutOnSection) MessageBox.Show("Element is cut");
+                //if (isCutOnSection) MessageBox.Show("Element is cut");
                 RoundOpening roundOpening = RoundOpening.Initialize(roundFamIns, _viewDirection, ViewDiscipline.ARC, isCutOnSection);
                 RoundOpenings.Add(roundOpening);
             }
@@ -90,7 +90,7 @@ namespace OpeningSymbol
             FilteredElementCollector ficol = new FilteredElementCollector(_doc, View.Id);
             List<FamilyInstance> genModelInstances = ficol.OfClass(typeof(FamilyInstance))
                                     .Select(x => x as FamilyInstance)
-                                        .Where(y => y.Symbol.Family.FamilyCategory.Name == "Generic Models").ToList();
+                                        .Where(y => y.Symbol.Family.FamilyCategory.Id.IntegerValue == (int)BuiltInCategory.OST_GenericModel).ToList();
             _roundFamilyInstances = new List<FamilyInstance>();
             _rectFamilyInstances = new List<FamilyInstance>();
 
@@ -109,11 +109,11 @@ namespace OpeningSymbol
         {
             double rdX = Math.Abs(View.RightDirection.X);
             double rdY = Math.Abs(View.RightDirection.Y);
-            double vdX = Math.Abs(View.ViewDirection.Y);
-            double vdY = Math.Abs(View.ViewDirection.X);
+            double vdX = Math.Abs(View.ViewDirection.X);
+            double vdY = Math.Abs(View.ViewDirection.Y);
 
-            if (vdY == 1 && rdX == 1) _viewDirection = ViewDirection.SectionV;
-            if (vdX == 1 && rdY == 1) _viewDirection = ViewDirection.SectionH;
+            if (vdY == 1 && rdX == 1) _viewDirection = ViewDirection.SectionH;
+            if (vdX == 1 && rdY == 1) _viewDirection = ViewDirection.SectionV;
         }
 
         //Run separately with doc
@@ -154,8 +154,8 @@ namespace OpeningSymbol
                                                         .OfClass(typeof(FamilyInstance))
                                                             .WherePasses(CutPlaneFilter)
                                                                 .Select(x => x as FamilyInstance)
-                                                                    .Where(y => y.Symbol.Family.FamilyCategory.Name == "Generic Models").ToList();
-                MessageBox.Show(_cutElements.Count.ToString());
+                                                                    .Where(y => y.Symbol.Family.FamilyCategory.Id.IntegerValue == (int)BuiltInCategory.OST_GenericModel).ToList();
+                //MessageBox.Show(_cutElements.Count.ToString());
             }
         }
     }

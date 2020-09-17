@@ -55,15 +55,15 @@ namespace OpeningSymbol
                 OpeningHost = OpeningHost.NotAssociated;
                 return;
             }
-            switch (host.Category.Name)
+            switch (host.Category.Id.IntegerValue)
             {
-                case "Floors":
+                case (int)BuiltInCategory.OST_Floors:
                     OpeningHost = OpeningHost.FloorOrCeiling;
                     break;
-                case "Walls":
+                case (int)BuiltInCategory.OST_Walls:
                     OpeningHost = OpeningHost.Wall;
                     break;
-                case "Ceilings":
+                case (int)BuiltInCategory.OST_Ceilings:
                     OpeningHost = OpeningHost.FloorOrCeiling;
                     break;
                 default:
