@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using ViewModels;
 
 namespace Functions
@@ -25,6 +26,7 @@ namespace Functions
         {
             OpeningSymbolTool result = new OpeningSymbolTool();
             result.OpeningWindowMainViewModel = openingWindowMainViewModel;
+            result.CreateSectionViews();
 
 
 
@@ -39,14 +41,40 @@ namespace Functions
             {
                 if(mv.IsSelected)
                 {
-                    SectionView sectionView = new SectionView(OpeningWindowMainViewModel.Document);
-                    sectionView.View = mv.View;
-                    sectionView.ViewDiscipline = viewDiscipline;
+                    SectionView sectionView = new SectionView(OpeningWindowMainViewModel.Document, mv.View, viewDiscipline);
+                    sectionView.FindCutElements(OpeningWindowMainViewModel.Document);
+                    sectionView.CreateOpeningLists();
+                    SectionViews.Add(sectionView);
                 }
             }
         }
         private void CreatePlanViews()
         {
+
+        }
+
+        public void ProcessSectionViews()
+        {
+            MessageBox.Show("Processing sections");
+
+
+
+            foreach (SectionView sectionView in SectionViews)
+            {
+                using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document, "Changing symbols on: " + sectionView.View.Name))
+                {
+                    tx.Start();
+                    foreach (RoundOpening ro in sectionView.RoundOpenings)
+                    {
+                        ro.SwitchSymbol();
+                    }
+                    foreach (RectangularOpening ro in sectionView.RectangularOpenings)
+                    {
+                        ro.SwitchSymbol();
+                    }
+                    tx.Commit();
+                }
+            }
 
         }
     }

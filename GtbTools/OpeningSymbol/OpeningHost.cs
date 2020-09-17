@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace OpeningSymbol
 {
-    public enum ViewDirection
+    public enum OpeningHost
     {
         None,
-        SectionV,
-        SectionH,
-        PlanDown,
-        PlanUp
+        Wall,
+        FloorOrCeiling,
+        NotAssociated,
+        Unknown
     }
 }

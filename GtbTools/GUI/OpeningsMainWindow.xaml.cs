@@ -1,4 +1,5 @@
-﻿using OpeningSymbol;
+﻿using Functions;
+using OpeningSymbol;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -86,7 +87,8 @@ namespace GUI
 
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
-
+            OpeningSymbolTool openingSymbolTool = OpeningSymbolTool.Initialize(OpeningWindowMainViewModel);
+            openingSymbolTool.ProcessSectionViews();
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
