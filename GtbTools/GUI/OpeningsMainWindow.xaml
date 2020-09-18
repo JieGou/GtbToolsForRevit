@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         Title="OpeningsMainWindow" Height="450" Width="600" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid>
+    <Grid Background="#FFF0F0F0">
         <Grid.RowDefinitions>
             <RowDefinition Height="90"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -19,7 +19,7 @@
         <RadioButton x:Name="RadBtnTga" Content="TGA" HorizontalAlignment="Left" Margin="20,50,0,0" VerticalAlignment="Top" Checked="RadBtnTga_Checked"/>
         <Button x:Name="BtnApply" Grid.ColumnSpan="2" Content="Symbole ausrichten" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="140" IsEnabled="{Binding ProcessApproved, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="BtnApply_Click"/>
         <Button x:Name="BtnCancel" Grid.ColumnSpan="2" Content="Abbrechnen" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Top" Width="140" Click="BtnCancel_Click"/>
-        <ListBox x:Name="PlanViewsCheckboxList" ItemsSource="{Binding OpeningWindowMainViewModel.PlanViews}" HorizontalAlignment="Left" Height="270" Margin="20,39,0,0" Grid.Row="1" VerticalAlignment="Top" Width="180">
+        <ListBox x:Name="PlanViewsCheckboxList" ItemsSource="{Binding OpeningWindowMainViewModel.PlanViews}" BorderBrush="Black" HorizontalAlignment="Left" Height="270" Margin="20,39,0,0" Grid.Row="1" VerticalAlignment="Top" Width="180">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox x:Name="CheckboxTemplate" Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -27,7 +27,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox x:Name="SectionViewsCheckboxList" ItemsSource="{Binding OpeningWindowMainViewModel.SectionViews}" HorizontalAlignment="Left" Height="270" Margin="20,39,0,0" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Width="180">
+        <ListBox x:Name="SectionViewsCheckboxList" ItemsSource="{Binding OpeningWindowMainViewModel.SectionViews}" BorderBrush="Black" HorizontalAlignment="Left" Height="270" Margin="20,39,0,0" Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Width="180">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox x:Name="CheckboxTemplate" Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

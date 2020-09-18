@@ -82,7 +82,9 @@
     <Compile Include="OpeningSymbol\OpeningHost.cs" />
     <Compile Include="OpeningSymbol\OperationStatus.cs" />
     <Compile Include="OpeningSymbol\PlanView.cs" />
+    <Compile Include="OpeningSymbol\ProjectSymbol.cs" />
     <Compile Include="OpeningSymbol\SectionView.cs" />
+    <Compile Include="OpeningSymbol\SymbolControl.cs" />
     <Compile Include="OpeningSymbol\SymbolVisibility.cs" />
     <Compile Include="OpeningSymbol\RectangularOpening.cs" />
     <Compile Include="OpeningSymbol\RoundOpening.cs" />

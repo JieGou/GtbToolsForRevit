@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         Title="ProcessWindow" Height="300" Width="400" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closed="Window_Closed">
-    <Grid>
+    <Grid Background="#FFF0F0F0">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition></RowDefinition>

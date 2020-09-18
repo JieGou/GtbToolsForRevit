@@ -26,7 +26,7 @@ namespace GtbTools
         public const string AssemblyYear = "2020";
 #endif
         public const string AssemblyMinorVersion = "2";
-        public const string AssemblyBuildVersion = "1";
+        public const string AssemblyBuildVersion = "2";
         public const string AssemblyRevisionVersion = "1";
         #endregion
 

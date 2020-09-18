@@ -6,9 +6,10 @@
 	Title="GTB Tools"
 	Height="450"
 	Width="480">
-	<Grid>
+	<Grid Background="#FFF0F0F0">
 		<ListBox
 			x:Name="ListBox"
+            BorderBrush="Black"
 			ItemsSource="{Binding OpenViewsTool.ModelViewList}"
 			Grid.Column="0"
 			Grid.Row="0"

@@ -89,72 +89,81 @@ namespace Functions
 
             OperationStatus.AddLineToTextMessage("Processing section views:");
 
-            foreach (SectionView sectionView in SectionViews)
+            using(TransactionGroup transactionGroup = new TransactionGroup(OpeningWindowMainViewModel.Document))
             {
-                string info = "Changing symbols on: " + sectionView.View.Name;
-                OperationStatus.AddLineToTextMessage(info);
-                OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", sectionView.RoundOpenings.Count));
-                OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", sectionView.RectangularOpenings.Count));
-                using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document, info))
-                {
-                    tx.Start();
-                    foreach (RoundOpening ro in sectionView.RoundOpenings)
-                    {
-                        ro.SwitchSymbol();
-                    }
-                    foreach (RectangularOpening ro in sectionView.RectangularOpenings)
-                    {
-                        ro.SwitchSymbol();
-                    }
-                    tx.Commit();
-                }
-                if(OperationStatus.UserAborted)
-                {
-                    OperationStatus.AddLineToTextMessage("Process aborted by user. Window will be closed.");
-                    OperationStatus.ShowCountDown(5);
-                    dispatcher = Dispatcher.FromThread(windowThread);
-                    dispatcher.Invoke(OperationStatus.CloseOperationWindow);
-                    return;
-                }
-            }
+                transactionGroup.Start("Transaction Group");
 
-            OperationStatus.AddLineToTextMessage("Processing plan views:");
+                foreach (SectionView sectionView in SectionViews)
+                {
+                    string info = "Changing symbols on: " + sectionView.View.Name;
+                    OperationStatus.AddLineToTextMessage(info);
+                    OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", sectionView.RoundOpenings.Count));
+                    OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", sectionView.RectangularOpenings.Count));
+                    using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
+                    {
+                        tx.Start(info);
+                        foreach (RoundOpening ro in sectionView.RoundOpenings)
+                        {
+                            ro.SwitchSymbol();
+                        }
+                        foreach (RectangularOpening ro in sectionView.RectangularOpenings)
+                        {
+                            ro.SwitchSymbol();
+                        }
+                        tx.Commit();
+                    }
+                    if (OperationStatus.UserAborted)
+                    {
+                        OperationStatus.AddLineToTextMessage("Process aborted by user. Rolling back changes...");
+                        OperationStatus.ShowCountDown(3);
+                        dispatcher = Dispatcher.FromThread(windowThread);
+                        dispatcher.Invoke(OperationStatus.CloseOperationWindow);
+                        transactionGroup.RollBack();
+                        return;
+                    }
+                }
 
-            foreach (PlanView planView in PlanViews)
-            {
-                string info = "Changing symbols on: " + planView.View.Name;
-                OperationStatus.AddLineToTextMessage(info);
-                OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", planView.RoundOpenings.Count));
-                OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", planView.RectangularOpenings.Count));
-                using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document, "Changing symbols on: " + planView.View.Name))
+                OperationStatus.AddLineToTextMessage("Processing plan views:");
+
+                foreach (PlanView planView in PlanViews)
                 {
-                    tx.Start();
-                    foreach (RoundOpening ro in planView.RoundOpenings)
+                    string info = "Changing symbols on: " + planView.View.Name;
+                    OperationStatus.AddLineToTextMessage(info);
+                    OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", planView.RoundOpenings.Count));
+                    OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", planView.RectangularOpenings.Count));
+                    using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
                     {
-                        ro.SwitchSymbol();
+                        tx.Start(info);
+                        foreach (RoundOpening ro in planView.RoundOpenings)
+                        {
+                            ro.SwitchSymbol();
+                        }
+                        foreach (RectangularOpening ro in planView.RectangularOpenings)
+                        {
+                            ro.SwitchSymbol();
+                        }
+                        tx.Commit();
                     }
-                    foreach (RectangularOpening ro in planView.RectangularOpenings)
+                    if (OperationStatus.UserAborted)
                     {
-                        ro.SwitchSymbol();
+                        OperationStatus.AddLineToTextMessage("Process aborted by user. Rolling back changes...");
+                        OperationStatus.ShowCountDown(3);
+                        dispatcher = Dispatcher.FromThread(windowThread);
+                        dispatcher.Invoke(OperationStatus.CloseOperationWindow);
+                        transactionGroup.RollBack();
+                        return;
                     }
-                    tx.Commit();
                 }
-                if (OperationStatus.UserAborted)
-                {
-                    OperationStatus.AddLineToTextMessage("Process aborted by user. Window will be closed.");
-                    OperationStatus.ShowCountDown(5);
-                    dispatcher = Dispatcher.FromThread(windowThread);
-                    dispatcher.Invoke(OperationStatus.CloseOperationWindow);
-                    return;
-                }
+
+                transactionGroup.Assimilate();
             }
             OperationStatus.DisableAbortButton();
             OperationStatus.AddLineToTextMessage("Application ended successfully!");
-            OperationStatus.AddLineToTextMessage("Changes will be visible on window close.");
+            OperationStatus.AddLineToTextMessage("Symbols have been changed.");
             OperationStatus.CloseButtonEnabled = true;
-            OperationStatus.ShowCountDown(5);
-            dispatcher = Dispatcher.FromThread(windowThread);
-            dispatcher.Invoke(OperationStatus.CloseOperationWindow);
+            //OperationStatus.ShowCountDown(5);
+            //dispatcher = Dispatcher.FromThread(windowThread);
+            //dispatcher.Invoke(OperationStatus.CloseOperationWindow);
         }
     }
 }
