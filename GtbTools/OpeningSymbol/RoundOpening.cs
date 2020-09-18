@@ -58,6 +58,14 @@ namespace OpeningSymbol
             return result;
         }
 
+        public static RoundOpening Initialize(FamilyInstance familyInstance)
+        {
+            RoundOpening result = new RoundOpening();
+            result.FamilyInstance = familyInstance;
+            result.FindElementHost();
+            return result;
+        }
+
         private void SetOpeningDimensions()
         {
             Parameter parDiameter = FamilyInstance.LookupParameter("Diameter");

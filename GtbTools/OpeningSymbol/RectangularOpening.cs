@@ -57,6 +57,13 @@ namespace OpeningSymbol
             result.SetSymbolVisibility();
             return result;
         }
+        public static RectangularOpening Initialize(FamilyInstance familyInstance)
+        {
+            RectangularOpening result = new RectangularOpening();
+            result.FamilyInstance = familyInstance;
+            result.FindElementHost();
+            return result;
+        }
 
         private void SetOpeningDimensions()
         {

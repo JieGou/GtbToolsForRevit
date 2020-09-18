@@ -37,7 +37,9 @@ namespace GtbTools.Forms
         ExternalEvent _exEventSaveCoords;
         ExternalEvent _exEventLoadCoords;
         ExternalEvent _exEventExcel;
-        ExternalEvent _ExEventSymbols;
+        ExternalEvent _exEventSymbols;
+        ExternalEvent _wallSymbols;
+        ExternalEvent _floorSymbols;
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -45,14 +47,16 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent ExEventSymbols)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent wallSymbols, ExternalEvent floorSymbols)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
             _exEventLoadCoords = exEventLoadCoords;
             _exEventSaveCoords = exEventSaveCoords;
             _exEventExcel = exEventExcel;
-            _ExEventSymbols = ExEventSymbols;
+            _exEventSymbols = exEventSymbols;
+            _wallSymbols = wallSymbols;
+            _floorSymbols = floorSymbols;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -117,7 +121,17 @@ namespace GtbTools.Forms
 
         private void SymbolMainWindow_Click(object sender, RoutedEventArgs e)
         {
-            _ExEventSymbols.Raise();
+            _exEventSymbols.Raise();
+        }
+
+        private void SelectAllFloor_Click(object sender, RoutedEventArgs e)
+        {
+            _floorSymbols.Raise();
+        }
+
+        private void SelectAllWall_Click(object sender, RoutedEventArgs e)
+        {
+            _wallSymbols.Raise();
         }
     }
 }

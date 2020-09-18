@@ -188,4 +188,56 @@ namespace GtbTools
             return "Symbol handler";
         }
     }
+
+    class ExternalEventSelectWallSymbols : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Initiated wall symbol selector");
+            try
+            {
+                OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
+                openingSymbolSelector.SelectWallOpenings();
+                //RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
+                //uiapp.PostCommand(commandId);
+                openingSymbolSelector.ShowReport();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Symbol wall selector";
+        }
+    }
+
+    class ExternalEventSelectFloorSymbols : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Initiated floor symbol selector");
+            try
+            {
+                OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
+                openingSymbolSelector.SelectFloorOpenings();
+                openingSymbolSelector.ShowReport();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Symbol floor selector";
+        }
+    }
 }
