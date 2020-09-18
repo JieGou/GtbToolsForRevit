@@ -199,9 +199,9 @@ namespace GtbTools
             {
                 OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
                 openingSymbolSelector.SelectWallOpenings();
-                //RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
-                //uiapp.PostCommand(commandId);
                 openingSymbolSelector.ShowReport();
+                RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
+                uiapp.PostCommand(commandId);
             }
             catch (Exception ex)
             {
@@ -227,6 +227,8 @@ namespace GtbTools
                 OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
                 openingSymbolSelector.SelectFloorOpenings();
                 openingSymbolSelector.ShowReport();
+                RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
+                uiapp.PostCommand(commandId);
             }
             catch (Exception ex)
             {
