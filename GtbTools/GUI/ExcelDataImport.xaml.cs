@@ -68,25 +68,28 @@ namespace GtbTools.GUI
             }
         }
 
-        private void SearchDirectories(string filter)
+        private bool SearchDirectories(string filter)
         {
+            bool result = false;
             string searchDirectory = "";
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
-                if (result == System.Windows.Forms.DialogResult.OK)
+                System.Windows.Forms.DialogResult dialogResult = dialog.ShowDialog();
+                if (dialogResult == System.Windows.Forms.DialogResult.OK)
                 {
                     searchDirectory = dialog.SelectedPath;
+                    result = true;
                 }
             }
-            if (string.IsNullOrEmpty(searchDirectory)) return;
+            if (string.IsNullOrEmpty(searchDirectory)) return result;
             ExcelDataImporter = new ExcelDataImporter(searchDirectory, filter);
+            return result;
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)
         {
             string filter = TxtBoxSearch.Text;
-            SearchDirectories(filter);
+            if(!SearchDirectories(filter)) return;
             ExcelDataImporter.CreateExcelPathList();
             ExcelDataImporter.CreateFileList();
             //MessageBox.Show(ExcelDataImporter.FileList.Count.ToString());
