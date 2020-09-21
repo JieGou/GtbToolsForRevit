@@ -50,7 +50,7 @@ namespace OpeningSymbol
             result._viewDirection = viewDirection;
             result._viewDiscipline = viewDiscipline;
             result._absoluteCutPlane = absoluteCutPlane;
-            //result.SetInstanceXYZ();
+            result.SetInstanceXYZ();
             result.FindElementHost();
             result.SetOpeningDimensions();
             result.CheckCutPlane();
@@ -164,12 +164,20 @@ namespace OpeningSymbol
             if (_viewDirection == ViewDirection.PlanDown)
             {
                 if (OpeningHost == OpeningHost.FloorOrCeiling) SymbolVisibility = SymbolVisibility.TopSymbol;
-                if (OpeningHost == OpeningHost.Wall) SymbolVisibility = SymbolVisibility.FrontBackSymbol;
+                if (OpeningHost == OpeningHost.Wall)
+                {
+                    if (Math.Abs(_z) == 1) SymbolVisibility = SymbolVisibility.RightLeftSymbol;
+                    if (Math.Abs(_x) == 1 || Math.Abs(_y) == 1) SymbolVisibility = SymbolVisibility.FrontBackSymbol;
+                }
             }
             if (_viewDirection == ViewDirection.PlanUp)
             {
                 if (OpeningHost == OpeningHost.FloorOrCeiling) SymbolVisibility = SymbolVisibility.TopSymbol;
-                if (OpeningHost == OpeningHost.Wall) SymbolVisibility = SymbolVisibility.FrontBackSymbol;
+                if (OpeningHost == OpeningHost.Wall)
+                {
+                    if (Math.Abs(_z) == 1) SymbolVisibility = SymbolVisibility.RightLeftSymbol;
+                    if (Math.Abs(_x) == 1 || Math.Abs(_y) == 1) SymbolVisibility = SymbolVisibility.FrontBackSymbol;
+                }
             }
         }
         /// <summary>
