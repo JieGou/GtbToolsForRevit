@@ -11,6 +11,7 @@ namespace OpeningSymbol
         None,
         Wall,
         FloorOrCeiling,
+        Roof,
         NotAssociated,
         Unknown
     }

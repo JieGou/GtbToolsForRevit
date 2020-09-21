@@ -40,6 +40,7 @@ namespace GtbTools.Forms
         ExternalEvent _exEventSymbols;
         ExternalEvent _wallSymbols;
         ExternalEvent _floorSymbols;
+        ExternalEvent _roofSymbols;
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -47,7 +48,7 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent wallSymbols, ExternalEvent floorSymbols)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent wallSymbols, ExternalEvent floorSymbols, ExternalEvent roofSymbols)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -57,6 +58,7 @@ namespace GtbTools.Forms
             _exEventSymbols = exEventSymbols;
             _wallSymbols = wallSymbols;
             _floorSymbols = floorSymbols;
+            _roofSymbols = roofSymbols;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -132,6 +134,11 @@ namespace GtbTools.Forms
         private void SelectAllWall_Click(object sender, RoutedEventArgs e)
         {
             _wallSymbols.Raise();
+        }
+
+        private void SelectAllRoof_Click(object sender, RoutedEventArgs e)
+        {
+            _roofSymbols.Raise();
         }
     }
 }

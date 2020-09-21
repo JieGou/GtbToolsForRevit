@@ -121,6 +121,9 @@ namespace OpeningSymbol
                 case (int)BuiltInCategory.OST_Ceilings:
                     OpeningHost = OpeningHost.FloorOrCeiling;
                     break;
+                case (int)BuiltInCategory.OST_Roofs:
+                    OpeningHost = OpeningHost.Roof;
+                    break;
                 default:
                     OpeningHost = OpeningHost.Unknown;
                     break;

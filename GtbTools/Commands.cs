@@ -242,4 +242,31 @@ namespace GtbTools
             return "Symbol floor selector";
         }
     }
+
+    class ExternalEventSelectRoofSymbols : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Initiated floor symbol selector");
+            try
+            {
+                OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
+                openingSymbolSelector.SelectRoofOpenings();
+                openingSymbolSelector.ShowReport();
+                RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
+                uiapp.PostCommand(commandId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Symbol roof selector";
+        }
+    }
 }

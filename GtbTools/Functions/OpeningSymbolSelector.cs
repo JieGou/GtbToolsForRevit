@@ -90,6 +90,7 @@ namespace Functions
                 }
             }
             _uidoc.Selection.SetElementIds(wallOpenings);
+            if (IsOpeningNumberNull()) return;
             _uidoc.ShowElements(wallOpenings);
         }
 
@@ -113,8 +114,41 @@ namespace Functions
                 }
             }
             _uidoc.Selection.SetElementIds(floorOpenings);
+            if (IsOpeningNumberNull()) return;
             _uidoc.ShowElements(floorOpenings);
         }
+
+        public void SelectRoofOpenings()
+        {
+            List<ElementId> roofOpenings = new List<ElementId>();
+            foreach (RectangularOpening ro in _rectangularOpenings)
+            {
+                if (ro.OpeningHost == OpeningHost.Roof)
+                {
+                    roofOpenings.Add(ro.FamilyInstance.Id);
+                    rectCounter++;
+                }
+            }
+            foreach (RoundOpening ro in _roundOpenings)
+            {
+                if (ro.OpeningHost == OpeningHost.Roof)
+                {
+                    roofOpenings.Add(ro.FamilyInstance.Id);
+                    roundCounter++;
+                }
+            }
+            _uidoc.Selection.SetElementIds(roofOpenings);
+            if (IsOpeningNumberNull()) return;
+            _uidoc.ShowElements(roofOpenings);
+        }
+
+        public bool IsOpeningNumberNull()
+        {
+            bool result = true;
+            if (rectCounter + roundCounter > 0) result = false;
+            return result;
+        }
+
         public void ShowReport()
         {
             string header = String.Format("Selected {0} rectangular openings", rectCounter) + String.Format(", and {0} round openings.", roundCounter) + Environment.NewLine;

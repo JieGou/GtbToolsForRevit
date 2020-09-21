@@ -117,11 +117,12 @@ namespace GtbTools
             IExternalEventHandler handler_event8 = new ExternalEventSelectFloorSymbols();
             ExternalEvent exEvent8 = ExternalEvent.Create(handler_event8);
 
-
+            IExternalEventHandler handler_event9 = new ExternalEventSelectRoofSymbols();
+            ExternalEvent exEvent9 = ExternalEvent.Create(handler_event9);
 
             DockablePaneProviderData data = new DockablePaneProviderData();
 
-            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, exEvent8);
+            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, exEvent8, exEvent9);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;

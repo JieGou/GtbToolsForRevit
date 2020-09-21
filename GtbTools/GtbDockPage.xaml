@@ -40,11 +40,14 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Button x:Name="SymbolMainWindow" Content="Set symbol settings on views" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="180" Click="SymbolMainWindow_Click"/>
-                        <Button x:Name="SelectAllWall" Content="Select wall openings on view" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="180" Click="SelectAllWall_Click"/>
-                        <Button x:Name="SelectAllFloor" Content="Select floor openings on view" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="180" Click="SelectAllFloor_Click"/>
+                        <Button x:Name="SymbolMainWindow" Content="Symboleinstellungen für Ansichten" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="200" Click="SymbolMainWindow_Click"/>
+                        <Button x:Name="SelectAllWall" Content="Wanddurchbrüche auswählen" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="200" Click="SelectAllWall_Click"/>
+                        <Button x:Name="SelectAllFloor" Content="Deckendurchbrüche auswählen" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="200" Click="SelectAllFloor_Click"/>
+                        <Button x:Name="SelectAllRoof" Content="Dachdurchbrüche auswählen" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="200" Click="SelectAllRoof_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">
