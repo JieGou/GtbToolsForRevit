@@ -248,7 +248,7 @@ namespace GtbTools
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Initiated floor symbol selector");
+            errorLog.WriteToLog("Initiated roof symbol selector");
             try
             {
                 OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
@@ -267,6 +267,30 @@ namespace GtbTools
         public string GetName()
         {
             return "Symbol roof selector";
+        }
+    }
+
+    class ExternalEventMepExtract : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Initiated mep extractor");
+            try
+            {
+                RevitDataExtractor revitDataExtractor = new RevitDataExtractor(uiapp.ActiveUIDocument.Document);
+                revitDataExtractor.ExtractMepSystems();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "MEP systems extract";
         }
     }
 }

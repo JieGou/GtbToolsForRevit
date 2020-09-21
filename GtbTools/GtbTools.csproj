@@ -69,6 +69,7 @@
     <Compile Include="Functions\OpeningSymbolSelector.cs" />
     <Compile Include="Functions\OpeningSymbolTool.cs" />
     <Compile Include="Functions\OpenViewsTool.cs" />
+    <Compile Include="Functions\RevitDataExtractor.cs" />
     <Compile Include="Functions\ViewCoordsTool.cs" />
     <Compile Include="GUI\ExcelDataImport.xaml.cs">
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
