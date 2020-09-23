@@ -24,6 +24,7 @@ namespace GtbTools
 		public List<ModelView> ModelViewList {get; set;}
 		public WindowResult WindowResult {get; set;}
 		public Nullable<bool> CloseInactive {get; set;}
+
 		ErrorLog _errorLog;
 		
 		UIDocument _uiDoc;
@@ -153,7 +154,7 @@ namespace GtbTools
 			{
 				//if(v.GetPrimaryViewId() != ElementId.InvalidElementId) continue;
 				if(v.IsTemplate) continue;
-				if(v.ViewType == ViewType.FloorPlan || v.ViewType == ViewType.CeilingPlan || v.ViewType == ViewType.EngineeringPlan || v.ViewType == ViewType.AreaPlan )
+				if(v.ViewType == ViewType.FloorPlan || v.ViewType == ViewType.CeilingPlan || v.ViewType == ViewType.EngineeringPlan )
 				{
 					viewList.Add(v);
 				}

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.ExtensibleStorage;
+using ExStorage;
 
 namespace OpeningSymbol
 {
@@ -183,13 +185,13 @@ namespace OpeningSymbol
         /// <summary>
         /// Requires revit transaction to run properly
         /// </summary>
-        public void SwitchSymbol()
+        public void SwitchSymbol(GtbSchema gtbSchema)
         {
-            Parameter parARC = FamilyInstance.LookupParameter("ARC");
-            Parameter parOben = FamilyInstance.LookupParameter("Ansicht nach Oben (Plan Views)");
-            Parameter parTop = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (ARC, Top Symbol)");
-            Parameter parFB = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (ARC, FB Symbol)");
-            Parameter parLR = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (ARC, LR Symbol)");
+            Parameter parARC = FamilyInstance.LookupParameter("TWP");
+            Parameter parOben = FamilyInstance.LookupParameter("Über Schnitt Ebene (TGA, Grundrisse)");
+            Parameter parTop = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, Top Symbol)");
+            Parameter parFB = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, FB Symbol)");
+            Parameter parLR = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, LR Symbol)");
 
             //Settings for ARC
             if (_viewDiscipline == ViewDiscipline.ARC)

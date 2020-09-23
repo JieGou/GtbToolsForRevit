@@ -66,6 +66,7 @@
     <Compile Include="Excel\ExcelFileData.cs" />
     <Compile Include="Excel\ExcelWrapper.cs" />
     <Compile Include="Excel\Report.cs" />
+    <Compile Include="ExStorage\GtbSchema.cs" />
     <Compile Include="Functions\OpeningSymbolSelector.cs" />
     <Compile Include="Functions\OpeningSymbolTool.cs" />
     <Compile Include="Functions\OpenViewsTool.cs" />

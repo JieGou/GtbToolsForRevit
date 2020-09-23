@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.ExtensibleStorage;
 using GtbTools;
 using GUI;
 using OpeningSymbol;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using ViewModels;
+using ExStorage;
 
 namespace Functions
 {
@@ -21,6 +23,7 @@ namespace Functions
         public List<SectionView> SectionViews { get; set; }
         public List<PlanView> PlanViews { get; set; }
         public OperationStatus OperationStatus { get; set; }
+        public GtbSchema GtbSchema { get; set; }
 
         private OpeningSymbolTool()
         {
@@ -91,7 +94,7 @@ namespace Functions
 
             using(TransactionGroup transactionGroup = new TransactionGroup(OpeningWindowMainViewModel.Document))
             {
-                transactionGroup.Start("Transaction Group");
+                transactionGroup.Start("GTB Symbol Tool");
 
                 foreach (SectionView sectionView in SectionViews)
                 {
@@ -104,11 +107,11 @@ namespace Functions
                         tx.Start(info);
                         foreach (RoundOpening ro in sectionView.RoundOpenings)
                         {
-                            ro.SwitchSymbol();
+                            ro.SwitchSymbol(GtbSchema);
                         }
                         foreach (RectangularOpening ro in sectionView.RectangularOpenings)
                         {
-                            ro.SwitchSymbol();
+                            ro.SwitchSymbol(GtbSchema);
                         }
                         tx.Commit();
                     }
@@ -136,11 +139,11 @@ namespace Functions
                         tx.Start(info);
                         foreach (RoundOpening ro in planView.RoundOpenings)
                         {
-                            ro.SwitchSymbol();
+                            ro.SwitchSymbol(GtbSchema);
                         }
                         foreach (RectangularOpening ro in planView.RectangularOpenings)
                         {
-                            ro.SwitchSymbol();
+                            ro.SwitchSymbol(GtbSchema);
                         }
                         tx.Commit();
                     }

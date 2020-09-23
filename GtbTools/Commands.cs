@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using ExStorage;
 using Functions;
 using GtbTools.GUI;
 using GUI;
@@ -171,8 +172,11 @@ namespace GtbTools
                 OpeningWindowMainViewModel openingWindowMainViewModel = OpeningWindowMainViewModel.Initialize(uiapp.ActiveUIDocument.Document);
                 OpeningsMainWindow openingsMainWindow = new OpeningsMainWindow(openingWindowMainViewModel);
                 openingsMainWindow.ShowDialog();
+                GtbSchema gtbSchema = new GtbSchema();
+                gtbSchema.SetGtbSchema();
                 if (openingsMainWindow.OpeningSymbolTool != null)
                 {
+                    openingsMainWindow.OpeningSymbolTool.GtbSchema = gtbSchema;
                     openingsMainWindow.OpeningSymbolTool.ProcessSelectedViews();
                 }
             }

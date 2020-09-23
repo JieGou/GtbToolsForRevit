@@ -5,7 +5,7 @@
     <Assembly>GtbTools.dll</Assembly>
     <AddInId>DCBCD363-075C-45FB-908C-37F056A76861</AddInId>
     <FullClassName>GtbTools.App</FullClassName>
-    <VendorId>GTB</VendorId>
+    <VendorId>GTBE</VendorId>
     <VendorDescription>GTB Berlin</VendorDescription>
   </AddIn>
 </RevitAddIns>
