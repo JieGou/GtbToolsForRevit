@@ -201,11 +201,9 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated wall symbol selector");
             try
             {
-                OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
-                openingSymbolSelector.SelectWallOpenings();
-                openingSymbolSelector.ShowReport();
-                RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
-                uiapp.PostCommand(commandId);
+                OpeningTagger openingTagger = OpeningTagger.Initialize(uiapp.ActiveUIDocument.Document);
+                openingTagger.DisplayWindow();
+                openingTagger.TagThemAll();
             }
             catch (Exception ex)
             {

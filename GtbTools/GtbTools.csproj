@@ -70,6 +70,7 @@
     <Compile Include="ExStorage\OpeningExStorage.cs" />
     <Compile Include="Functions\OpeningSymbolSelector.cs" />
     <Compile Include="Functions\OpeningSymbolTool.cs" />
+    <Compile Include="Functions\OpeningTagger.cs" />
     <Compile Include="Functions\OpenViewsTool.cs" />
     <Compile Include="Functions\RevitDataExtractor.cs" />
     <Compile Include="Functions\ViewCoordsTool.cs" />
@@ -81,6 +82,9 @@
     </Compile>
     <Compile Include="GUI\ProcessWindow.xaml.cs">
       <DependentUpon>ProcessWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\QuickTagWindow.xaml.cs">
+      <DependentUpon>QuickTagWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\SymbolToolWarning.xaml.cs">
       <DependentUpon>SymbolToolWarning.xaml</DependentUpon>
@@ -131,6 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\ProcessWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\QuickTagWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

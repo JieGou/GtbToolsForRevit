@@ -17,7 +17,7 @@ namespace OpeningSymbol
         ViewDirection _viewDirection;
         ViewDiscipline _viewDiscipline;
         bool _isCutByView;
-        PlanViewLocation _planViewLocation;
+        public PlanViewLocation PlanViewLocation { get; set; }
         XYZ _xyz;
         double _x;
         double _y;
@@ -95,15 +95,15 @@ namespace OpeningSymbol
                 if (_absoluteCutPlane - _absoluteOpeningLevel < 0 && Math.Abs(_absoluteCutPlane - _absoluteOpeningLevel) < _depth)
                 {
                     _isCutByView = true;
-                    _planViewLocation = PlanViewLocation.CutByPlane;
+                    PlanViewLocation = PlanViewLocation.CutByPlane;
                 }
                 if(_absoluteOpeningLevel - _absoluteCutPlane > _depth)
                 {
-                    _planViewLocation = PlanViewLocation.AboveCutPlane;
+                    PlanViewLocation = PlanViewLocation.AboveCutPlane;
                 }
                 if(_absoluteCutPlane - _absoluteOpeningLevel > 0)
                 {
-                    _planViewLocation = PlanViewLocation.BelowCutPlane;
+                    PlanViewLocation = PlanViewLocation.BelowCutPlane;
                 }
             }
         }
@@ -299,7 +299,7 @@ namespace OpeningSymbol
                 {
                     if (_viewDirection == ViewDirection.PlanDown)
                     {
-                        if(_planViewLocation == PlanViewLocation.AboveCutPlane)
+                        if(PlanViewLocation == PlanViewLocation.AboveCutPlane)
                         {
                             parOben.Set(1);
                             gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
@@ -312,7 +312,7 @@ namespace OpeningSymbol
                     }
                     if (_viewDirection == ViewDirection.PlanUp)
                     {
-                        if(_planViewLocation == PlanViewLocation.BelowCutPlane)
+                        if(PlanViewLocation == PlanViewLocation.BelowCutPlane)
                         {
                             parOben.Set(1);
                             gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
