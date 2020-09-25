@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
 using GtbTools;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace ViewModels
 {
     public class OpeningWindowMainViewModel
     {
+        public UIDocument UIDocument { get; set; }
         public Document Document { get; set; }
         public List<ModelView> SectionViews { get; set; }
         public List<ModelView> PlanViews { get; set; }
@@ -23,10 +25,11 @@ namespace ViewModels
 
         }
 
-        public static OpeningWindowMainViewModel Initialize(Document doc)
+        public static OpeningWindowMainViewModel Initialize(UIDocument uidoc)
         {
             OpeningWindowMainViewModel result = new OpeningWindowMainViewModel();
-            result.Document = doc;
+            result.UIDocument = uidoc;
+            result.Document = uidoc.Document;
             result.GetAllViews();
             result.CreatePlanViewList();
             result.CreateSectionViewList();

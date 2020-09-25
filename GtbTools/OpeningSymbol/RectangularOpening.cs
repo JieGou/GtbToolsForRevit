@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Structure;
 using ExStorage;
+using GUI;
 
 namespace OpeningSymbol
 {
@@ -13,10 +16,14 @@ namespace OpeningSymbol
         public FamilyInstance FamilyInstance { get; set; }
         public SymbolVisibility SymbolVisibility {get; set;}
         public OpeningHost OpeningHost { get; set; }
+        public bool SymbolUserModified { get; set; }
+        public bool DisciplineUserModified { get; set; }
+        public OpeningExStorage OpeningExStorage { get; set; }
 
         ViewDirection _viewDirection;
         ViewDiscipline _viewDiscipline;
         bool _isCutByView;
+        PlanViewLocation _planViewLocation;
         XYZ _xyz;
         double _x;
         double _y;
@@ -26,7 +33,13 @@ namespace OpeningSymbol
         double _height;
         double _depth;
 
-        Dictionary<string, int> _eStorage;
+        private void ReadCompareExternalStorage()
+        {
+            OpeningExStorage = new OpeningExStorage(FamilyInstance);
+            OpeningExStorage.ReadExternalStorage();
+            OpeningExStorage.ReadCurrentSettings();
+            OpeningExStorage.CompareData();
+        }
 
         private RectangularOpening()
         {
@@ -43,6 +56,7 @@ namespace OpeningSymbol
             result.SetInstanceXYZ();
             result.FindElementHost();
             result.SetSymbolVisibility();
+            result.ReadCompareExternalStorage();
             return result;
         }
 
@@ -58,8 +72,10 @@ namespace OpeningSymbol
             result.SetOpeningDimensions();
             result.CheckCutPlane();
             result.SetSymbolVisibility();
+            result.ReadCompareExternalStorage();
             return result;
         }
+
         public static RectangularOpening Initialize(FamilyInstance familyInstance)
         {
             RectangularOpening result = new RectangularOpening();
@@ -93,6 +109,15 @@ namespace OpeningSymbol
                 if (_absoluteCutPlane - _absoluteOpeningLevel < 0 && Math.Abs(_absoluteCutPlane - _absoluteOpeningLevel) < _depth)
                 {
                     _isCutByView = true;
+                    _planViewLocation = PlanViewLocation.CutByPlane;
+                }
+                if (_absoluteOpeningLevel - _absoluteCutPlane > _depth)
+                {
+                    _planViewLocation = PlanViewLocation.AboveCutPlane;
+                }
+                if (_absoluteCutPlane - _absoluteOpeningLevel > 0)
+                {
+                    _planViewLocation = PlanViewLocation.BelowCutPlane;
                 }
             }
         }
@@ -171,7 +196,6 @@ namespace OpeningSymbol
                     if (Math.Abs(_z) == 1) SymbolVisibility = SymbolVisibility.RightLeftSymbol;
                     if (Math.Abs(_x) == 1 || Math.Abs(_y) == 1) SymbolVisibility = SymbolVisibility.FrontBackSymbol;
                 }
-
             }
             if (_viewDirection == ViewDirection.PlanUp)
             {
@@ -195,8 +219,8 @@ namespace OpeningSymbol
             Parameter parOben = FamilyInstance.LookupParameter("Über Schnitt Ebene (TGA, Grundrisse)");
 
             //Settings for ARC
-            if (_viewDiscipline == ViewDiscipline.ARC)
-            {               
+            if (_viewDiscipline == ViewDiscipline.TWP)
+            {
                 parARC.Set(1);
                 gtbSchema.SetEntityField(FamilyInstance, "discipline", 1);
 
@@ -277,6 +301,7 @@ namespace OpeningSymbol
             //Settings for TGA
             if(_viewDiscipline == ViewDiscipline.TGA)
             {
+                if (OpeningExStorage._disciplineX) DisciplineUserModified = true;
                 parARC.Set(0);
                 gtbSchema.SetEntityField(FamilyInstance, "discipline", 2);
 
@@ -289,16 +314,73 @@ namespace OpeningSymbol
                 {
                     if (_viewDirection == ViewDirection.PlanDown)
                     {
-                        parOben.Set(0);
-                        gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                        if (_planViewLocation == PlanViewLocation.AboveCutPlane)
+                        {
+                            parOben.Set(1);
+                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
+                        }
+                        else
+                        {
+                            parOben.Set(0);
+                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                        }
                     }
                     if (_viewDirection == ViewDirection.PlanUp)
                     {
-                        parOben.Set(1);
-                        gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
+                        if (_planViewLocation == PlanViewLocation.BelowCutPlane)
+                        {
+                            parOben.Set(1);
+                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
+                        }
+                        else
+                        {
+                            parOben.Set(0);
+                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                        }
                     }
                 }
             }
+        }
+        public List<string> GetManualChanges()
+        {
+            List<string> result = new List<string>();
+
+            if (OpeningExStorage._disciplineX)
+            {
+                string info = "Manual change of discipline!";
+                result.Add(info);
+            }
+
+            if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
+            {
+                if (OpeningExStorage._fBSymbolX)
+                {
+                    string info = "Manual change of front back symbol";
+                    result.Add(info);
+                }
+            }
+            if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
+            {
+                if (OpeningExStorage._lRSymbolX)
+                {
+                    string info = "Manual change of left right symbol";
+                    result.Add(info);
+                }
+            }
+            if (SymbolVisibility == SymbolVisibility.TopSymbol)
+            {
+                if (OpeningExStorage._topSymbolX)
+                {
+                    string info = "Manual change of top symbol (TWP)";
+                    result.Add(info);
+                }
+                if (OpeningExStorage._aBSymbolX)
+                {
+                    string info = "Manual change of top symbol (TGA)";
+                    result.Add(info);
+                }
+            }                
+            return result;
         }
     }
 }

@@ -129,7 +129,22 @@ namespace GtbTools
 				uiView.Close();
 			}
 		}
-		
+
+		public static UIView GetUIView(View view, UIDocument uidoc)
+		{
+			UIView uiview = null;
+			IList<UIView> uiviews = uidoc.GetOpenUIViews();
+			foreach (UIView uv in uiviews)
+			{
+				if (uv.ViewId.Equals(view.Id))
+				{
+					uiview = uv;
+					break;
+				}
+			}
+			return uiview;
+		}
+
 		private UIView GetUIView(View view)
 		{
 			UIView uiview = null;

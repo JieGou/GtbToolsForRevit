@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OpeningSymbol
 {
-    public enum ViewDiscipline
+    public enum WarningWindowResult
     {
         None,
-        TWP,
-        TGA,
+        Yes,
+        No,
+        YesToAll,
+        NoToAll
     }
 }

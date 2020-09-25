@@ -169,7 +169,7 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated symbol handler");
             try
             {
-                OpeningWindowMainViewModel openingWindowMainViewModel = OpeningWindowMainViewModel.Initialize(uiapp.ActiveUIDocument.Document);
+                OpeningWindowMainViewModel openingWindowMainViewModel = OpeningWindowMainViewModel.Initialize(uiapp.ActiveUIDocument);
                 OpeningsMainWindow openingsMainWindow = new OpeningsMainWindow(openingWindowMainViewModel);
                 openingsMainWindow.ShowDialog();
                 GtbSchema gtbSchema = new GtbSchema();

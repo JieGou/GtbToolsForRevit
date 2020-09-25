@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace OpeningSymbol
 {
-    public enum ViewDiscipline
+    public enum PlanViewLocation
     {
         None,
-        TWP,
-        TGA,
+        AboveCutPlane,
+        CutByPlane,
+        BelowCutPlane
     }
 }

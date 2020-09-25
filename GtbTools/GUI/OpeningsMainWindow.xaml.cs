@@ -77,7 +77,7 @@ namespace GUI
 
         private void RadBtnArc_Checked(object sender, RoutedEventArgs e)
         {
-            OpeningWindowMainViewModel.ViewDiscipline = ViewDiscipline.ARC;
+            OpeningWindowMainViewModel.ViewDiscipline = ViewDiscipline.TWP;
             ProcessApproved = true;
         }
 

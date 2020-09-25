@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Threading;
 using ViewModels;
 using ExStorage;
+using Autodesk.Revit.UI;
 
 namespace Functions
 {
@@ -24,6 +25,9 @@ namespace Functions
         public List<PlanView> PlanViews { get; set; }
         public OperationStatus OperationStatus { get; set; }
         public GtbSchema GtbSchema { get; set; }
+
+        public bool NoToAll { get; set; } = false;
+        public bool YesToall { get; set; } = false;
 
         private OpeningSymbolTool()
         {
@@ -104,16 +108,66 @@ namespace Functions
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", sectionView.RectangularOpenings.Count));
                     using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
                     {
-                        tx.Start(info);
+                        
                         foreach (RoundOpening ro in sectionView.RoundOpenings)
                         {
+                            tx.Start(info);
                             ro.SwitchSymbol(GtbSchema);
+                            tx.Commit();
                         }
                         foreach (RectangularOpening ro in sectionView.RectangularOpenings)
                         {
-                            ro.SwitchSymbol(GtbSchema);
+                            UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
+                            View view = sectionView.View;
+                            WarningWindowResult warningWindowResult = WarningWindowResult.None;
+                            List<string> manualChanges = ro.GetManualChanges();
+                            if (manualChanges.Count > 0)
+                            {
+                                if (NoToAll) continue;
+                                if (YesToall)
+                                {
+                                    tx.Start(info);
+                                    ro.SwitchSymbol(GtbSchema);
+                                    tx.Commit();
+                                    continue;
+                                }
+                                uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
+                                uiDoc.ActiveView = view;
+                                uiDoc.ShowElements(ro.FamilyInstance.Id);
+                                UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
+                                SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
+                                symbolToolWarning.DisplayWindow(manualChanges);
+                                warningWindowResult = symbolToolWarning.WarningWindowResult;
+                            }
+                            else
+                            {
+                                tx.Start(info);
+                                ro.SwitchSymbol(GtbSchema);
+                                tx.Commit();
+                            }
+                            if (warningWindowResult == WarningWindowResult.No)
+                            {
+                                continue;
+                            }
+                            if (warningWindowResult == WarningWindowResult.NoToAll)
+                            {
+                                NoToAll = true;
+                                continue;
+                            }
+                            if (warningWindowResult == WarningWindowResult.Yes)
+                            {
+                                tx.Start(info);
+                                ro.SwitchSymbol(GtbSchema);
+                                tx.Commit();
+                            }
+                            if (warningWindowResult == WarningWindowResult.YesToAll)
+                            {
+                                YesToall = true;
+                                tx.Start(info);
+                                ro.SwitchSymbol(GtbSchema);
+                                tx.Commit();
+                            }
                         }
-                        tx.Commit();
                     }
                     if (OperationStatus.UserAborted)
                     {
@@ -136,16 +190,66 @@ namespace Functions
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", planView.RectangularOpenings.Count));
                     using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
                     {
-                        tx.Start(info);
+
                         foreach (RoundOpening ro in planView.RoundOpenings)
                         {
+                            tx.Start(info);
                             ro.SwitchSymbol(GtbSchema);
+                            tx.Commit();
                         }
                         foreach (RectangularOpening ro in planView.RectangularOpenings)
                         {
-                            ro.SwitchSymbol(GtbSchema);
+                            UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
+                            View view = planView.View;
+                            WarningWindowResult warningWindowResult = WarningWindowResult.None;
+                            List<string> manualChanges = ro.GetManualChanges();
+                            if (manualChanges.Count > 0)
+                            {
+                                if (NoToAll) continue;
+                                if (YesToall)
+                                {
+                                    tx.Start(info);
+                                    ro.SwitchSymbol(GtbSchema);
+                                    tx.Commit();
+                                    continue;
+                                }
+                                uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
+                                uiDoc.ActiveView = view;
+                                uiDoc.ShowElements(ro.FamilyInstance.Id);
+                                UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
+                                SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
+                                symbolToolWarning.DisplayWindow(manualChanges);
+                                warningWindowResult = symbolToolWarning.WarningWindowResult;
+                            }
+                            else
+                            {
+                                tx.Start(info);
+                                ro.SwitchSymbol(GtbSchema);
+                                tx.Commit();
+                            }
+                            if (warningWindowResult == WarningWindowResult.No)
+                            {
+                                continue;
+                            }
+                            if (warningWindowResult == WarningWindowResult.NoToAll)
+                            {
+                                NoToAll = true;
+                                continue;
+                            }
+                            if (warningWindowResult == WarningWindowResult.Yes)
+                            {
+                                tx.Start(info);
+                                ro.SwitchSymbol(GtbSchema);
+                                tx.Commit();
+                            }
+                            if (warningWindowResult == WarningWindowResult.YesToAll)
+                            {
+                                YesToall = true;
+                                tx.Start(info);
+                                ro.SwitchSymbol(GtbSchema);
+                                tx.Commit();
+                            }
                         }
-                        tx.Commit();
                     }
                     if (OperationStatus.UserAborted)
                     {

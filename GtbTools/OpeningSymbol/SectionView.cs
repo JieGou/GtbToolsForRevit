@@ -35,7 +35,7 @@ namespace OpeningSymbol
             SetViewDirection();
             RectangularOpenings = new List<RectangularOpening>();
             RoundOpenings = new List<RoundOpening>();
-            if (ViewDiscipline == ViewDiscipline.ARC) CreateArcOpeningList();
+            if (ViewDiscipline == ViewDiscipline.TWP) CreateArcOpeningList();
             if (ViewDiscipline == ViewDiscipline.TGA) CreateTgaOpeningList();
         }
 
@@ -72,7 +72,7 @@ namespace OpeningSymbol
                 bool isCutOnSection = Equals(recFamIns, _cutElements);
                 
                 //if (isCutOnSection) MessageBox.Show("Element is cut");
-                RectangularOpening rectangularOpening = RectangularOpening.Initialize(recFamIns, _viewDirection, ViewDiscipline.ARC, isCutOnSection);
+                RectangularOpening rectangularOpening = RectangularOpening.Initialize(recFamIns, _viewDirection, ViewDiscipline.TWP, isCutOnSection);
                 RectangularOpenings.Add(rectangularOpening);
             }
             foreach (FamilyInstance roundFamIns in _roundFamilyInstances)
@@ -80,7 +80,7 @@ namespace OpeningSymbol
                 bool isCutOnSection = Equals(roundFamIns, _cutElements);
 
                 //if (isCutOnSection) MessageBox.Show("Element is cut");
-                RoundOpening roundOpening = RoundOpening.Initialize(roundFamIns, _viewDirection, ViewDiscipline.ARC, isCutOnSection);
+                RoundOpening roundOpening = RoundOpening.Initialize(roundFamIns, _viewDirection, ViewDiscipline.TWP, isCutOnSection);
                 RoundOpenings.Add(roundOpening);
             }
         }

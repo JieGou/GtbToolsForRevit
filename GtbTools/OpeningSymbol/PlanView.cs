@@ -37,7 +37,7 @@ namespace OpeningSymbol
             SetCutPlane();
             RectangularOpenings = new List<RectangularOpening>();
             RoundOpenings = new List<RoundOpening>();
-            if (ViewDiscipline == ViewDiscipline.ARC) CreateArcOpeningList();
+            if (ViewDiscipline == ViewDiscipline.TWP) CreateArcOpeningList();
             if (ViewDiscipline == ViewDiscipline.TGA) CreateTgaOpeningList();
         }
 
@@ -59,12 +59,12 @@ namespace OpeningSymbol
         {
             foreach (FamilyInstance recFamIns in _rectFamilyInstances)
             {
-                RectangularOpening rectangularOpening = RectangularOpening.Initialize(recFamIns, ViewDirection, ViewDiscipline.ARC, _absoluteCutPlane);
+                RectangularOpening rectangularOpening = RectangularOpening.Initialize(recFamIns, ViewDirection, ViewDiscipline.TWP, _absoluteCutPlane);
                 RectangularOpenings.Add(rectangularOpening);
             }
             foreach (FamilyInstance roundFamIns in _roundFamilyInstances)
             {
-                RoundOpening roundOpening = RoundOpening.Initialize(roundFamIns, ViewDirection, ViewDiscipline.ARC, _absoluteCutPlane);
+                RoundOpening roundOpening = RoundOpening.Initialize(roundFamIns, ViewDirection, ViewDiscipline.TWP, _absoluteCutPlane);
                 RoundOpenings.Add(roundOpening);
             }
         }

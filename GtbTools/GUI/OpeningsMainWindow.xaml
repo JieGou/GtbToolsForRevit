@@ -15,7 +15,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <RadioButton x:Name="RadBtnArc" Content="ARC" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Checked="RadBtnArc_Checked"/>
+        <RadioButton x:Name="RadBtnArc" Content="TWP" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Checked="RadBtnArc_Checked"/>
         <RadioButton x:Name="RadBtnTga" Content="TGA" HorizontalAlignment="Left" Margin="20,50,0,0" VerticalAlignment="Top" Checked="RadBtnTga_Checked"/>
         <Button x:Name="BtnApply" Grid.ColumnSpan="2" Content="Symbole ausrichten" HorizontalAlignment="Center" Margin="0,20,0,0" VerticalAlignment="Top" Width="140" IsEnabled="{Binding ProcessApproved, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="BtnApply_Click"/>
         <Button x:Name="BtnCancel" Grid.ColumnSpan="2" Content="Abbrechnen" HorizontalAlignment="Center" Margin="0,50,0,0" VerticalAlignment="Top" Width="140" Click="BtnCancel_Click"/>

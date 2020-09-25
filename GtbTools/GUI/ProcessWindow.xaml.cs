@@ -1,4 +1,5 @@
 ﻿using OpeningSymbol;
+using OwnerSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,14 @@ namespace GUI
         public ProcessWindow(OperationStatus operationStatus)
         {
             this.DataContext = this;
+            SetOwner();
             OperationStatus = operationStatus;
             InitializeComponent();
-            Topmost = true;
+        }
+        private void SetOwner()
+        {
+            WindowHandleSearch revitHandleSearch = WindowHandleSearch.MainWindowHandle;
+            revitHandleSearch.SetAsOwner(this);
         }
 
         private void Abort_Btn_Click(object sender, RoutedEventArgs e)

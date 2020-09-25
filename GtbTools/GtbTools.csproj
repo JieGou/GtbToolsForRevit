@@ -67,6 +67,7 @@
     <Compile Include="Excel\ExcelWrapper.cs" />
     <Compile Include="Excel\Report.cs" />
     <Compile Include="ExStorage\GtbSchema.cs" />
+    <Compile Include="ExStorage\OpeningExStorage.cs" />
     <Compile Include="Functions\OpeningSymbolSelector.cs" />
     <Compile Include="Functions\OpeningSymbolTool.cs" />
     <Compile Include="Functions\OpenViewsTool.cs" />
@@ -81,10 +82,14 @@
     <Compile Include="GUI\ProcessWindow.xaml.cs">
       <DependentUpon>ProcessWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\SymbolToolWarning.xaml.cs">
+      <DependentUpon>SymbolToolWarning.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ZoomWindow.xaml.cs" />
     <Compile Include="OpeningSymbol\OpeningHost.cs" />
     <Compile Include="OpeningSymbol\OperationStatus.cs" />
     <Compile Include="OpeningSymbol\PlanView.cs" />
+    <Compile Include="OpeningSymbol\PlanViewLocation.cs" />
     <Compile Include="OpeningSymbol\ProjectSymbol.cs" />
     <Compile Include="OpeningSymbol\SectionView.cs" />
     <Compile Include="OpeningSymbol\SymbolControl.cs" />
@@ -93,6 +98,8 @@
     <Compile Include="OpeningSymbol\RoundOpening.cs" />
     <Compile Include="OpeningSymbol\ViewDirection.cs" />
     <Compile Include="OpeningSymbol\ViewDiscipline.cs" />
+    <Compile Include="OpeningSymbol\WarningWindowResult.cs" />
+    <Compile Include="OwnerSearch\WindowHandleSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GtbDockPage.xaml.cs">
       <DependentUpon>GtbDockPage.xaml</DependentUpon>
@@ -124,6 +131,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\ProcessWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\SymbolToolWarning.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
