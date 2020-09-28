@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using OpeningSymbol;
+using OwnerSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,16 @@ namespace GUI
         public List<string> Info { get; set; }
         public SymbolToolWarning(UIView uIView)
         {
+            SetOwner();
             UIView = uIView;
             DataContext = this;
             InitializeComponent();          
+        }
+
+        private void SetOwner()
+        {
+            WindowHandleSearch windowHandleSearch = WindowHandleSearch.MainWindowHandle;
+            windowHandleSearch.SetAsOwner(this);
         }
 
         public void DisplayWindow(List<string> info)
@@ -68,7 +76,7 @@ namespace GUI
 
         private void Btn_Click_NoToAll(object sender, RoutedEventArgs e)
         {
-            WarningWindowResult = WarningWindowResult.YesToAll;
+            WarningWindowResult = WarningWindowResult.NoToAll;
             Close();
         }
     }

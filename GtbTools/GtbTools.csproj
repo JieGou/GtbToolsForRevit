@@ -77,6 +77,7 @@
     <Compile Include="GUI\ExcelDataImport.xaml.cs">
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\GtbWindowResult.cs" />
     <Compile Include="GUI\OpeningsMainWindow.xaml.cs">
       <DependentUpon>OpeningsMainWindow.xaml</DependentUpon>
     </Compile>

@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace OpeningSymbol
 {
@@ -28,7 +25,6 @@ namespace OpeningSymbol
             ViewDiscipline = viewDiscipline;
         }
 
-        //run separately
         public void CreateOpeningLists()
         {
             SearchFamilyInstances();
@@ -37,6 +33,42 @@ namespace OpeningSymbol
             RoundOpenings = new List<RoundOpening>();
             if (ViewDiscipline == ViewDiscipline.TWP) CreateArcOpeningList();
             if (ViewDiscipline == ViewDiscipline.TGA) CreateTgaOpeningList();
+        }
+
+        public void LabelUnsupportedInstances()
+        {
+            foreach (RectangularOpening ro in RectangularOpenings)
+            {
+                Parameter gtbParameter = ro.FamilyInstance.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
+                if(ro.OpeningHost == OpeningHost.Roof)
+                {
+                    gtbParameter.Set("Host nicht unterstützt");
+                }
+                if (ro.OpeningHost == OpeningHost.NotAssociated)
+                {
+                    gtbParameter.Set("Element nicht verknüpft");
+                }
+                if (ro.OpeningHost == OpeningHost.Unknown)
+                {
+                    gtbParameter.Set("Unbekannter Host");
+                }
+            }
+            foreach (RoundOpening ro in RoundOpenings)
+            {
+                Parameter gtbParameter = ro.FamilyInstance.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
+                if (ro.OpeningHost == OpeningHost.Roof)
+                {
+                    gtbParameter.Set("Host nicht unterstützt");
+                }
+                if (ro.OpeningHost == OpeningHost.NotAssociated)
+                {
+                    gtbParameter.Set("Element nicht verknüpft");
+                }
+                if (ro.OpeningHost == OpeningHost.Unknown)
+                {
+                    gtbParameter.Set("Unbekannter Host");
+                }
+            }
         }
 
         private void CreateTgaOpeningList()
@@ -96,8 +128,10 @@ namespace OpeningSymbol
 
             foreach (FamilyInstance fi in genModelInstances)
             {
-                if (fi.Symbol.Family.Name == "XXX_Rectangular Face Opening_MT") _rectFamilyInstances.Add(fi);
-                if (fi.Symbol.Family.Name == "XXX_Round Face Opening_MT") _roundFamilyInstances.Add(fi);
+                Parameter gtbParameter = fi.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
+                if (gtbParameter == null) continue;
+                if (fi.Symbol.Family.Name.ToUpper().Contains("RECTANGULAR")) _rectFamilyInstances.Add(fi);
+                if (fi.Symbol.Family.Name.ToUpper().Contains("ROUND")) _roundFamilyInstances.Add(fi);
             }
             int roundIns = _roundFamilyInstances.Count;
             int rectIns = _rectFamilyInstances.Count;

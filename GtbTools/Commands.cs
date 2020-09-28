@@ -193,17 +193,29 @@ namespace GtbTools
         }
     }
 
-    class ExternalEventSelectWallSymbols : IExternalEventHandler
+    class ExternalEventTagAllOpenings : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Initiated wall symbol selector");
+            errorLog.WriteToLog("Initiated tag all openings tool");
             try
             {
-                OpeningTagger openingTagger = OpeningTagger.Initialize(uiapp.ActiveUIDocument.Document);
-                openingTagger.DisplayWindow();
-                openingTagger.TagThemAll();
+                Document doc = uiapp.ActiveUIDocument.Document;
+                if (OpeningTagger.IsValidViewType(doc))
+                {
+                    OpeningTagger openingTagger = OpeningTagger.Initialize(doc);
+                    GtbWindowResult gtbWindowResult =  openingTagger.DisplayWindow();
+                    if(gtbWindowResult == GtbWindowResult.Apply)
+                    {
+                        openingTagger.TagThemAll();
+                        openingTagger.ShowNewTagsInfo();
+                    }
+                }
+                else
+                {
+                    TaskDialog.Show("Error", "Unterstützte Ansichten:\n- Grundrisse\n- Deckenpläne\n- Tragwerkspläne");
+                }
             }
             catch (Exception ex)
             {
@@ -214,7 +226,7 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Symbol wall selector";
+            return "Tag all openings";
         }
     }
 

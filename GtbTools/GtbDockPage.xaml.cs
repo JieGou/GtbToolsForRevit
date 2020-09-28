@@ -38,7 +38,7 @@ namespace GtbTools.Forms
         ExternalEvent _exEventLoadCoords;
         ExternalEvent _exEventExcel;
         ExternalEvent _exEventSymbols;
-        ExternalEvent _wallSymbols;
+        ExternalEvent _tagAllOpenings;
         ExternalEvent _floorSymbols;
         ExternalEvent _roofSymbols;
         ExternalEvent _mepExtract;
@@ -49,7 +49,7 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent wallSymbols, ExternalEvent floorSymbols, ExternalEvent roofSymbols, ExternalEvent mepExtract)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, ExternalEvent floorSymbols, ExternalEvent roofSymbols, ExternalEvent mepExtract)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -57,7 +57,7 @@ namespace GtbTools.Forms
             _exEventSaveCoords = exEventSaveCoords;
             _exEventExcel = exEventExcel;
             _exEventSymbols = exEventSymbols;
-            _wallSymbols = wallSymbols;
+            _tagAllOpenings = tagAllOpenings;
             _floorSymbols = floorSymbols;
             _roofSymbols = roofSymbols;
             _mepExtract = mepExtract;
@@ -133,9 +133,9 @@ namespace GtbTools.Forms
             _floorSymbols.Raise();
         }
 
-        private void SelectAllWall_Click(object sender, RoutedEventArgs e)
+        private void Btn_Click_TagAllOpenings(object sender, RoutedEventArgs e)
         {
-            _wallSymbols.Raise();
+            _tagAllOpenings.Raise();
         }
 
         private void SelectAllRoof_Click(object sender, RoutedEventArgs e)

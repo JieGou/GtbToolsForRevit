@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Structure;
 using ExStorage;
-using GUI;
 
 namespace OpeningSymbol
 {
@@ -16,7 +10,6 @@ namespace OpeningSymbol
         public FamilyInstance FamilyInstance { get; set; }
         public SymbolVisibility SymbolVisibility {get; set;}
         public OpeningHost OpeningHost { get; set; }
-        public bool SymbolUserModified { get; set; }
         public bool DisciplineUserModified { get; set; }
         public OpeningExStorage OpeningExStorage { get; set; }
 

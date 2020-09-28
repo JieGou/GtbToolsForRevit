@@ -111,7 +111,7 @@ namespace GtbTools
             IExternalEventHandler handler_event6 = new ExternalEventSymbolHandler();
             ExternalEvent exEvent6 = ExternalEvent.Create(handler_event6);
 
-            IExternalEventHandler handler_event7 = new ExternalEventSelectWallSymbols();
+            IExternalEventHandler handler_event7 = new ExternalEventTagAllOpenings();
             ExternalEvent exEvent7 = ExternalEvent.Create(handler_event7);
 
             IExternalEventHandler handler_event8 = new ExternalEventSelectFloorSymbols();

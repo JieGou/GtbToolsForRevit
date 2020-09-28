@@ -64,6 +64,7 @@ namespace Functions
 					}
 					text += line + Environment.NewLine;
 				}
+				text += Environment.NewLine;
 			}
 
 			Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();

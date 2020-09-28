@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autodesk.Revit.DB;
 using ExStorage;
 
@@ -13,6 +10,8 @@ namespace OpeningSymbol
         public FamilyInstance FamilyInstance { get; set; }
         public SymbolVisibility SymbolVisibility { get; set; }
         public OpeningHost OpeningHost { get; set; }
+        public bool DisciplineUserModified { get; set; }
+        public OpeningExStorage OpeningExStorage { get; set; }
 
         ViewDirection _viewDirection;
         ViewDiscipline _viewDiscipline;
@@ -27,7 +26,13 @@ namespace OpeningSymbol
         double _diameter;
         double _depth;
 
-        Dictionary<string, int> _eStorage;
+        private void ReadCompareExternalStorage()
+        {
+            OpeningExStorage = new OpeningExStorage(FamilyInstance);
+            OpeningExStorage.ReadExternalStorage();
+            OpeningExStorage.ReadCurrentSettings();
+            OpeningExStorage.CompareData();
+        }
 
         private RoundOpening()
         {
@@ -44,6 +49,7 @@ namespace OpeningSymbol
             result.SetInstanceXYZ();
             result.FindElementHost();
             result.SetSymbolVisibility();
+            result.ReadCompareExternalStorage();
             return result;
         }
 
@@ -59,6 +65,7 @@ namespace OpeningSymbol
             result.SetOpeningDimensions();
             result.CheckCutPlane();
             result.SetSymbolVisibility();
+            result.ReadCompareExternalStorage();
             return result;
         }
 
@@ -287,6 +294,7 @@ namespace OpeningSymbol
             //Settings for TGA
             if (_viewDiscipline == ViewDiscipline.TGA)
             {
+                if (OpeningExStorage._disciplineX) DisciplineUserModified = true;
                 parARC.Set(0);
                 gtbSchema.SetEntityField(FamilyInstance, "discipline", 2);
 
@@ -325,6 +333,47 @@ namespace OpeningSymbol
                     }
                 }
             }
+        }
+        public List<string> GetManualChanges()
+        {
+            List<string> result = new List<string>();
+
+            if (OpeningExStorage._disciplineX)
+            {
+                string info = "Manual change of discipline!";
+                result.Add(info);
+            }
+
+            if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
+            {
+                if (OpeningExStorage._fBSymbolX)
+                {
+                    string info = "Manual change of front back symbol";
+                    result.Add(info);
+                }
+            }
+            if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
+            {
+                if (OpeningExStorage._lRSymbolX)
+                {
+                    string info = "Manual change of left right symbol";
+                    result.Add(info);
+                }
+            }
+            if (SymbolVisibility == SymbolVisibility.TopSymbol)
+            {
+                if (OpeningExStorage._topSymbolX)
+                {
+                    string info = "Manual change of top symbol (TWP)";
+                    result.Add(info);
+                }
+                if (OpeningExStorage._aBSymbolX)
+                {
+                    string info = "Manual change of top symbol (TGA)";
+                    result.Add(info);
+                }
+            }
+            return result;
         }
     }
 }

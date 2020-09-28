@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using OwnerSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace GUI
     /// </summary>
     public partial class QuickTagWindow : Window
     {
+        public GtbWindowResult WindowResult { get; set; }
         public ElementId WandSymbol { get; set; }
         public ElementId DeckenSymbol { get; set; }
         public ElementId BodenSymbol { get; set; }
@@ -30,16 +32,30 @@ namespace GUI
         public QuickTagWindow(List<FamilySymbol> genericModelTags)
         {
             _genericModelTags = genericModelTags;
+            SetOwner();
             InitializeComponent();
         }
 
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
+            if(cmBoxBoden.SelectedIndex < 0 || cmBoxDecken.SelectedIndex < 0 || cmBoxWand.SelectedIndex < 0)
+            {
+                Close();
+                return;
+            }
             WandSymbol = _tagSymbols[cmBoxWand.SelectedIndex].Id;
             DeckenSymbol = _tagSymbols[cmBoxDecken.SelectedIndex].Id;
             BodenSymbol = _tagSymbols[cmBoxBoden.SelectedIndex].Id;
+            WindowResult = GtbWindowResult.Apply;
             Close();
         }
+
+        private void SetOwner()
+        {
+            WindowHandleSearch windowHandleSearch = WindowHandleSearch.MainWindowHandle;
+            windowHandleSearch.SetAsOwner(this);
+        }
+
         public void SetLists()
         {
             _tagSymbols = new List<TagSymbol>();

@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="SymbolToolWarning" Height="200" Width="320">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Title="SymbolToolWarning" Height="230" Width="360">
     <Grid>
-        <Button Content="Yes" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_Yes"/>
-        <Button Content="Yes to all" HorizontalAlignment="Left" Margin="10,128,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_YesToAll"/>
-        <Button Content="No" HorizontalAlignment="Left" Margin="107,103,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_No"/>
-        <Button Content="No to all" HorizontalAlignment="Left" Margin="107,128,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_NoToAll"/>
-        <ListBox x:Name="MyListBox" Margin="10,36,10,71">
+        <Button Content="Ja" HorizontalAlignment="Left" Margin="11,139,0,0" VerticalAlignment="Top" Width="85" Click="Btn_Click_Yes"/>
+        <Button Content="Ja zu allem" HorizontalAlignment="Left" Margin="11,164,0,0" VerticalAlignment="Top" Width="85" Click="Btn_Click_YesToAll"/>
+        <Button Content="Nein" HorizontalAlignment="Left" Margin="108,139,0,0" VerticalAlignment="Top" Width="85" Click="Btn_Click_No"/>
+        <Button Content="Nein zu allem" HorizontalAlignment="Left" Margin="108,164,0,0" VerticalAlignment="Top" Width="85" Click="Btn_Click_NoToAll"/>
+        <ListBox x:Name="MyListBox" Margin="8,28,12,68">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -20,8 +22,8 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Label Content="Are you sure you want to apply automatic changes?" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-        <Button Content="Zoom In" HorizontalAlignment="Left" Margin="207,103,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_ZoomIn"/>
-        <Button Content="Zoom Out" HorizontalAlignment="Left" Margin="207,128,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_ZoomOut"/>
+        <Label Content="Möchtest du wirklich automatische Änderungen anwenden?" HorizontalAlignment="Left" Margin="8,2,0,0" VerticalAlignment="Top"/>
+        <Button Content="Zoom In" HorizontalAlignment="Left" Margin="257,139,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_ZoomIn"/>
+        <Button Content="Zoom Out" HorizontalAlignment="Left" Margin="257,164,0,0" VerticalAlignment="Top" Width="75" Click="Btn_Click_ZoomOut"/>
     </Grid>
 </Window>
