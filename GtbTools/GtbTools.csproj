@@ -13,9 +13,26 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug2018|x64' ">
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug2018\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;DEBUG2018</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug2019' Or '$(Configuration)' == 'Release2019'">
     <ProjectGuid>{7C6686D0-91F9-4807-B013-532F77086E60}</ProjectGuid>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug2018' Or '$(Configuration)' == 'Release2018'">
+    <ProjectGuid>{7C6686D0-91F9-4807-B013-532F77086E60}</ProjectGuid>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup>
@@ -38,6 +55,14 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Debug2018' Or '$(Configuration)' == 'Release2018'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI" Condition="'$(Configuration)' == 'Debug2018' Or '$(Configuration)' == 'Release2018'">
+      <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2018\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Debug2019' Or '$(Configuration)' == 'Release2019'">
       <HintPath>..\..\..\..\..\..\Program Files\Autodesk\Revit 2019\RevitAPI.dll</HintPath>
       <Private>False</Private>
@@ -67,13 +92,21 @@
     <Compile Include="Excel\ExcelWrapper.cs" />
     <Compile Include="Excel\Report.cs" />
     <Compile Include="ExStorage\GtbSchema.cs" />
+    <Compile Include="ExStorage\OpeningMemory.cs" />
     <Compile Include="ExStorage\OpeningExStorage.cs" />
+    <Compile Include="Functions\CutOpeningMemory.cs" />
     <Compile Include="Functions\OpeningSymbolSelector.cs" />
     <Compile Include="Functions\OpeningSymbolTool.cs" />
     <Compile Include="Functions\OpeningTagger.cs" />
     <Compile Include="Functions\OpenViewsTool.cs" />
     <Compile Include="Functions\RevitDataExtractor.cs" />
     <Compile Include="Functions\ViewCoordsTool.cs" />
+    <Compile Include="GUI\CutOpeningMemoryWindow.xaml.cs">
+      <DependentUpon>CutOpeningMemoryWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DurchbruchMemoryWindow.xaml.cs">
+      <DependentUpon>DurchbruchMemoryWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ExcelDataImport.xaml.cs">
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
     </Compile>
@@ -91,13 +124,16 @@
       <DependentUpon>SymbolToolWarning.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\ZoomWindow.xaml.cs" />
+    <Compile Include="Model\DurchbruchModel.cs" />
+    <Compile Include="Model\DurchbruchStatus.cs" />
+    <Compile Include="OpeningSymbol\ControlledSymbolType.cs" />
     <Compile Include="OpeningSymbol\OpeningHost.cs" />
     <Compile Include="OpeningSymbol\OperationStatus.cs" />
     <Compile Include="OpeningSymbol\PlanView.cs" />
     <Compile Include="OpeningSymbol\PlanViewLocation.cs" />
     <Compile Include="OpeningSymbol\ProjectSymbol.cs" />
     <Compile Include="OpeningSymbol\SectionView.cs" />
-    <Compile Include="OpeningSymbol\SymbolControl.cs" />
+    <Compile Include="OpeningSymbol\ControlledSymbol.cs" />
     <Compile Include="OpeningSymbol\SymbolVisibility.cs" />
     <Compile Include="OpeningSymbol\RectangularOpening.cs" />
     <Compile Include="OpeningSymbol\RoundOpening.cs" />
@@ -109,8 +145,13 @@
     <Compile Include="GtbDockPage.xaml.cs">
       <DependentUpon>GtbDockPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\DurchbruchMemoryViewModel.cs" />
+    <Compile Include="ViewModels\DurchbruchShape.cs" />
     <Compile Include="ViewModels\ModelView.cs" />
+    <Compile Include="ViewModels\MovedDurchbruchViewModel.cs" />
+    <Compile Include="ViewModels\NewDurchbruchViewModel.cs" />
     <Compile Include="ViewModels\OpeningWindowMainViewModel.cs" />
+    <Compile Include="ViewModels\ResizedDurchbruchViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -124,6 +165,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="GtbDockPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\CutOpeningMemoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\DurchbruchMemoryWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

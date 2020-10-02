@@ -25,6 +25,7 @@ namespace Functions
         public List<PlanView> PlanViews { get; set; }
         public OperationStatus OperationStatus { get; set; }
         public GtbSchema GtbSchema { get; set; }
+        public Dictionary<ControlledSymbol, List<View>> ControlledSymbolsDict { get; set; }
 
         public bool NoToAll { get; set; } = false;
         public bool YesToall { get; set; } = false;
@@ -40,8 +41,29 @@ namespace Functions
             result.OpeningWindowMainViewModel = openingWindowMainViewModel;
             result.CreateSectionViews();
             result.CreatePlanViews();
-
+            result.SetControlledSymbolsDict();
             return result;
+        }
+
+        private void SetControlledSymbolsDict()
+        {
+            ControlledSymbolsDict = new Dictionary<ControlledSymbol, List<View>>();
+            foreach (PlanView pv in PlanViews)
+            {
+                foreach (ControlledSymbol cs in pv.ControlledSymbols)
+                {
+                    //int check = ControlledSymbolsDict.Keys.Where(e => e.ID == cs.ID).ToList().Count;
+                    if (ControlledSymbolsDict.ContainsKey(cs))
+                    {
+                        ControlledSymbolsDict[cs].Add(pv.View);
+                    }
+                    else
+                    {
+                        List<View> views = new List<View>() { pv.View };
+                        ControlledSymbolsDict.Add(cs, views);
+                    }
+                }
+            }
         }
 
         private void CreateSectionViews()
@@ -59,6 +81,7 @@ namespace Functions
                 }
             }
         }
+
         private void CreatePlanViews()
         {
             PlanViews = new List<PlanView>();
@@ -78,6 +101,11 @@ namespace Functions
         {
             Dispatcher dispatcher;
             OperationStatus = OperationStatus.Initialize("Symbol changing tool initialized...");
+            OperationStatus.Progress = 0;
+            double full = 100;
+            double sum = SectionViews.Count + PlanViews.Count;
+            double progressStep = 0;
+            if (sum != 0) progressStep = full / sum;
 
             Thread windowThread = new Thread(delegate ()
             {
@@ -104,6 +132,7 @@ namespace Functions
                     OperationStatus.AddLineToTextMessage(info);
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", sectionView.RoundOpenings.Count));
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", sectionView.RectangularOpenings.Count));
+                    OperationStatus.Progress += progressStep;
                     using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
                     {
                         tx.Start("Label unsupported instances");
@@ -235,6 +264,7 @@ namespace Functions
                     OperationStatus.AddLineToTextMessage(info);
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", planView.RoundOpenings.Count));
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", planView.RectangularOpenings.Count));
+                    OperationStatus.Progress += progressStep;
                     using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
                     {
                         tx.Start("Label unsupported instances");
@@ -367,6 +397,23 @@ namespace Functions
             //OperationStatus.ShowCountDown(5);
             //dispatcher = Dispatcher.FromThread(windowThread);
             //dispatcher.Invoke(OperationStatus.CloseOperationWindow);
+        }
+
+        public void DisplayProblematic()
+        {
+            foreach (var pair in ControlledSymbolsDict)
+            {
+                
+                if(pair.Value.Count > 1)
+                {
+                    string info = pair.Key.ID.ToString() + Environment.NewLine;
+                    foreach (View v in pair.Value)
+                    {
+                        info += v.Name + ", ";
+                    }
+                    MessageBox.Show(info);
+                }
+            }
         }
     }
 }

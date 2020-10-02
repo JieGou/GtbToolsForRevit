@@ -23,8 +23,7 @@ namespace ExStorage
             if(Schema == null)
             {
                 Schema = CreateGtbSchema();
-            }
-            
+            }          
         }
 
         public bool SetEntityField(FamilyInstance familyInstance, string fieldName, int value)
@@ -32,14 +31,34 @@ namespace ExStorage
             bool result = false;
             Entity entity = familyInstance.GetEntity(Schema);
             Field field = Schema.GetField(fieldName);
-            try
+
+            if(entity.IsValid())
             {
                 entity.Get<int>(field);
                 entity.Set(field, value);
                 familyInstance.SetEntity(entity);
                 result = true;
             }
-            catch
+            else
+            {
+                SetSchemaEntity(familyInstance, field, value);
+            }           
+            return result;
+        }
+
+        public bool SetEntityField(FamilyInstance familyInstance, string fieldName, string value)
+        {
+            bool result = false;
+            Entity entity = familyInstance.GetEntity(Schema);
+            Field field = Schema.GetField(fieldName);
+
+            if(entity.IsValid())
+            {
+                entity.Set(field, value);
+                familyInstance.SetEntity(entity);
+                result = true;
+            }
+            else
             {
                 SetSchemaEntity(familyInstance, field, value);
             }
@@ -50,6 +69,13 @@ namespace ExStorage
         {
             Entity entity = new Entity(Schema);
             entity.Set<int>(field, value);
+            familyInstance.SetEntity(entity);
+        }
+
+        private void SetSchemaEntity(FamilyInstance familyInstance, Field field, string value)
+        {
+            Entity entity = new Entity(Schema);
+            entity.Set<string>(field, value);
             familyInstance.SetEntity(entity);
         }
 
@@ -66,12 +92,19 @@ namespace ExStorage
             FieldBuilder fbSymbol = schemaBuilder.AddSimpleField("fbSymbol", typeof(int));
             FieldBuilder abSymbol = schemaBuilder.AddSimpleField("abSymbol", typeof(int));
             FieldBuilder manSymbol = schemaBuilder.AddSimpleField("manSymbol", typeof(int));
-            discipline.SetDocumentation("Opening discipline automatic setting");
-            topSymbol.SetDocumentation("Top symbol automatic setting");
-            lrSymbol.SetDocumentation("Left right symbol automatic setting");
-            fbSymbol.SetDocumentation("Front back symbol automatic setting");
-            abSymbol.SetDocumentation("Above below symbol automatic setting");
-            manSymbol.SetDocumentation("Manual symbol automatic setting");
+            FieldBuilder positionXYZ = schemaBuilder.AddSimpleField("positionXYZ", typeof(string));
+            FieldBuilder dimensions = schemaBuilder.AddSimpleField("dimensions", typeof(string));
+            FieldBuilder dateSaved = schemaBuilder.AddSimpleField("dateSaved", typeof(string));
+            discipline.SetDocumentation("Opening discipline automatic setting (0 - never set, 1 - true, 2 false)");
+            topSymbol.SetDocumentation("Top symbol automatic setting (0 - never set, 1 - true, 2 false)");
+            lrSymbol.SetDocumentation("Left right symbol automatic setting (0 - never set, 1 - true, 2 false)");
+            fbSymbol.SetDocumentation("Front back symbol automatic setting (0 - never set, 1 - true, 2 false)");
+            abSymbol.SetDocumentation("Above below symbol automatic setting (0 - never set, 1 - true, 2 false)");
+            manSymbol.SetDocumentation("Manual symbol automatic setting (0 - never set, 1 - true, 2 false)");
+            positionXYZ.SetDocumentation("XYZ saved position of opening (0.00;0.00;0.00");
+            dimensions.SetDocumentation("Opening dimensions: rectangular WidthxHeightxDepth, round DiameterxDepth");
+            dateSaved.SetDocumentation("Date of saving opening information DD-MM-YYYY");
+            
             return schemaBuilder.Finish();
         }
     }

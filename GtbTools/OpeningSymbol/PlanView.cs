@@ -12,6 +12,7 @@ namespace OpeningSymbol
         public ViewDirection ViewDirection { get; set; }
         public List<RectangularOpening> RectangularOpenings { get; set; }
         public List<RoundOpening> RoundOpenings { get; set; }
+        public List<ControlledSymbol> ControlledSymbols { get; set; }
         double _absoluteCutPlane;
 
         List<FamilyInstance> _rectFamilyInstances;
@@ -34,6 +35,7 @@ namespace OpeningSymbol
             RoundOpenings = new List<RoundOpening>();
             if (ViewDiscipline == ViewDiscipline.TWP) CreateArcOpeningList();
             if (ViewDiscipline == ViewDiscipline.TGA) CreateTgaOpeningList();
+            SetControlledSymbols();
         }
 
         public void LabelUnsupportedInstances()
@@ -146,6 +148,21 @@ namespace OpeningSymbol
                 Level level = _doc.GetElement(cutPlaneId) as Level;
                 double elevation = level.Elevation * 304.8;
                 _absoluteCutPlane = elevation + cutPlaneOffset;
+            }
+        }
+
+        private void SetControlledSymbols()
+        {
+            ControlledSymbols = new List<ControlledSymbol>();
+            foreach (RoundOpening ro in RoundOpenings)
+            {
+                ControlledSymbol controlledSymbol = ControlledSymbol.Initialize(ro);
+                ControlledSymbols.Add(controlledSymbol);
+            }
+            foreach (RectangularOpening ro in RectangularOpenings)
+            {
+                ControlledSymbol controlledSymbol = ControlledSymbol.Initialize(ro);
+                ControlledSymbols.Add(controlledSymbol);
             }
         }
     }

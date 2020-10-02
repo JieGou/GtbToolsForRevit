@@ -46,11 +46,14 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button x:Name="SymbolMainWindow" Content="Symboleinstellungen für Ansichten" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="200" Click="SymbolMainWindow_Click"/>
                         <Button x:Name="TagAllOpenings" Content="Durchbrüche beschriften" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="200" Click="Btn_Click_TagAllOpenings"/>
+                        <Button x:Name="CheckMemory" Content="Check Memory" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="200" Click="CheckMemory_Click"/>
+                        <Button x:Name="ContextRefreshTest" Content="Context Refresh Test" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="200" Click="ContextRefreshTest_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">

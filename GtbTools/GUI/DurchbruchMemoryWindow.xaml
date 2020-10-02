@@ -1,0 +1,89 @@
+﻿<Window x:Class="GUI.DurchbruchMemoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        
+        Title="DurchbruchMemoryWindow" Height="600" Width="650">
+    
+    <Grid Focusable="True">
+        <Grid.Background>
+            <SolidColorBrush Color="#FFEAEAEA"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TabControl x:Name="MyTabs" Background="#FFEAEAEA">
+            <TabItem Header="New Durchbruche" TabIndex="0">
+                <StackPanel Margin="5" Background="White">
+                    <DataGrid x:Name="DataGridNew" ItemsSource="{Binding NewDurchbruche}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
+                            <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
+                            <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                            <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
+                            <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
+                            <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                            <DataGridTemplateColumn Header="Views">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_NewDurchBruchViews"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Moved Durchbruche" TabIndex="1">
+                <StackPanel Margin="5" Background="White">
+                    <DataGrid x:Name="DataGridMoved" ItemsSource="{Binding MovedDurchbruche}" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
+                            <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
+                            <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                            <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
+                            <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
+                            <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                            <DataGridTemplateColumn Header="Views">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_MovedDurchBruchViews"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Resized Durchbruche" TabIndex="2">
+                <StackPanel Margin="5" Background="White">
+                    <DataGrid x:Name="DataGridResized" ItemsSource="{Binding ResizedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridResized_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
+                            <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
+                            <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                            <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
+                            <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
+                            <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                            <DataGridTemplateColumn Header="Views">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_ResizedDurchBruchViews"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <Button Content="Test Btn" Grid.Column="1" HorizontalAlignment="Center" Margin="0,344,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Visibility="Hidden"/>
+    </Grid>
+</Window>

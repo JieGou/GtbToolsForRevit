@@ -21,6 +21,9 @@ using Autodesk.Revit.UI;
 using System.Text;
 using GtbTools.Excel;
 using ViewModels;
+using System.Threading;
+using GUI;
+using System.Windows.Threading;
 
 namespace GtbTools.Forms
 {
@@ -29,7 +32,7 @@ namespace GtbTools.Forms
     /// </summary>
     public partial class GtbDockPage : Page, Autodesk.Revit.UI.IDockablePaneProvider
     {
-        OpeningWindowMainViewModel OpeningWindowMainViewModel { get; set; }
+        public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
 
         #region Data
         ExternalEvent _exEventCopyCoords;
@@ -39,8 +42,7 @@ namespace GtbTools.Forms
         ExternalEvent _exEventExcel;
         ExternalEvent _exEventSymbols;
         ExternalEvent _tagAllOpenings;
-        ExternalEvent _floorSymbols;
-        ExternalEvent _roofSymbols;
+        ExternalEvent _cutOpeningMemory;
         ExternalEvent _mepExtract;
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
@@ -49,7 +51,7 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, ExternalEvent floorSymbols, ExternalEvent roofSymbols, ExternalEvent mepExtract)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel, ExternalEvent cutOpeningMemory, ExternalEvent mepExtract)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -58,9 +60,9 @@ namespace GtbTools.Forms
             _exEventExcel = exEventExcel;
             _exEventSymbols = exEventSymbols;
             _tagAllOpenings = tagAllOpenings;
-            _floorSymbols = floorSymbols;
-            _roofSymbols = roofSymbols;
+            _cutOpeningMemory = cutOpeningMemory;
             _mepExtract = mepExtract;
+            DurchbruchMemoryViewModel = durchbruchMemoryViewModel;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -130,7 +132,7 @@ namespace GtbTools.Forms
 
         private void SelectAllFloor_Click(object sender, RoutedEventArgs e)
         {
-            _floorSymbols.Raise();
+
         }
 
         private void Btn_Click_TagAllOpenings(object sender, RoutedEventArgs e)
@@ -140,12 +142,32 @@ namespace GtbTools.Forms
 
         private void SelectAllRoof_Click(object sender, RoutedEventArgs e)
         {
-            _roofSymbols.Raise();
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _mepExtract.Raise();
+        }
+
+        private void CheckMemory_Click(object sender, RoutedEventArgs e)
+        {
+            _cutOpeningMemory.Raise();
+        }
+
+        private void ContextRefreshTest_Click(object sender, RoutedEventArgs e)
+        {
+            Thread windowThread = new Thread(delegate ()
+            {
+                DurchbruchMemoryViewModel.LoadContextEvent.Raise();
+                DurchbruchMemoryViewModel.SignalEvent.WaitOne();
+                DurchbruchMemoryViewModel.SignalEvent.Reset();
+                DurchbruchMemoryWindow durchbruchMemoryWindow = new DurchbruchMemoryWindow(DurchbruchMemoryViewModel);
+                durchbruchMemoryWindow.Show();
+                Dispatcher.Run();
+            });
+            windowThread.SetApartmentState(ApartmentState.STA);
+            windowThread.Start();
         }
     }
 }

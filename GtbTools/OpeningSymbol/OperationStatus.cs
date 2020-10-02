@@ -56,6 +56,20 @@ namespace OpeningSymbol
                 }
             }
         }
+        private double _progress;
+        public double Progress
+        {
+            get => _progress;
+            set
+            {
+                if (_progress != value)
+                {
+                    _progress = value;
+                    OnPropertyChanged(nameof(Progress));
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)
         {

@@ -145,8 +145,8 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated excel data import");
             try
             {
-                ExcelDataImport excelDataImport = new ExcelDataImport(uiapp.MainWindowHandle);
-                excelDataImport.ShowDialog();
+                //ExcelDataImport excelDataImport = new ExcelDataImport(uiapp.MainWindowHandle);
+                //excelDataImport.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -178,6 +178,7 @@ namespace GtbTools
                 {
                     openingsMainWindow.OpeningSymbolTool.GtbSchema = gtbSchema;
                     openingsMainWindow.OpeningSymbolTool.ProcessSelectedViews();
+                    //openingsMainWindow.OpeningSymbolTool.DisplayProblematic();
                 }
             }
             catch (Exception ex)
@@ -230,19 +231,17 @@ namespace GtbTools
         }
     }
 
-    class ExternalEventSelectFloorSymbols : IExternalEventHandler
+    class ExternalEventUpdateViewModel : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Initiated floor symbol selector");
+            errorLog.WriteToLog("Loading current context to view model");
             try
             {
-                OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
-                openingSymbolSelector.SelectFloorOpenings();
-                openingSymbolSelector.ShowReport();
-                RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
-                uiapp.PostCommand(commandId);
+                App.Instance.DurchbruchMemoryViewModel.LoadContext(uiapp);
+                App.Instance.DurchbruchMemoryViewModel.InitializeDurchbruche();
+                App.Instance.DurchbruchMemoryViewModel.SignalEvent.Set();
             }
             catch (Exception ex)
             {
@@ -253,11 +252,34 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Symbol floor selector";
+            return "Current context loaded";
         }
     }
 
-    class ExternalEventSelectRoofSymbols : IExternalEventHandler
+    class ExternalEventShowElement : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Loading current context to view model");
+            try
+            {
+                App.Instance.DurchbruchMemoryViewModel.ShowElement();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Current context loaded";
+        }
+    }
+
+    class ExternalEventCutOpeningMemory : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
@@ -265,11 +287,15 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated roof symbol selector");
             try
             {
-                OpeningSymbolSelector openingSymbolSelector = OpeningSymbolSelector.Initialize(uiapp.ActiveUIDocument);
-                openingSymbolSelector.SelectRoofOpenings();
-                openingSymbolSelector.ShowReport();
-                RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TagAllNotTagged);
-                uiapp.PostCommand(commandId);
+                CutOpeningMemory cutOpeningMemory = new CutOpeningMemory(uiapp.ActiveUIDocument);
+                cutOpeningMemory.GetAllOpenings();
+                cutOpeningMemory.SetOpeningMemories();
+                CutOpeningMemoryWindow window = new CutOpeningMemoryWindow(cutOpeningMemory);
+                window.ShowDialog();
+                if (window.GtbWindowResult == GtbWindowResult.Apply)
+                {
+                    window.CutOpeningMemory.DisplayChanges();
+                }
             }
             catch (Exception ex)
             {

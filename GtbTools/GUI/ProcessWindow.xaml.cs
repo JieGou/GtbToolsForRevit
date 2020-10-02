@@ -64,5 +64,6 @@ namespace GUI
         {
             TextBoxInfo.ScrollToEnd();
         }
+
     }
 }

@@ -15,6 +15,7 @@
         <Button Content="Close" Margin="100,15,0,15" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75" Click="Close_Btn_Click" IsEnabled="{Binding OperationStatus.CloseButtonEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
         <TextBox x:Name="TextBoxInfo" Margin="10,0,10,10" Grid.Row="1" TextWrapping="Wrap" Text="{Binding OperationStatus.TextMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ScrollViewer.VerticalScrollBarVisibility="Visible" TextChanged="TextBoxInfo_TextChanged"/>
+        <ProgressBar x:Name="ProgressBar" HorizontalAlignment="Right" Height="20" Margin="0,15,10,0" VerticalAlignment="Top" Width="180" Value="{Binding OperationStatus.Progress}"/>
 
     </Grid>
 </Window>
