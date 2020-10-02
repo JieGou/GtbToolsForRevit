@@ -17,6 +17,11 @@ namespace ViewModels
         public string OpeningMark { get; set; }
         public DurchbruchModel DurchbruchModel { get; set; }
 
+        public string OldDiameter { get; set; }
+        public string OldWidth { get; set; }
+        public string OldHeight { get; set; }
+        public string OldDepth { get; set; }
+
         private ResizedDurchbruchViewModel()
         {
 
@@ -31,6 +36,7 @@ namespace ViewModels
             result.SetDimensions();
             result.SetMark();
             result.SetViews();
+            result.GetOldDimensions();
             return result;
         }
 
@@ -81,5 +87,25 @@ namespace ViewModels
                 Views.Add(modelView);
             }
         }
-    }
+
+        private void GetOldDimensions()
+        {
+            if(DurchbruchModel.Shape == DurchbruchShape.Rectangular)
+            {
+                string[] dims = DurchbruchModel.OpeningMemory.OldDimensions.Split('x');
+                OldWidth = dims[0];
+                OldHeight = dims[1];
+                OldDepth = dims[2];
+                OldDiameter = "---";
+            }
+            if (DurchbruchModel.Shape == DurchbruchShape.Round)
+            {
+                string[] dims = DurchbruchModel.OpeningMemory.OldDimensions.Split('x');
+                OldDiameter = dims[0];
+                OldDepth = dims[1];
+                OldWidth = "---";
+                OldHeight = "---";
+            }
+        }
+}
 }

@@ -120,6 +120,7 @@ namespace Model
                 DurchbruchStatus = DurchbruchStatus.Resized;
                 return;
             }
+
             DurchbruchStatus = DurchbruchStatus.Unchanged;
         }
     }

@@ -54,7 +54,8 @@ namespace ViewModels
 
         public void ShowElement()
         {
-            UIDocument.ShowElements(CurrentSelection);
+            UIDocument.Selection.SetElementIds(new List<ElementId>() { CurrentSelection });
+            //UIDocument.ShowElements(CurrentSelection);
         }
 
         private void SetAllDurchbruche()

@@ -77,5 +77,20 @@ namespace GUI
             DurchbruchMemoryViewModel.CurrentSelection = item.DurchbruchModel.ElementId;
             DurchbruchMemoryViewModel.ShowElementEvent.Raise();
         }
+
+        private void DataGridMoved_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            MovedDurchbruchViewModel item = (MovedDurchbruchViewModel)DataGridMoved.SelectedItem;
+            DurchbruchMemoryViewModel.CurrentSelection = item.DurchbruchModel.ElementId;
+            DurchbruchMemoryViewModel.ShowElementEvent.Raise();
+            //raise event to create a ball or a line
+        }
+
+        private void DataGridNew_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            NewDurchbruchViewModel item = (NewDurchbruchViewModel)DataGridNew.SelectedItem;
+            DurchbruchMemoryViewModel.CurrentSelection = item.DurchbruchModel.ElementId;
+            DurchbruchMemoryViewModel.ShowElementEvent.Raise();
+        }
     }
 }

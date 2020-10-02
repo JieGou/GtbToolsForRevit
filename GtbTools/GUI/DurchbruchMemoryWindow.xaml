@@ -19,7 +19,7 @@
         <TabControl x:Name="MyTabs" Background="#FFEAEAEA">
             <TabItem Header="New Durchbruche" TabIndex="0">
                 <StackPanel Margin="5" Background="White">
-                    <DataGrid x:Name="DataGridNew" ItemsSource="{Binding NewDurchbruche}" AutoGenerateColumns="False">
+                    <DataGrid x:Name="DataGridNew" ItemsSource="{Binding NewDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridNew_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
                             <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
@@ -41,7 +41,7 @@
             </TabItem>
             <TabItem Header="Moved Durchbruche" TabIndex="1">
                 <StackPanel Margin="5" Background="White">
-                    <DataGrid x:Name="DataGridMoved" ItemsSource="{Binding MovedDurchbruche}" AutoGenerateColumns="False">
+                    <DataGrid x:Name="DataGridMoved" ItemsSource="{Binding MovedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridMoved_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
                             <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
@@ -79,6 +79,10 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldDiameter}"/>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldWidth}"/>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldHeight}"/>
+                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldDepth}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
