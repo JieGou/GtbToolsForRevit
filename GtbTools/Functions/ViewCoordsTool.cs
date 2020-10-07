@@ -158,7 +158,6 @@ namespace GtbTools
 				string savePath = dlg.FileName;
 				string content = File.ReadAllText(savePath);
 				string[] coordArray = content.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-				MessageBox.Show(coordArray.Length.ToString());
 
 				XYZ p;
 				XYZ q;
