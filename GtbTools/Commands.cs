@@ -75,25 +75,18 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated open view tools...");
             try
             {
+                OpenViewsTool openViewsTool = new OpenViewsTool(uiapp.ActiveUIDocument, errorLog);
+                openViewsTool.CreateModelViewList();
+                ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
+                zoomWindow.ShowDialog();
+                if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
+                if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
                 View activeView = uiapp.ActiveUIDocument.ActiveView;
                 if (activeView.ViewType == ViewType.CeilingPlan || activeView.ViewType == ViewType.EngineeringPlan || activeView.ViewType == ViewType.FloorPlan || activeView.ViewType == ViewType.AreaPlan)
                 {
-                    OpenViewsTool openViewsTool = new OpenViewsTool(uiapp.ActiveUIDocument, errorLog);
-                    openViewsTool.CreateModelViewList();
-
-                    ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
-                    zoomWindow.ShowDialog();
-                    if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
-                    if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
                     ViewCoordsTool viewCoordsTool = new ViewCoordsTool(uiapp.ActiveUIDocument);
                     if (openViewsTool.WindowResult == WindowResult.UserApply) viewCoordsTool.ApplyCoordsToViews();
                 }
-                else
-                {
-                    string info = "Die aktive Ansicht muss vom Typ 2d sein!" + Environment.NewLine + Environment.NewLine + "Unterstützte Ansichtstypen:" + Environment.NewLine + "Floor plan, ceiling plan, structural plan, area plan.";
-                    TaskDialog.Show("Warning", info);
-                }
-
             }
             catch (Exception ex)
             {
