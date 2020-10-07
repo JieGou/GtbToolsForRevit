@@ -169,5 +169,10 @@ namespace GtbTools.Forms
             windowThread.SetApartmentState(ApartmentState.STA);
             windowThread.Start();
         }
+
+        private void Btn_Click_GoToTestDir(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(@"H:\Revit\Makros\Umsetzung\Durchbruch Symbolen");
+        }
     }
 }
