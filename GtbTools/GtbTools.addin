@@ -2,7 +2,7 @@
 <RevitAddIns>
   <AddIn Type="Application">
     <Name>GTB Tools</Name>
-    <Assembly>GtbTools.dll</Assembly>
+    <Assembly>H:\Revit\Makros\Publikation\2019\07-10-2020\GtbTools.dll</Assembly>
     <AddInId>DCBCD363-075C-45FB-908C-37F056A76861</AddInId>
     <FullClassName>GtbTools.App</FullClassName>
     <VendorId>GTBE</VendorId>

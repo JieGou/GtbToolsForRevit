@@ -42,9 +42,18 @@ namespace GtbTools
             errorLog.WriteToLog("Multi apply coords to view");
             try
             {
-                ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
-                vct.ApplyCoordsToViews();
-        }
+                View activeView = uiapp.ActiveUIDocument.ActiveView;
+                if(activeView.ViewType == ViewType.CeilingPlan || activeView.ViewType == ViewType.EngineeringPlan || activeView.ViewType == ViewType.FloorPlan || activeView.ViewType == ViewType.AreaPlan)
+                {
+                    ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                    vct.ApplyCoordsToViews();
+                }
+                else
+                {
+                    string info = "Die aktive Ansicht muss vom Typ 2d sein!" + Environment.NewLine + Environment.NewLine + "Unterstützte Ansichtstypen:" + Environment.NewLine + "Floor plan, ceiling plan, structural plan, area plan.";
+                    TaskDialog.Show("Warning", info);
+                }
+            }
             catch (Exception ex)
             {
                 MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
@@ -66,15 +75,25 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated open view tools...");
             try
             {
-                OpenViewsTool openViewsTool = new OpenViewsTool(uiapp.ActiveUIDocument, errorLog);
-                openViewsTool.CreateModelViewList();
+                View activeView = uiapp.ActiveUIDocument.ActiveView;
+                if (activeView.ViewType == ViewType.CeilingPlan || activeView.ViewType == ViewType.EngineeringPlan || activeView.ViewType == ViewType.FloorPlan || activeView.ViewType == ViewType.AreaPlan)
+                {
+                    OpenViewsTool openViewsTool = new OpenViewsTool(uiapp.ActiveUIDocument, errorLog);
+                    openViewsTool.CreateModelViewList();
 
-                ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
-                zoomWindow.ShowDialog();
-                if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
-                if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
-                ViewCoordsTool viewCoordsTool = new ViewCoordsTool(uiapp.ActiveUIDocument);
-                if (openViewsTool.WindowResult == WindowResult.UserApply) viewCoordsTool.ApplyCoordsToViews();
+                    ZoomWindow zoomWindow = new ZoomWindow(openViewsTool);
+                    zoomWindow.ShowDialog();
+                    if (openViewsTool.WindowResult == WindowResult.UserApply) openViewsTool.OpenViews();
+                    if (openViewsTool.CloseInactive == true) openViewsTool.CloseInactiveViews();
+                    ViewCoordsTool viewCoordsTool = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                    if (openViewsTool.WindowResult == WindowResult.UserApply) viewCoordsTool.ApplyCoordsToViews();
+                }
+                else
+                {
+                    string info = "Die aktive Ansicht muss vom Typ 2d sein!" + Environment.NewLine + Environment.NewLine + "Unterstützte Ansichtstypen:" + Environment.NewLine + "Floor plan, ceiling plan, structural plan, area plan.";
+                    TaskDialog.Show("Warning", info);
+                }
+
             }
             catch (Exception ex)
             {
@@ -97,8 +116,25 @@ namespace GtbTools
             errorLog.WriteToLog("Saving coordinates to file...");
             try
             {
-                ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
-                vct.SaveCurrentCoordinatesAs();
+                View activeView = uiapp.ActiveUIDocument.ActiveView;
+                if (activeView.ViewType == ViewType.ThreeD || activeView.ViewType == ViewType.Section || activeView.ViewType == ViewType.CeilingPlan || activeView.ViewType == ViewType.EngineeringPlan || activeView.ViewType == ViewType.FloorPlan || activeView.ViewType == ViewType.AreaPlan)
+                {
+                    ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                    if (activeView.ViewType == ViewType.ThreeD)
+                    {
+                        vct.Save3dCoordinatesAs();
+                    }
+                    else
+                    {
+                        vct.SaveCurrentCoordinatesAs();
+                    }
+                }
+                else
+                {
+                    string info = "Die aktive Ansicht muss vom Typ 2d sein!" + Environment.NewLine + Environment.NewLine + "Unterstützte Ansichtstypen:" + Environment.NewLine + "Floor plan, ceiling plan, structural plan, area plan, 3D, section";
+                    TaskDialog.Show("Warning", info);
+                }
+
             }
             catch (Exception ex)
             {
@@ -121,8 +157,24 @@ namespace GtbTools
             errorLog.WriteToLog("Loading coordinates from file...");
             try
             {
-                ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
-                vct.LoadCoordinatesFrom();
+                View activeView = uiapp.ActiveUIDocument.ActiveView;
+                if (activeView.ViewType == ViewType.ThreeD || activeView.ViewType == ViewType.Section || activeView.ViewType == ViewType.CeilingPlan || activeView.ViewType == ViewType.EngineeringPlan || activeView.ViewType == ViewType.FloorPlan || activeView.ViewType == ViewType.AreaPlan)
+                {
+                    ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
+                    if (activeView.ViewType == ViewType.ThreeD)
+                    {
+                        vct.Load3dCoordinatesFrom();
+                    }
+                    else
+                    {
+                        vct.LoadCoordinatesFrom();
+                    }
+                }
+                else
+                {
+                    string info = "Die aktive Ansicht ist nicht unterstüzt!" + Environment.NewLine + Environment.NewLine + "Unterstützte Ansichtstypen:" + Environment.NewLine + "Floor plan, ceiling plan, structural plan, area plan, 3D, section";
+                    TaskDialog.Show("Warning", info);
+                }
             }
             catch (Exception ex)
             {
@@ -145,8 +197,8 @@ namespace GtbTools
             errorLog.WriteToLog("Initiated excel data import");
             try
             {
-                //ExcelDataImport excelDataImport = new ExcelDataImport(uiapp.MainWindowHandle);
-                //excelDataImport.ShowDialog();
+                ExcelDataImport excelDataImport = new ExcelDataImport();
+                excelDataImport.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -331,6 +383,52 @@ namespace GtbTools
         public string GetName()
         {
             return "MEP systems extract";
+        }
+    }
+
+    class ExternalEventShowOnView : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Opening selected view");
+            try
+            {
+                App.Instance.DurchbruchMemoryViewModel.OpenView();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Opened selected view";
+        }
+    }
+
+    class ExternalEventSaveData : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Saving data to extensible storage");
+            try
+            {
+                App.Instance.DurchbruchMemoryViewModel.SaveOpeningsToExStorage();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "data saved to exstorage";
         }
     }
 }

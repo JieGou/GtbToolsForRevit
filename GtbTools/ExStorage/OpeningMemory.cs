@@ -89,11 +89,16 @@ namespace ExStorage
             Parameter height = _familyInstance.get_Parameter(new Guid("8eb274b3-fc0c-43e0-a46b-236bf59f292d"));
             if(depth != null && width != null && height != null)
             {
-                NewDimensions = width.AsDouble().ToString() + "x" + height.AsDouble().ToString() + "x" + depth.AsDouble().ToString();
+                double widthMetric = width.AsDouble() * 304.8;
+                double heightMetric = height.AsDouble() * 304.8;
+                double depthMetric = depth.AsDouble() * 304.8;
+                NewDimensions = widthMetric.ToString("F1") + "x" + heightMetric.ToString("F1") + "x" + depthMetric.ToString("F1");
             }
             if (depth != null && diameter != null)
             {
-                NewDimensions = diameter.AsDouble().ToString() + "x" + depth.AsDouble().ToString();
+                double depthMetric = depth.AsDouble() * 304.8;
+                double diameterMetric = diameter.AsDouble() * 304.8;
+                NewDimensions = diameterMetric.ToString("F1") + "x" + depthMetric.ToString("F1");
             }
             NewDateSaved = DateTime.Now.ToString("dd-MM-yyyy");
         }

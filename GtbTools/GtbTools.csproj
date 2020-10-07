@@ -107,6 +107,9 @@
     <Compile Include="GUI\DurchbruchMemoryWindow.xaml.cs">
       <DependentUpon>DurchbruchMemoryWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\DurchbruchViews.xaml.cs">
+      <DependentUpon>DurchbruchViews.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ExcelDataImport.xaml.cs">
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
     </Compile>
@@ -173,6 +176,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\DurchbruchMemoryWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\DurchbruchViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,11 +16,15 @@ namespace ViewModels
         public UIDocument UIDocument {get; set;}
         public Document Document { get; set; }
         public ElementId CurrentSelection { get; set; }
+        public View DesiredView { get; set; }
         public ExternalEvent LoadContextEvent { get; set; }
         public ExternalEvent ShowElementEvent { get; set; }
+        public ExternalEvent OpenViewEvent { get; set; }
+        public ExternalEvent SaveDataToExStorageEvent { get; set; }
         public List<NewDurchbruchViewModel> NewDurchbruche { get; set; }
         public List<MovedDurchbruchViewModel> MovedDurchbruche { get; set; }
         public List<ResizedDurchbruchViewModel> ResizedDurchbruche { get; set; }
+        public bool SaveAllToStorage { get; set; } = false;
 
         public ManualResetEvent SignalEvent = new ManualResetEvent(false);
 
@@ -46,16 +50,70 @@ namespace ViewModels
             Document = UIApplication.ActiveUIDocument.Document;
         }
 
-        public void SetExternalEvents(ExternalEvent loadContextEvent, ExternalEvent showElementEvent)
+        public void SetExternalEvents(ExternalEvent loadContextEvent, ExternalEvent showElementEvent, ExternalEvent openViewEvent, ExternalEvent saveDataToExStorageEvent)
         {
             LoadContextEvent = loadContextEvent;
             ShowElementEvent = showElementEvent;
+            OpenViewEvent = openViewEvent;
+            SaveDataToExStorageEvent = saveDataToExStorageEvent;
         }
 
         public void ShowElement()
         {
             UIDocument.Selection.SetElementIds(new List<ElementId>() { CurrentSelection });
             //UIDocument.ShowElements(CurrentSelection);
+        }
+
+        public void OpenView()
+        {
+            UIDocument.ActiveView = DesiredView;
+            UIDocument.Selection.SetElementIds(new List<ElementId>() { CurrentSelection });
+            UIDocument.ShowElements(CurrentSelection);
+        }
+
+        public void SaveOpeningsToExStorage()
+        {
+            using (Transaction tx = new Transaction(Document, "GTB-Tool ExStorage Write"))
+            {
+                tx.Start();
+                SaveNewOpenings();
+                if (SaveAllToStorage)
+                {
+                    SaveMovedOpenings();
+                    SaveResizedOpenings();
+                }
+                tx.Commit();
+            }
+        }
+
+        private void SaveNewOpenings()
+        {
+            foreach (NewDurchbruchViewModel item in NewDurchbruche)
+            {
+                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+            }
+        }
+
+        private void SaveResizedOpenings()
+        {
+            foreach (ResizedDurchbruchViewModel item in ResizedDurchbruche)
+            {
+                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+            }
+        }
+
+        private void SaveMovedOpenings()
+        {
+            foreach (MovedDurchbruchViewModel item in MovedDurchbruche)
+            {
+                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+            }
         }
 
         private void SetAllDurchbruche()

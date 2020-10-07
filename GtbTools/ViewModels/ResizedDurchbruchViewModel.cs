@@ -53,17 +53,21 @@ namespace ViewModels
 
         private void SetDimensions()
         {
-            Depth = DurchbruchModel.Depth.AsValueString();
+            double depthMetric = DurchbruchModel.Depth.AsDouble() * 304.8;
+            Depth = depthMetric.ToString("F1");
             if (DurchbruchModel.Shape == DurchbruchShape.Round)
             {
                 Width = "---";
                 Height = "---";
-                Diameter = DurchbruchModel.Diameter.AsValueString();
+                double diameterMetric = DurchbruchModel.Diameter.AsDouble() * 304.8;
+                Diameter = diameterMetric.ToString("F1");
             }
             if (DurchbruchModel.Shape == DurchbruchShape.Rectangular)
             {
-                Width = DurchbruchModel.Width.AsValueString();
-                Height = DurchbruchModel.Height.AsValueString();
+                double widthMetric = DurchbruchModel.Width.AsDouble() * 304.8;
+                double heightMetric = DurchbruchModel.Height.AsDouble() * 304.8;
+                Width = widthMetric.ToString("F1");
+                Height = heightMetric.ToString("F1");
                 Diameter = "---";
             }
         }

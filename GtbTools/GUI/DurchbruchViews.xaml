@@ -1,0 +1,27 @@
+﻿<Window x:Class="GUI.DurchbruchViews"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        Title="DurchbruchViews" Height="300" Width="300">
+    <Grid Background="#FFEAEAEA">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <StackPanel Margin="5" Background="White">
+        <DataGrid x:Name="DataGridViews" ItemsSource="{Binding Views}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Ansicht name" Binding="{Binding Path=Name}"/>
+                <DataGridTemplateColumn Header="Open View">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Label Content="--Double click to open the view--" MouseDoubleClick="Label_MouseDoubleClick"></Label>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+    </ScrollViewer>
+    </Grid>
+</Window>

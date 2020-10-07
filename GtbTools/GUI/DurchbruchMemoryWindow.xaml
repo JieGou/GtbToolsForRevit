@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         
         Title="DurchbruchMemoryWindow" Height="600" Width="650">
-    
-    <Grid Focusable="True">
+
+    <Grid x:Name="MainGrid">
         <Grid.Background>
             <SolidColorBrush Color="#FFEAEAEA"/>
         </Grid.Background>
@@ -18,76 +18,86 @@
         </Grid.ColumnDefinitions>
         <TabControl x:Name="MyTabs" Background="#FFEAEAEA">
             <TabItem Header="New Durchbruche" TabIndex="0">
-                <StackPanel Margin="5" Background="White">
-                    <DataGrid x:Name="DataGridNew" ItemsSource="{Binding NewDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridNew_SelectionChanged">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
-                            <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
-                            <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
-                            <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
-                            <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
-                            <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
-                            <DataGridTemplateColumn Header="Views">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_NewDurchBruchViews"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel Margin="5" Background="White">
+                        <DataGrid x:Name="DataGridNew" ItemsSource="{Binding NewDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridNew_SelectionChanged" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
+                                <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
+                                <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                                <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
+                                <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
+                                <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                                <DataGridTemplateColumn Header="Views">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_NewDurchBruchViews"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Moved Durchbruche" TabIndex="1">
-                <StackPanel Margin="5" Background="White">
-                    <DataGrid x:Name="DataGridMoved" ItemsSource="{Binding MovedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridMoved_SelectionChanged">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
-                            <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
-                            <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
-                            <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
-                            <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
-                            <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
-                            <DataGridTemplateColumn Header="Views">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_MovedDurchBruchViews"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <StackPanel Margin="5" Background="White">
+                        <DataGrid x:Name="DataGridMoved" ItemsSource="{Binding MovedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridMoved_SelectionChanged" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
+                                <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
+                                <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                                <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
+                                <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
+                                <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                                <DataGridTemplateColumn Header="Views">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Edit" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_MovedDurchBruchViews"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Resized Durchbruche" TabIndex="2">
-                <StackPanel Margin="5" Background="White">
-                    <DataGrid x:Name="DataGridResized" ItemsSource="{Binding ResizedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridResized_SelectionChanged">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
-                            <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
-                            <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
-                            <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
-                            <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
-                            <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
-                            <DataGridTemplateColumn Header="Views">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_ResizedDurchBruchViews"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldDiameter}"/>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldWidth}"/>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldHeight}"/>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OldDepth}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+                    <StackPanel Margin="5" Background="White">
+                        <DataGrid x:Name="DataGridResized" ItemsSource="{Binding ResizedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridResized_SelectionChanged" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
+                                <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
+                                <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                                <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
+                                <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
+                                <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                                <DataGridTemplateColumn Header="Views">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_ResizedDurchBruchViews"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                                <DataGridTextColumn Header="OldDiameter" Binding="{Binding Path=OldDiameter}"/>
+                                <DataGridTextColumn Header="OldWidth" Binding="{Binding Path=OldWidth}"/>
+                                <DataGridTextColumn Header="OldHeight" Binding="{Binding Path=OldHeight}"/>
+                                <DataGridTextColumn Header="OldDepth" Binding="{Binding Path=OldDepth}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
-        <Button Content="Test Btn" Grid.Column="1" HorizontalAlignment="Center" Margin="0,344,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click" Visibility="Hidden"/>
+        <StackPanel x:Name="RightStackPanel" Margin="5,22,5,0" Grid.Column="1" Focusable="True" Height="542" VerticalAlignment="Top">
+            <Button Content="Clear Selection" Grid.Column="1" HorizontalAlignment="Center" Margin="0,10,0,5" VerticalAlignment="Top" Width="100" Click="Btn_Click_ClearAll" Visibility="Visible"/>
+            <Button Content="Save New" Grid.Column="1" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Top" Width="100" Click="Btn_Click_SaveNew" Visibility="Visible"/>
+            <Button Content="Save All" Grid.Column="1" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Top" Width="100" Click="Btn_Click_SaveAll" Visibility="Visible"/>
+        </StackPanel>
     </Grid>
 </Window>

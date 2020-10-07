@@ -18,7 +18,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <TextBox x:Name="TxtBoxSearch" HorizontalAlignment="Left" Height="23" Margin="626,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="156"/>
-        <Button x:Name="BtnSearch" Content="Suchen .xlsx Dateien" HorizontalAlignment="Left" Margin="626,40,0,0" VerticalAlignment="Top" Width="157" Height="23" Click="BtnSearch_Click"/>
+        <Button x:Name="BtnSearch" Content="Suchen .xlsx Dateien" HorizontalAlignment="Left" Margin="626,40,0,0" VerticalAlignment="Top" Width="157" Height="23" Click="BtnSearch_Click" IsEnabled="False"/>
         <TextBox x:Name="TxtBoxCellColumn"  LostFocus="TxtBoxCellColumn_LostFocus" HorizontalAlignment="Left" Height="23" Margin="471,193,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="35"/>
         <Label Content="Zelle Adresse (A1, C2...)" HorizontalAlignment="Left" Margin="649,190,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.132,0"/>
         <TextBox x:Name="TxtBoxSheetName" LostFocus="TxtBoxSheetName_LostFocus" HorizontalAlignment="Left" Height="23" Margin="471,221,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
@@ -38,7 +38,7 @@
         <TextBox x:Name="TxtBoxCellRow" LostFocus="TxtBoxCellRow_LostFocus" HorizontalAlignment="Left" Height="23" Margin="555,193,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="41"/>
         <Label Content="1,2-100" HorizontalAlignment="Left" Margin="596,190,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.132,0" Width="53"/>
         <Button x:Name="BtnProcess" IsEnabled="{Binding ProcessApproved, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="Process" HorizontalAlignment="Left" Margin="708,389,0,0" VerticalAlignment="Top" Width="75" Click="BtnProcess_Click"/>
-        <Label x:Name="lblFunctionInactive" Foreground="Red" Content="Funktion ist jetzt nur fur Frank und Martin aktiviert" HorizontalAlignment="Left" Margin="475,363,0,0" VerticalAlignment="Top" Width="307"/>
+        <Label x:Name="lblFunctionInactive" Foreground="Red" Content="Funktion ist nicht aktiviert" HorizontalAlignment="Left" Margin="475,363,0,0" VerticalAlignment="Top" Width="307"/>
         <Button x:Name="BtnSelectAll" Content="Alles Wahlen" HorizontalAlignment="Left" Margin="467,10,0,0" VerticalAlignment="Top" Width="142" Height="23" Click="BtnSelectAll_Click" IsEnabled="false" />
         <Button x:Name="BtnClearAll" Content="Alles Klaren" HorizontalAlignment="Left" Margin="467,40,0,0" VerticalAlignment="Top" Width="142" Height="23" Click="BtnClearAll_Click" IsEnabled="False"/>
 

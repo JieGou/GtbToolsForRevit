@@ -46,14 +46,13 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
-                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button x:Name="SymbolMainWindow" Content="Symboleinstellungen für Ansichten" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="200" Click="SymbolMainWindow_Click"/>
                         <Button x:Name="TagAllOpenings" Content="Durchbrüche beschriften" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="200" Click="Btn_Click_TagAllOpenings"/>
-                        <Button x:Name="CheckMemory" Content="Check Memory" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="200" Click="CheckMemory_Click"/>
-                        <Button x:Name="ContextRefreshTest" Content="Context Refresh Test" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="200" Click="ContextRefreshTest_Click"/>
+                        <Button x:Name="CheckMemory" Content="Check Memory" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="200" Click="CheckMemory_Click" Visibility="Collapsed"/>
+                        <Button x:Name="ContextRefreshTest" Content="Durchbrüche Memory" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center" Width="200" Click="ContextRefreshTest_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">
@@ -62,10 +61,12 @@
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Label x:Name="LblVersion" Content="GTB Tools version: " Grid.Row="1"/>
                         <TextBox Foreground="Red" Text="Version Beta, bitte speichern Sie die Datei vor der Verwendung." TextWrapping="Wrap" Grid.Row="2" IsReadOnly="True"/>
+                        <TextBox Foreground="#FF7C7C7C" Text="Durchbrüche tools funktionieren nur mit neuen Durchbrüche Familien." TextWrapping="Wrap" Grid.Row="3" IsReadOnly="True"/>
                     </Grid>
                 </TabItem>
             </TabControl>

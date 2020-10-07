@@ -32,48 +32,53 @@ namespace GUI
             DataGridResized.DataContext = this.DurchbruchMemoryViewModel;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Btn_Click_ClearAll(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(DurchbruchMemoryViewModel.NewDurchbruche.Count.ToString());
+            DataGridResized.UnselectAll();
+            DataGridNew.UnselectAll();
+            DataGridMoved.UnselectAll();
+        }
+
+        private void Btn_Click_SaveNew(object sender, RoutedEventArgs e)
+        {
+            DurchbruchMemoryViewModel.SaveDataToExStorageEvent.Raise();
+        }
+
+        private void Btn_Click_SaveAll(object sender, RoutedEventArgs e)
+        {
+            DurchbruchMemoryViewModel.SaveAllToStorage = true;
+            DurchbruchMemoryViewModel.SaveDataToExStorageEvent.Raise();
         }
 
         private void BtnClick_NewDurchBruchViews(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             NewDurchbruchViewModel sendingClass = (NewDurchbruchViewModel)button.DataContext;
-            string info = "";
-            foreach (ModelView mv in sendingClass.Views)
-            {
-                info += mv.Name + Environment.NewLine;
-            }
-            MessageBox.Show(info);
+            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
+            durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
+            durchbruchViews.ShowDialog();
         }
         private void BtnClick_MovedDurchBruchViews(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             MovedDurchbruchViewModel sendingClass = (MovedDurchbruchViewModel)button.DataContext;
-            string info = "";
-            foreach (ModelView mv in sendingClass.Views)
-            {
-                info += mv.Name + Environment.NewLine;
-            }
-            MessageBox.Show(info);
+            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
+            durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
+            durchbruchViews.ShowDialog();
         }
         private void BtnClick_ResizedDurchBruchViews(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             ResizedDurchbruchViewModel sendingClass = (ResizedDurchbruchViewModel)button.DataContext;
-            string info = "";
-            foreach (ModelView mv in sendingClass.Views)
-            {
-                info += mv.Name + Environment.NewLine;
-            }
-            MessageBox.Show(info);
+            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
+            durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
+            durchbruchViews.ShowDialog();
         }
 
         private void DataGridResized_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ResizedDurchbruchViewModel item = (ResizedDurchbruchViewModel)DataGridResized.SelectedItem;
+            if (item == null) return;
             DurchbruchMemoryViewModel.CurrentSelection = item.DurchbruchModel.ElementId;
             DurchbruchMemoryViewModel.ShowElementEvent.Raise();
         }
@@ -81,6 +86,7 @@ namespace GUI
         private void DataGridMoved_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             MovedDurchbruchViewModel item = (MovedDurchbruchViewModel)DataGridMoved.SelectedItem;
+            if (item == null) return;
             DurchbruchMemoryViewModel.CurrentSelection = item.DurchbruchModel.ElementId;
             DurchbruchMemoryViewModel.ShowElementEvent.Raise();
             //raise event to create a ball or a line
@@ -89,8 +95,10 @@ namespace GUI
         private void DataGridNew_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             NewDurchbruchViewModel item = (NewDurchbruchViewModel)DataGridNew.SelectedItem;
+            if (item == null) return;
             DurchbruchMemoryViewModel.CurrentSelection = item.DurchbruchModel.ElementId;
             DurchbruchMemoryViewModel.ShowElementEvent.Raise();
         }
+
     }
 }

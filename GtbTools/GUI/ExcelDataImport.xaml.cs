@@ -54,7 +54,7 @@ namespace GtbTools.GUI
         private bool _userAllowed;
         private bool _processApproved;
 
-        public ExcelDataImport(IntPtr windowHandle)
+        public ExcelDataImport()
         {
             DataContext = this;
             Topmost = true;

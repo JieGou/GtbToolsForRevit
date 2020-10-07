@@ -27,7 +27,7 @@ namespace GtbTools
 #endif
         public const string AssemblyMinorVersion = "2";
         public const string AssemblyBuildVersion = "2";
-        public const string AssemblyRevisionVersion = "1";
+        public const string AssemblyRevisionVersion = "2";
         #endregion
 
         public static string PlugInVersion
@@ -118,9 +118,17 @@ namespace GtbTools
 
             IExternalEventHandler handler_event8 = new ExternalEventUpdateViewModel();
             ExternalEvent exEvent8 = ExternalEvent.Create(handler_event8);
+
             IExternalEventHandler showElementIExEventHandler = new ExternalEventShowElement();
             ExternalEvent showElementEventHandler = ExternalEvent.Create(showElementIExEventHandler);
-            DurchbruchMemoryViewModel.SetExternalEvents(exEvent8, showElementEventHandler);
+
+            IExternalEventHandler openViewExEventHandler = new ExternalEventShowOnView();
+            ExternalEvent openViewEventHandler = ExternalEvent.Create(openViewExEventHandler);
+
+            IExternalEventHandler saveDataExEventHandler = new ExternalEventSaveData();
+            ExternalEvent saveDataEventHandler = ExternalEvent.Create(saveDataExEventHandler);
+
+            DurchbruchMemoryViewModel.SetExternalEvents(exEvent8, showElementEventHandler, openViewEventHandler, saveDataEventHandler);
 
             IExternalEventHandler handler_event9 = new ExternalEventCutOpeningMemory();
             ExternalEvent exEvent9 = ExternalEvent.Create(handler_event9);
