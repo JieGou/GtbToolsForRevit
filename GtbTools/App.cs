@@ -26,7 +26,7 @@ namespace GtbTools
         public const string AssemblyYear = "2020";
 #endif
         public const string AssemblyMinorVersion = "2";
-        public const string AssemblyBuildVersion = "2";
+        public const string AssemblyBuildVersion = "3";
         public const string AssemblyRevisionVersion = "3";
         #endregion
 
@@ -45,6 +45,7 @@ namespace GtbTools
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
         public ErrorLog ErrorLog { get; set; }
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
+        public Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
         RibbonItem _button;
 
         internal static App _app = null;
@@ -59,6 +60,7 @@ namespace GtbTools
             _app = this;
             ErrorLog = new ErrorLog();
             DurchbruchMemoryViewModel = new DurchbruchMemoryViewModel();
+            DurchbruchRotationFix = new Functions.DurchbruchRotationFix();
             string path = Assembly.GetExecutingAssembly().Location;
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
@@ -136,9 +138,17 @@ namespace GtbTools
             IExternalEventHandler handler_event10 = new ExternalEventMepExtract();
             ExternalEvent exEvent10 = ExternalEvent.Create(handler_event10);
 
+            IExternalEventHandler fixRotationEventHandler = new ExternalEventFixRotationIssue();
+            ExternalEvent fixRotationExEvent = ExternalEvent.Create(fixRotationEventHandler);
+
+            IExternalEventHandler handler_event11 = new ExternalEventFixRotationSelect();
+            ExternalEvent exEvent11 = ExternalEvent.Create(handler_event11);
+
+            DurchbruchRotationFix.SetExternalEvents(fixRotationExEvent);
+
             DockablePaneProviderData data = new DockablePaneProviderData();
 
-            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, DurchbruchMemoryViewModel, exEvent9, exEvent10);
+            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;

@@ -4,15 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace DurchbruchRotationFix
 {
-    public enum DurchbruchStatus
+    public enum WindowDecision
     {
         None,
-        Unchanged,
-        Moved,
-        Resized,
-        New,
-        MovedAndResized,
+        Show,
+        Apply
     }
 }

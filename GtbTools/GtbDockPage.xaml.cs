@@ -33,6 +33,7 @@ namespace GtbTools.Forms
     public partial class GtbDockPage : Page, Autodesk.Revit.UI.IDockablePaneProvider
     {
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
+        Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
 
         #region Data
         ExternalEvent _exEventCopyCoords;
@@ -44,6 +45,8 @@ namespace GtbTools.Forms
         ExternalEvent _tagAllOpenings;
         ExternalEvent _cutOpeningMemory;
         ExternalEvent _mepExtract;
+        ExternalEvent _copyElevations;
+        
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -51,7 +54,7 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel, ExternalEvent cutOpeningMemory, ExternalEvent mepExtract)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel, ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,ExternalEvent copyElevations)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -62,7 +65,9 @@ namespace GtbTools.Forms
             _tagAllOpenings = tagAllOpenings;
             _cutOpeningMemory = cutOpeningMemory;
             _mepExtract = mepExtract;
+            DurchbruchRotationFix = rotationFix;
             DurchbruchMemoryViewModel = durchbruchMemoryViewModel;
+            _copyElevations = copyElevations;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -173,6 +178,24 @@ namespace GtbTools.Forms
         private void Btn_Click_GoToTestDir(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start(@"H:\Revit\Makros\Umsetzung\Durchbruch Symbolen");
+        }
+
+        private void RotationFixButton_Click(object sender, RoutedEventArgs e)
+        {
+            Thread windowThread = new Thread(delegate ()
+            {
+                DurchbruchRotationFix.FixRotationEvent.Raise();
+                //DurchbruchRotationFix.SignalEvent.WaitOne();
+                //DurchbruchRotationFix.SignalEvent.Reset();
+                Dispatcher.Run();
+            });
+            windowThread.SetApartmentState(ApartmentState.STA);
+            windowThread.Start();
+        }
+
+        private void CopyElevations_Click(object sender, RoutedEventArgs e)
+        {
+            _copyElevations.Raise();
         }
     }
 }

@@ -30,6 +30,7 @@ namespace GUI
             DataGridNew.DataContext = this.DurchbruchMemoryViewModel;
             DataGridMoved.DataContext = this.DurchbruchMemoryViewModel;
             DataGridResized.DataContext = this.DurchbruchMemoryViewModel;
+            DataGridMovedAndResized.DataContext = this.DurchbruchMemoryViewModel;
         }
 
         private void Btn_Click_ClearAll(object sender, RoutedEventArgs e)

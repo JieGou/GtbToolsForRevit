@@ -24,6 +24,7 @@ namespace ViewModels
         public List<NewDurchbruchViewModel> NewDurchbruche { get; set; }
         public List<MovedDurchbruchViewModel> MovedDurchbruche { get; set; }
         public List<ResizedDurchbruchViewModel> ResizedDurchbruche { get; set; }
+        public List<MovedAndResizedDbViewModel> MovedAndResizedDurchbruche { get; set; }
         public bool SaveAllToStorage { get; set; } = false;
 
         public ManualResetEvent SignalEvent = new ManualResetEvent(false);
@@ -147,6 +148,7 @@ namespace ViewModels
             NewDurchbruche = new List<NewDurchbruchViewModel>();
             ResizedDurchbruche = new List<ResizedDurchbruchViewModel>();
             MovedDurchbruche = new List<MovedDurchbruchViewModel>();
+            MovedAndResizedDurchbruche = new List<MovedAndResizedDbViewModel>();
 
             foreach (DurchbruchModel dbm in _modelDurchbrucheAll)
             {
@@ -164,6 +166,11 @@ namespace ViewModels
                 {
                     MovedDurchbruchViewModel movedDurchbruchViewModel = MovedDurchbruchViewModel.Initialize(dbm);
                     MovedDurchbruche.Add(movedDurchbruchViewModel);
+                }
+                if (dbm.DurchbruchStatus == DurchbruchStatus.MovedAndResized)
+                {
+                    MovedAndResizedDbViewModel movedAndResizedDbViewModel = MovedAndResizedDbViewModel.Initialize(dbm);
+                    MovedAndResizedDurchbruche.Add(movedAndResizedDbViewModel);
                 }
             }
         }

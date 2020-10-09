@@ -85,6 +85,15 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="DurchbruchRotationFix\DurchbruchOrientation.cs" />
+    <Compile Include="DurchbruchRotationFix\DurchbruchRotatedModel.cs" />
+    <Compile Include="DurchbruchRotationFix\DurchbruchRotation.cs" />
+    <Compile Include="DurchbruchRotationFix\RotationFixViewModel.cs" />
+    <Compile Include="DurchbruchRotationFix\WindowDecision.cs" />
+    <Compile Include="Functions\GetSetElevation.cs" />
+    <Compile Include="GUI\DurchbruchRotationFixWindow.xaml.cs">
+      <DependentUpon>DurchbruchRotationFixWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ErrorLog\ErrorLog.cs" />
     <Compile Include="Excel\ExcelCellValue.cs" />
     <Compile Include="Excel\ExcelDataImporter.cs" />
@@ -95,6 +104,7 @@
     <Compile Include="ExStorage\OpeningMemory.cs" />
     <Compile Include="ExStorage\OpeningExStorage.cs" />
     <Compile Include="Functions\CutOpeningMemory.cs" />
+    <Compile Include="Functions\DurchbruchRotationFix.cs" />
     <Compile Include="Functions\OpeningSymbolSelector.cs" />
     <Compile Include="Functions\OpeningSymbolTool.cs" />
     <Compile Include="Functions\OpeningTagger.cs" />
@@ -154,6 +164,7 @@
     <Compile Include="ViewModels\MovedDurchbruchViewModel.cs" />
     <Compile Include="ViewModels\NewDurchbruchViewModel.cs" />
     <Compile Include="ViewModels\OpeningWindowMainViewModel.cs" />
+    <Compile Include="ViewModels\MovedAndResizedDbViewModel.cs" />
     <Compile Include="ViewModels\ResizedDurchbruchViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -167,6 +178,10 @@
     <EmbeddedResource Include="Resources\GtbInactive.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="GUI\DurchbruchRotationFixWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GtbDockPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

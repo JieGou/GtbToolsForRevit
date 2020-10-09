@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using DurchbruchRotationFix;
 using ExStorage;
 using Functions;
 using GtbTools.GUI;
@@ -422,6 +423,64 @@ namespace GtbTools
         public string GetName()
         {
             return "data saved to exstorage";
+        }
+    }
+
+    class ExternalEventFixRotationIssue : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Fixing rotation issue");
+            try
+            {
+
+                Functions.DurchbruchRotationFix durchbruchRotationFix = Functions.DurchbruchRotationFix.Initialize(uiapp.ActiveUIDocument);
+                durchbruchRotationFix.DisplayWindow();
+                if(durchbruchRotationFix.DurchbruchRotationFixWindow.WindowDecision == WindowDecision.Apply)
+                {
+                    durchbruchRotationFix.FixRotation(durchbruchRotationFix.RotationFixViewModel.RotatedElementsToFix);
+                }
+                if (durchbruchRotationFix.DurchbruchRotationFixWindow.WindowDecision == WindowDecision.Show)
+                {
+                    App.Instance.DurchbruchRotationFix.SelectOpenings(App.Instance.DurchbruchRotationFix.RotationFixViewModel.Selection);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Fixed rotation issue";
+        }
+    }
+
+    class ExternalEventFixRotationSelect : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Selecting rotated durchbruche...");
+            try
+            {
+                GetSetElevation getSetElevation = new GetSetElevation(uiapp.ActiveUIDocument.Document);
+                getSetElevation.GetOpenings();
+                getSetElevation.SetElevations();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Selected rotated openings";
         }
     }
 }

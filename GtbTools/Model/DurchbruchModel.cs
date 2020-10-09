@@ -105,6 +105,11 @@ namespace Model
 
         private void SetStatus()
         {
+            if(OpeningMemory.IsDimChanged && OpeningMemory.IsPosChanged)
+            {
+                DurchbruchStatus = DurchbruchStatus.MovedAndResized;
+                return;
+            }
             if(OpeningMemory.IsNew)
             {
                 DurchbruchStatus = DurchbruchStatus.New;
