@@ -18,14 +18,14 @@ namespace ViewModels
         public UIDocument UIDocument {get; set;}
         public Document Document { get; set; }
         public ElementId CurrentSelection { get; set; }
-        public MovedDurchbruchViewModel CurrentItem { get; set; }
+        public MovedAndResizedDbViewModel CurrentItem { get; set; }
         public View DesiredView { get; set; }
         public ExternalEvent LoadContextEvent { get; set; }
         public ExternalEvent ShowElementEvent { get; set; }
         public ExternalEvent OpenViewEvent { get; set; }
         public ExternalEvent SaveDataToExStorageEvent { get; set; }
         public List<NewDurchbruchViewModel> NewDurchbruche { get; set; }
-        public List<MovedDurchbruchViewModel> MovedDurchbruche { get; set; }
+        public List<MovedAndResizedDbViewModel> MovedDurchbruche { get; set; }
         public List<ResizedDurchbruchViewModel> ResizedDurchbruche { get; set; }
         public List<MovedAndResizedDbViewModel> MovedAndResizedDurchbruche { get; set; }
         public bool SaveAllToStorage { get; set; } = false;
@@ -174,7 +174,7 @@ namespace ViewModels
 
         private void SaveMovedOpenings()
         {
-            foreach (MovedDurchbruchViewModel item in MovedDurchbruche)
+            foreach (MovedAndResizedDbViewModel item in MovedDurchbruche)
             {
                 item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
                 item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
@@ -212,7 +212,7 @@ namespace ViewModels
         {
             NewDurchbruche = new List<NewDurchbruchViewModel>();
             ResizedDurchbruche = new List<ResizedDurchbruchViewModel>();
-            MovedDurchbruche = new List<MovedDurchbruchViewModel>();
+            MovedDurchbruche = new List<MovedAndResizedDbViewModel>();
             MovedAndResizedDurchbruche = new List<MovedAndResizedDbViewModel>();
 
             foreach (DurchbruchModel dbm in _modelDurchbrucheAll)
@@ -229,7 +229,7 @@ namespace ViewModels
                 }
                 if (dbm.DurchbruchStatus == DurchbruchStatus.Moved)
                 {
-                    MovedDurchbruchViewModel movedDurchbruchViewModel = MovedDurchbruchViewModel.Initialize(dbm);
+                    MovedAndResizedDbViewModel movedDurchbruchViewModel = MovedAndResizedDbViewModel.Initialize(dbm);
                     MovedDurchbruche.Add(movedDurchbruchViewModel);
                 }
                 if (dbm.DurchbruchStatus == DurchbruchStatus.MovedAndResized)

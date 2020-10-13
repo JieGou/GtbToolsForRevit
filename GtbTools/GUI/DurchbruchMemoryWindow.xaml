@@ -73,6 +73,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                                <DataGridTextColumn Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
                                 <DataGridCheckBoxColumn Header="Old position marker">
                                     <DataGridCheckBoxColumn.CellStyle>
                                         <Style>
@@ -119,6 +120,7 @@
                                 <DataGridTextColumn Header="OldWidth" Binding="{Binding Path=OldWidth}"/>
                                 <DataGridTextColumn Header="OldHeight" Binding="{Binding Path=OldHeight}"/>
                                 <DataGridTextColumn Header="OldDepth" Binding="{Binding Path=OldDepth}"/>
+                                <DataGridTextColumn Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
@@ -134,7 +136,7 @@
                               ItemsSource="{Binding MovedAndResizedDurchbruche}" 
                               AutoGenerateColumns="False" 
                               SelectionChanged="DataGridMovedAndResized_SelectionChanged" 
-                              IsReadOnly="True">
+                              IsReadOnly="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
                             <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
@@ -154,7 +156,19 @@
                             <DataGridTextColumn Header="OldWidth" Binding="{Binding Path=OldWidth}"/>
                             <DataGridTextColumn Header="OldHeight" Binding="{Binding Path=OldHeight}"/>
                             <DataGridTextColumn Header="OldDepth" Binding="{Binding Path=OldDepth}"/>
-                        </DataGrid.Columns>
+                            <DataGridTextColumn Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
+                            <DataGridCheckBoxColumn Header="Old position marker">
+                            <DataGridCheckBoxColumn.CellStyle>
+                                <Style>
+                                    <EventSetter Event="CheckBox.Checked" Handler="OnChecked"/>
+                                    <EventSetter Event="CheckBox.Unchecked" Handler="OnUnchecked"/>
+                                    <Setter Property="CheckBox.HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="CheckBox.VerticalAlignment" Value="Center"/>
+                                    <Setter Property= "CheckBox.Background" Value="Transparent"/>
+                                </Style>
+                            </DataGridCheckBoxColumn.CellStyle>
+                            </DataGridCheckBoxColumn>
+                            </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
             </ScrollViewer>

@@ -21,6 +21,7 @@ namespace ViewModels
         public string OldWidth { get; set; }
         public string OldHeight { get; set; }
         public string OldDepth { get; set; }
+        public string DateSaved { get; set; }
 
         private ResizedDurchbruchViewModel()
         {
@@ -37,7 +38,13 @@ namespace ViewModels
             result.SetMark();
             result.SetViews();
             result.GetOldDimensions();
+            result.SetDateSaved();
             return result;
+        }
+
+        private void SetDateSaved()
+        {
+            DateSaved = DurchbruchModel.OpeningMemory.OldDateSaved;
         }
 
         private void SetElementId()

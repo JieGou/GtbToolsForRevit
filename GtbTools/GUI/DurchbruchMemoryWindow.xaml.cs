@@ -38,6 +38,7 @@ namespace GUI
             DataGridResized.UnselectAll();
             DataGridNew.UnselectAll();
             DataGridMoved.UnselectAll();
+            DataGridMovedAndResized.UnselectAll();
         }
 
         private void Btn_Click_SaveNew(object sender, RoutedEventArgs e)
@@ -62,7 +63,7 @@ namespace GUI
         private void BtnClick_MovedDurchBruchViews(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            MovedDurchbruchViewModel sendingClass = (MovedDurchbruchViewModel)button.DataContext;
+            MovedAndResizedDbViewModel sendingClass = (MovedAndResizedDbViewModel)button.DataContext;
             DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
             durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
             durchbruchViews.ShowDialog();
@@ -97,7 +98,7 @@ namespace GUI
 
         private void DataGridMoved_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MovedDurchbruchViewModel item = (MovedDurchbruchViewModel)DataGridMoved.SelectedItem;
+            MovedAndResizedDbViewModel item = (MovedAndResizedDbViewModel)DataGridMoved.SelectedItem;
             if (item == null) return;
             DurchbruchMemoryViewModel.CurrentSelection = item.DurchbruchModel.ElementId;
             DurchbruchMemoryViewModel.DurchbruchMemoryAction = DurchbruchMemoryAction.ShowElement;
@@ -157,16 +158,17 @@ namespace GUI
         private void OnChecked(object sender, RoutedEventArgs e)
         {
             DataGridCell item = (DataGridCell)sender;
-            MovedDurchbruchViewModel sendingClass = (MovedDurchbruchViewModel)item.DataContext;
+            MovedAndResizedDbViewModel sendingClass = (MovedAndResizedDbViewModel)item.DataContext;
             DurchbruchMemoryViewModel.CurrentItem = sendingClass;
             DurchbruchMemoryViewModel.DurchbruchMemoryAction = DurchbruchMemoryAction.ShowPosition;
             DurchbruchMemoryViewModel.SignalEvent.Set();
             DurchbruchMemoryViewModel.ShowElementEvent.Raise();
         }
+
         private void OnUnchecked(object sender, RoutedEventArgs e)
         {
             DataGridCell item = (DataGridCell)sender;
-            MovedDurchbruchViewModel sendingClass = (MovedDurchbruchViewModel)item.DataContext;
+            MovedAndResizedDbViewModel sendingClass = (MovedAndResizedDbViewModel)item.DataContext;
             DurchbruchMemoryViewModel.CurrentItem = sendingClass;
             DurchbruchMemoryViewModel.DurchbruchMemoryAction = DurchbruchMemoryAction.DeletePosition;
             DurchbruchMemoryViewModel.SignalEvent.Set();

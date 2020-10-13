@@ -15,6 +15,7 @@ namespace ViewModels
         public string Depth { get; set; }
         public List<ModelView> Views { get; set; }
         public string OpeningMark { get; set; }
+        public string DateSaved { get; set; }
         public DurchbruchModel DurchbruchModel { get; set; }
         public int OldPositionMarker { get; set; }
         public int OldPositionModelCurve { get; set; }
@@ -23,7 +24,7 @@ namespace ViewModels
         {
 
         }
-
+        //class postponed
         public static MovedDurchbruchViewModel Initialize(DurchbruchModel durchbruchModel)
         {
             MovedDurchbruchViewModel result = new MovedDurchbruchViewModel();
@@ -33,7 +34,13 @@ namespace ViewModels
             result.SetDimensions();
             result.SetMark();
             result.SetViews();
+            result.SetDateSaved();
             return result;
+        }
+
+        private void SetDateSaved()
+        {
+            DateSaved = DurchbruchModel.OpeningMemory.OldDateSaved;
         }
 
         private void SetElementId()

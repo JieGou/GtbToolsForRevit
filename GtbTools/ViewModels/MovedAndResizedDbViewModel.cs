@@ -15,8 +15,10 @@ namespace ViewModels
         public string Depth { get; set; }
         public List<ModelView> Views { get; set; }
         public string OpeningMark { get; set; }
+        public string DateSaved { get; set; }
         public DurchbruchModel DurchbruchModel { get; set; }
-
+        public int OldPositionMarker { get; set; }
+        public int OldPositionModelCurve { get; set; }
         public string OldDiameter { get; set; }
         public string OldWidth { get; set; }
         public string OldHeight { get; set; }
@@ -37,7 +39,13 @@ namespace ViewModels
             result.SetMark();
             result.SetViews();
             result.GetOldDimensions();
+            result.SetDateSaved();
             return result;
+        }
+
+        private void SetDateSaved()
+        {
+            DateSaved = DurchbruchModel.OpeningMemory.OldDateSaved;
         }
 
         private void SetElementId()
