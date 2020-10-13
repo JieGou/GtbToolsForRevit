@@ -16,6 +16,8 @@ namespace ViewModels
         public List<ModelView> Views { get; set; }
         public string OpeningMark { get; set; }
         public DurchbruchModel DurchbruchModel { get; set; }
+        public int OldPositionMarker { get; set; }
+        public int OldPositionModelCurve { get; set; }
 
         private MovedDurchbruchViewModel()
         {

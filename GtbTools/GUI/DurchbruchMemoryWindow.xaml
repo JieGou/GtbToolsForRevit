@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         
-        Title="DurchbruchMemoryWindow" Height="600" Width="650">
+        Title="DurchbruchMemoryWindow" Height="500" Width="750">
 
     <Grid x:Name="MainGrid">
         <Grid.Background>
@@ -18,9 +18,16 @@
         </Grid.ColumnDefinitions>
         <TabControl x:Name="MyTabs" Background="#FFEAEAEA">
             <TabItem Header="New Durchbruche" TabIndex="0">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer x:Name="ScrViewerNew" PreviewMouseWheel="ScrViewerNew_PreviewMouseWheel">
                     <StackPanel Margin="5" Background="White">
-                        <DataGrid x:Name="DataGridNew" ItemsSource="{Binding NewDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridNew_SelectionChanged" IsReadOnly="True">
+                        <DataGrid x:Name="DataGridNew" 
+                              ScrollViewer.CanContentScroll="True" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                              ItemsSource="{Binding NewDurchbruche}" 
+                              AutoGenerateColumns="False" 
+                              SelectionChanged="DataGridNew_SelectionChanged" 
+                              IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
                                 <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
@@ -42,9 +49,15 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Moved Durchbruche" TabIndex="1">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <ScrollViewer x:Name="ScrViewerMoved" PreviewMouseWheel="ScrViewerMoved_PreviewMouseWheel">
                     <StackPanel Margin="5" Background="White">
-                        <DataGrid x:Name="DataGridMoved" ItemsSource="{Binding MovedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridMoved_SelectionChanged" IsReadOnly="True">
+                        <DataGrid x:Name="DataGridMoved"
+                              ScrollViewer.CanContentScroll="True" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                              ItemsSource="{Binding MovedDurchbruche}" 
+                              AutoGenerateColumns="False" 
+                              SelectionChanged="DataGridMoved_SelectionChanged">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
                                 <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
@@ -60,15 +73,33 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                                <DataGridCheckBoxColumn Header="Old position marker">
+                                    <DataGridCheckBoxColumn.CellStyle>
+                                        <Style>
+                                            <EventSetter Event="CheckBox.Checked" Handler="OnChecked"/>
+                                            <EventSetter Event="CheckBox.Unchecked" Handler="OnUnchecked"/>
+                                            <Setter Property="CheckBox.HorizontalAlignment" Value="Center"/>
+                                            <Setter Property="CheckBox.VerticalAlignment" Value="Center"/>
+                                            <Setter Property= "CheckBox.Background" Value="Transparent"/>
+                                        </Style>
+                                    </DataGridCheckBoxColumn.CellStyle>
+                                </DataGridCheckBoxColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Resized Durchbruche" TabIndex="2">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
+                <ScrollViewer x:Name="ScrViewerResized" PreviewMouseWheel="ScrViewerResized_PreviewMouseWheel">
                     <StackPanel Margin="5" Background="White">
-                        <DataGrid x:Name="DataGridResized" ItemsSource="{Binding ResizedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridResized_SelectionChanged" IsReadOnly="True">
+                        <DataGrid x:Name="DataGridResized"
+                              ScrollViewer.CanContentScroll="True" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                              ItemsSource="{Binding ResizedDurchbruche}" 
+                              AutoGenerateColumns="False" 
+                              SelectionChanged="DataGridResized_SelectionChanged" 
+                              IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
                                 <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
@@ -94,9 +125,16 @@
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Moved and Resized" TabIndex="3">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True">
-                <StackPanel Margin="5" Background="White">
-                        <DataGrid x:Name="DataGridMovedAndResized" ItemsSource="{Binding MovedAndResizedDurchbruche}" AutoGenerateColumns="False" SelectionChanged="DataGridResized_SelectionChanged" IsReadOnly="True">
+                <ScrollViewer x:Name="ScrViewerMovedAndResized" PreviewMouseWheel="ScrViewerMovedAndResized_PreviewMouseWheel">
+                    <StackPanel Margin="5" Background="White">
+                        <DataGrid x:Name="DataGridMovedAndResized"
+                              ScrollViewer.CanContentScroll="True" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" 
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                              ItemsSource="{Binding MovedAndResizedDurchbruche}" 
+                              AutoGenerateColumns="False" 
+                              SelectionChanged="DataGridMovedAndResized_SelectionChanged" 
+                              IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
                             <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
@@ -107,7 +145,7 @@
                             <DataGridTemplateColumn Header="Views">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_ResizedDurchBruchViews"/>
+                                        <Button Content="Show" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_MovedAndResized"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

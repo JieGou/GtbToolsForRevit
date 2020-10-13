@@ -82,7 +82,7 @@ namespace ExStorage
         private void ReadCurrentSettings()
         {
             LocationPoint locationPoint = _familyInstance.Location as LocationPoint;
-            NewPosition = locationPoint.Point.X.ToString() + ";" + locationPoint.Point.Y.ToString() + ";" + locationPoint.Point.Z.ToString();
+            NewPosition = locationPoint.Point.X.ToString("F4") + ";" + locationPoint.Point.Y.ToString("F4") + ";" + locationPoint.Point.Z.ToString("F4");
             Parameter depth = _familyInstance.get_Parameter(new Guid("17a96ef5-1311-49f2-a0d1-4fe5f3f3854b"));
             Parameter diameter = _familyInstance.get_Parameter(new Guid("9c805bcc-ebc9-4d4c-8d73-26970789417a"));
             Parameter width = _familyInstance.get_Parameter(new Guid("46982e85-76c3-43fb-828f-ddf7a643566f"));

@@ -310,7 +310,22 @@ namespace GtbTools
             errorLog.WriteToLog("Loading current context to view model");
             try
             {
-                App.Instance.DurchbruchMemoryViewModel.ShowElement();
+                DurchbruchMemoryViewModel model = App.Instance.DurchbruchMemoryViewModel;
+                model.SignalEvent.WaitOne();
+                model.SignalEvent.Reset();
+                if (model.DurchbruchMemoryAction == DurchbruchMemoryAction.ShowElement)
+                {
+                    model.ShowElement();
+                }
+                if (model.DurchbruchMemoryAction == DurchbruchMemoryAction.ShowPosition)
+                {
+                    model.CreateOldPositionMarker();
+                }
+                if (model.DurchbruchMemoryAction == DurchbruchMemoryAction.DeletePosition)
+                {
+                    model.DeleteOldPositionMarker();
+                    model.DeleteOldPositionCurve();
+                }
             }
             catch (Exception ex)
             {

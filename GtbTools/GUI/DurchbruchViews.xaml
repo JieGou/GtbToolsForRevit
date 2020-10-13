@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="DurchbruchViews" Height="300" Width="300">
+        Title="DurchbruchViews" Height="300" Width="400">
     <Grid Background="#FFEAEAEA">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <StackPanel Margin="5" Background="White">

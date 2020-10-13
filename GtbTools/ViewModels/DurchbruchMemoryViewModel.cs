@@ -1,4 +1,5 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
 using Model;
 using System;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ViewModels
 {
@@ -16,6 +18,7 @@ namespace ViewModels
         public UIDocument UIDocument {get; set;}
         public Document Document { get; set; }
         public ElementId CurrentSelection { get; set; }
+        public MovedDurchbruchViewModel CurrentItem { get; set; }
         public View DesiredView { get; set; }
         public ExternalEvent LoadContextEvent { get; set; }
         public ExternalEvent ShowElementEvent { get; set; }
@@ -26,6 +29,7 @@ namespace ViewModels
         public List<ResizedDurchbruchViewModel> ResizedDurchbruche { get; set; }
         public List<MovedAndResizedDbViewModel> MovedAndResizedDurchbruche { get; set; }
         public bool SaveAllToStorage { get; set; } = false;
+        public DurchbruchMemoryAction DurchbruchMemoryAction { get; set; }
 
         public ManualResetEvent SignalEvent = new ManualResetEvent(false);
 
@@ -85,6 +89,67 @@ namespace ViewModels
                 }
                 tx.Commit();
             }
+        }
+
+        public void CreateOldPositionMarker()
+        {
+            ElementId id = new ElementId(372571);
+            FamilySymbol fs = Document.GetElement(id) as FamilySymbol;
+
+            string oldPosition = CurrentItem.DurchbruchModel.OpeningMemory.OldPosition;
+            string[] coords = oldPosition.Split(';');
+            double x1 = Convert.ToDouble(coords[0]);
+            double y1 = Convert.ToDouble(coords[1]);
+            double z1 = Convert.ToDouble(coords[2]);
+
+            XYZ xyz1 = new XYZ(x1, y1, z1);
+
+            string newPosition = CurrentItem.DurchbruchModel.OpeningMemory.NewPosition;
+            string[] coordsNew = newPosition.Split(';');
+            double x2 = Convert.ToDouble(coordsNew[0]);
+            double y2 = Convert.ToDouble(coordsNew[1]);
+            double z2 = Convert.ToDouble(coordsNew[2]);
+
+            XYZ xyz2 = new XYZ(x2, y2, z2);
+
+            Transaction tx = new Transaction(Document, "Inserted position marker");
+            tx.Start();
+            FamilyInstance instance = Document.Create.NewFamilyInstance(xyz1, fs, StructuralType.NonStructural);
+
+            try
+            {
+                Line line = Line.CreateBound(xyz1, xyz2);
+                Plane plane = Plane.CreateByThreePoints(xyz1, xyz2, new XYZ(0, 0, 0));
+                SketchPlane sketchPlane = SketchPlane.Create(Document, plane);
+                ModelCurve curve = Document.Create.NewModelCurve(line, sketchPlane);
+                CurrentItem.OldPositionModelCurve = curve.Id.IntegerValue;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Can't create line marker" + Environment.NewLine + ex.ToString());
+            }
+            tx.Commit();
+            CurrentItem.OldPositionMarker = instance.Id.IntegerValue;
+        }
+
+        public void DeleteOldPositionMarker()
+        {
+            if (CurrentItem == null || CurrentItem.OldPositionMarker == 0) return;
+            if (Document.GetElement(new ElementId(CurrentItem.OldPositionMarker)) == null) return;
+            Transaction tx = new Transaction(Document, "Deleted position marker");
+            tx.Start();
+            Document.Delete(new ElementId(CurrentItem.OldPositionMarker));
+            tx.Commit();
+        }
+
+        public void DeleteOldPositionCurve()
+        {
+            if (CurrentItem == null || CurrentItem.OldPositionModelCurve == 0) return;
+            if (Document.GetElement(new ElementId(CurrentItem.OldPositionModelCurve)) == null) return;
+            Transaction tx = new Transaction(Document, "Deleted position curve");
+            tx.Start();
+            Document.Delete(new ElementId(CurrentItem.OldPositionModelCurve));
+            tx.Commit();
         }
 
         private void SaveNewOpenings()
