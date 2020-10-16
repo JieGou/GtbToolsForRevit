@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="DurchbruchViews" Height="300" Width="400">
+        Title="DurchbruchViews" Height="300" Width="500">
     <Grid Background="#FFEAEAEA">
         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <StackPanel Margin="5" Background="White">
@@ -15,7 +15,7 @@
                 <DataGridTemplateColumn Header="Open View">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Label Content="--Double click to open the view--" MouseDoubleClick="Label_MouseDoubleClick"></Label>
+                            <Label Content="--Double click to open the view--" Foreground="Blue" MouseDoubleClick="Label_MouseDoubleClick"></Label>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

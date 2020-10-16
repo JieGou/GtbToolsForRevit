@@ -24,6 +24,8 @@ namespace GtbTools
         public const string AssemblyYear = "2019";
 #elif DEBUG2020 || RELEASE2020
         public const string AssemblyYear = "2020";
+#elif DEBUG2021 || RELEASE2021
+        public const string AssemblyYear = "2021";
 #endif
         public const string AssemblyMinorVersion = "2";
         public const string AssemblyBuildVersion = "3";
@@ -47,6 +49,7 @@ namespace GtbTools
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
         public Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
         RibbonItem _button;
+        ExternalEvent _toggleEvent;
 
         internal static App _app = null;
 
@@ -67,6 +70,10 @@ namespace GtbTools
             pushButtonGtbPanelControl.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
             _button = gtbPanel.AddItem(pushButtonGtbPanelControl);
             RegisterDockableWindow(application);
+            IExternalEventHandler handler_event = new ExternalEventShowHideDock();
+            _toggleEvent = ExternalEvent.Create(handler_event);
+            application.DockableFrameVisibilityChanged += OnDockableFrameVisibilityChanged;
+            application.ViewActivated += OnDockableFrameVisibilityChanged;
 
             return Result.Succeeded;
         }
@@ -77,22 +84,63 @@ namespace GtbTools
             return Result.Succeeded;
         }
 
-        public void Toggle(ExternalCommandData commandData)
+        public void Toggle(UIApplication application)
         {
             if(_button.ItemText == "Anzeigen")
+            {
+                //_button.ItemText = "Ausblenden";
+                //PushButton pb = _button as PushButton;
+                //pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
+                ShowDockableWindow(application);
+            }
+            else
+            {
+                //_button.ItemText = "Anzeigen";
+                //PushButton pb = _button as PushButton;
+                //pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
+                HideDockableWindow(application);
+            }
+        }
+
+        public void SwitchDockPanelButton(UIApplication application)
+        {
+            DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
+            DockablePane dp = application.GetDockablePane(dpid);
+            if(dp.IsShown() && _button.ItemText == "Anzeigen")
             {
                 _button.ItemText = "Ausblenden";
                 PushButton pb = _button as PushButton;
                 pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
-                ShowDockableWindow(commandData);
             }
-            else
+            if (!dp.IsShown() && _button.ItemText == "Ausblenden")
             {
                 _button.ItemText = "Anzeigen";
                 PushButton pb = _button as PushButton;
                 pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
-                HideDockableWindow(commandData);
             }
+        }
+
+        public void FixDockPanelButton(UIControlledApplication application)
+        {
+            DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
+            DockablePane dp = application.GetDockablePane(dpid);
+            if (dp.IsShown() && _button.ItemText == "Anzeigen")
+            {
+                _button.ItemText = "Ausblenden";
+                PushButton pb = _button as PushButton;
+                pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
+            }
+            if (!dp.IsShown() && _button.ItemText == "Ausblenden")
+            {
+                _button.ItemText = "Anzeigen";
+                PushButton pb = _button as PushButton;
+                pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
+            }
+        }
+
+        private void OnDockableFrameVisibilityChanged(object sender, EventArgs e)
+        {
+            _toggleEvent.Raise();
         }
 
         private void RegisterDockableWindow(UIControlledApplication app)
@@ -141,7 +189,7 @@ namespace GtbTools
             IExternalEventHandler fixRotationEventHandler = new ExternalEventFixRotationIssue();
             ExternalEvent fixRotationExEvent = ExternalEvent.Create(fixRotationEventHandler);
 
-            IExternalEventHandler handler_event11 = new ExternalEventFixRotationSelect();
+            IExternalEventHandler handler_event11 = new ExternalEventCopyElevations();
             ExternalEvent exEvent11 = ExternalEvent.Create(handler_event11);
 
             DurchbruchRotationFix.SetExternalEvents(fixRotationExEvent);
@@ -160,18 +208,18 @@ namespace GtbTools
             app.RegisterDockablePane(dpid, "GTB-Berlin", GtbDockableWindow as IDockablePaneProvider);
         }
 
-        private void ShowDockableWindow(ExternalCommandData commandData)
+        private void ShowDockableWindow(UIApplication application)
         {
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
-            DockablePane dp = commandData.Application.GetDockablePane(dpid);
+            DockablePane dp = application.GetDockablePane(dpid);
             
             dp.Show();
         }
 
-        private void HideDockableWindow(ExternalCommandData commandData)
+        private void HideDockableWindow(UIApplication application)
         {
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
-            DockablePane dp = commandData.Application.GetDockablePane(dpid);
+            DockablePane dp = application.GetDockablePane(dpid);
             dp.Hide();
         }
 

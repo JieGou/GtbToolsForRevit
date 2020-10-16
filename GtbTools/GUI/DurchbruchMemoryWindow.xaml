@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        
+        Closed="Window_Closed"
         Title="DurchbruchMemoryWindow" Height="500" Width="750">
 
     <Grid x:Name="MainGrid">
@@ -56,15 +56,15 @@
                               ScrollViewer.HorizontalScrollBarVisibility="Auto" 
                               ScrollViewer.VerticalScrollBarVisibility="Auto" 
                               ItemsSource="{Binding MovedDurchbruche}" 
-                              AutoGenerateColumns="False" 
+                              AutoGenerateColumns="False"
                               SelectionChanged="DataGridMoved_SelectionChanged">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
-                                <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
-                                <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
-                                <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
-                                <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
-                                <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                                <DataGridTextColumn IsReadOnly="True" Header="ID" Binding="{Binding Path=ElementId}"/>
+                                <DataGridTextColumn IsReadOnly="True" Header="Shape" Binding="{Binding Path=Shape}"/>
+                                <DataGridTextColumn IsReadOnly="True" Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                                <DataGridTextColumn IsReadOnly="True" Header="Width" Binding="{Binding Path=Width}"/>
+                                <DataGridTextColumn IsReadOnly="True" Header="Height" Binding="{Binding Path=Height}"/>
+                                <DataGridTextColumn IsReadOnly="True" Header="Depth" Binding="{Binding Path=Depth}"/>
                                 <DataGridTemplateColumn Header="Views">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -72,9 +72,9 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                                <DataGridTextColumn Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
-                                <DataGridCheckBoxColumn Header="Old position marker">
+                                <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                                <DataGridTextColumn IsReadOnly="True" Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
+                                <DataGridCheckBoxColumn Header="Old position marker" IsReadOnly="False">
                                     <DataGridCheckBoxColumn.CellStyle>
                                         <Style>
                                             <EventSetter Event="CheckBox.Checked" Handler="OnChecked"/>
@@ -135,15 +135,14 @@
                               ScrollViewer.VerticalScrollBarVisibility="Auto" 
                               ItemsSource="{Binding MovedAndResizedDurchbruche}" 
                               AutoGenerateColumns="False" 
-                              SelectionChanged="DataGridMovedAndResized_SelectionChanged" 
-                              IsReadOnly="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Path=ElementId}"/>
-                            <DataGridTextColumn Header="Shape" Binding="{Binding Path=Shape}"/>
-                            <DataGridTextColumn Header="Diameter" Binding="{Binding Path=Diameter}"/>
-                            <DataGridTextColumn Header="Width" Binding="{Binding Path=Width}"/>
-                            <DataGridTextColumn Header="Height" Binding="{Binding Path=Height}"/>
-                            <DataGridTextColumn Header="Depth" Binding="{Binding Path=Depth}"/>
+                              SelectionChanged="DataGridMovedAndResized_SelectionChanged">
+                            <DataGrid.Columns>
+                            <DataGridTextColumn IsReadOnly="True" Header="ID" Binding="{Binding Path=ElementId}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Shape" Binding="{Binding Path=Shape}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Diameter" Binding="{Binding Path=Diameter}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Width" Binding="{Binding Path=Width}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Height" Binding="{Binding Path=Height}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Depth" Binding="{Binding Path=Depth}"/>
                             <DataGridTemplateColumn Header="Views">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -151,13 +150,13 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                            <DataGridTextColumn Header="OldDiameter" Binding="{Binding Path=OldDiameter}"/>
-                            <DataGridTextColumn Header="OldWidth" Binding="{Binding Path=OldWidth}"/>
-                            <DataGridTextColumn Header="OldHeight" Binding="{Binding Path=OldHeight}"/>
-                            <DataGridTextColumn Header="OldDepth" Binding="{Binding Path=OldDepth}"/>
-                            <DataGridTextColumn Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
-                            <DataGridCheckBoxColumn Header="Old position marker">
+                            <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="OldDiameter" Binding="{Binding Path=OldDiameter}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="OldWidth" Binding="{Binding Path=OldWidth}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="OldHeight" Binding="{Binding Path=OldHeight}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="OldDepth" Binding="{Binding Path=OldDepth}"/>
+                            <DataGridTextColumn IsReadOnly="True" Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
+                            <DataGridCheckBoxColumn Header="Old Position Marker">
                             <DataGridCheckBoxColumn.CellStyle>
                                 <Style>
                                     <EventSetter Event="CheckBox.Checked" Handler="OnChecked"/>

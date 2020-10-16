@@ -118,7 +118,7 @@ namespace Functions
             foreach (FamilyInstance fi in genModelInstances)
             {
                 Parameter gtbParameter = fi.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
-                if (gtbParameter != null) _allOpenings.Add(fi);
+                if (gtbParameter != null && gtbParameter.AsString() != "GTB_Tools_location_marker") _allOpenings.Add(fi);
             }
         }
 

@@ -22,7 +22,7 @@ namespace GtbTools
         	errorLog.WriteToLog("Changing DockPanel visibility state");
             try
             {
-                App.Instance.Toggle(commandData);
+                App.Instance.Toggle(commandData.Application);
                 return Result.Succeeded;
             }
             catch (Exception ex)
@@ -32,6 +32,29 @@ namespace GtbTools
                 errorLog.RemoveLog = false;
                 return Result.Failed;
             }
+        }
+    }
+
+    class ExternalEventShowHideDock : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Changing dockpanel visibility by event");
+            try
+            {
+                App.Instance.SwitchDockPanelButton(uiapp);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Changed dockpanel visibility";
         }
     }
 
@@ -116,7 +139,15 @@ namespace GtbTools
                     ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
                     if (activeView.ViewType == ViewType.ThreeD)
                     {
-                        vct.Save3dCoordinatesAs();
+                        View3D view3D = activeView as View3D;
+                        if(view3D.IsPerspective)
+                        {
+                            TaskDialog.Show("Warning!", "Perspective ansichtmodus ist nicht unterstützt!" + Environment.NewLine + "Bitte verwenden Sie den orthogonalen Modus.");
+                        }
+                        else
+                        {
+                            vct.Save3dCoordinatesAs();
+                        }
                     }
                     else
                     {
@@ -157,7 +188,15 @@ namespace GtbTools
                     ViewCoordsTool vct = new ViewCoordsTool(uiapp.ActiveUIDocument);
                     if (activeView.ViewType == ViewType.ThreeD)
                     {
-                        vct.Load3dCoordinatesFrom();
+                        View3D view3D = activeView as View3D;
+                        if (view3D.IsPerspective)
+                        {
+                            TaskDialog.Show("Warning!", "Perspective ansichtmodus ist nicht unterstützt!" + Environment.NewLine + "Bitte verwenden Sie den orthogonalen Modus.");
+                        }
+                        else
+                        {
+                            vct.Load3dCoordinatesFrom();
+                        }
                     }
                     else
                     {
@@ -324,7 +363,15 @@ namespace GtbTools
                 if (model.DurchbruchMemoryAction == DurchbruchMemoryAction.DeletePosition)
                 {
                     model.DeleteOldPositionMarker();
-                    model.DeleteOldPositionCurve();
+                    //model.DeleteOldPositionCurve();
+                }
+                if (model.DurchbruchMemoryAction == DurchbruchMemoryAction.DeleteRemainingMarkers)
+                {
+                    MessageBoxResult result = MessageBox.Show("Möchten Sie verbleibende Positionsmarkierungen löschen?", "Warning!", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        model.DeleteAllPositionMarkers();
+                    }
                 }
             }
             catch (Exception ex)
@@ -446,7 +493,7 @@ namespace GtbTools
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Fixing rotation issue");
+            errorLog.WriteToLog("Fixing rotation issue...");
             try
             {
 
@@ -474,12 +521,12 @@ namespace GtbTools
         }
     }
 
-    class ExternalEventFixRotationSelect : IExternalEventHandler
+    class ExternalEventCopyElevations : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Selecting rotated durchbruche...");
+            errorLog.WriteToLog("Preaparing to copy elevation to opening elevation parameter...");
             try
             {
                 GetSetElevation getSetElevation = new GetSetElevation(uiapp.ActiveUIDocument.Document);
@@ -495,7 +542,7 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Selected rotated openings";
+            return "Copied elevations.";
         }
     }
 }

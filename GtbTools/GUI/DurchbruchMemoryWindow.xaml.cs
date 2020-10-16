@@ -174,5 +174,15 @@ namespace GUI
             DurchbruchMemoryViewModel.SignalEvent.Set();
             DurchbruchMemoryViewModel.ShowElementEvent.Raise();
         }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            if (DurchbruchMemoryViewModel.OldPositionMarkers.Count > 0)
+            {
+                DurchbruchMemoryViewModel.DurchbruchMemoryAction = DurchbruchMemoryAction.DeleteRemainingMarkers;
+                DurchbruchMemoryViewModel.SignalEvent.Set();
+                DurchbruchMemoryViewModel.ShowElementEvent.Raise();
+            }
+        }
     }
 }

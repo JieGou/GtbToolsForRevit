@@ -11,7 +11,7 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Threading;
+using System.Threading;
 using System.IO;
 using System.Windows;
 
@@ -145,6 +145,12 @@ namespace GtbTools
 
 		public void Load3dCoordinatesFrom()
 		{
+			char decSeparator = GetThreadDecimalSeparator();
+			if (decSeparator != ',' && decSeparator != '.')
+			{
+				TaskDialog.Show("Error", "Uknown decimal separator");
+			}
+
 			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 			dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
 
@@ -157,6 +163,14 @@ namespace GtbTools
 			{
 				string savePath = dlg.FileName;
 				string content = File.ReadAllText(savePath);
+				if (decSeparator == '.')
+				{
+					content = content.Replace(',', '.');
+				}
+				if (decSeparator == ',')
+				{
+					content = content.Replace('.', ',');
+				}
 				string[] coordArray = content.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
 				XYZ p;
@@ -237,6 +251,11 @@ namespace GtbTools
 		
 		public void LoadCoordinatesFrom()
 		{
+			char decSeparator = GetThreadDecimalSeparator();
+			if(decSeparator != ',' && decSeparator != '.')
+            {
+				TaskDialog.Show("Error", "Uknown decimal separator");
+            }
 			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 			dlg.Filter = "Text documents (.txt)|*.txt"; // Filter files by extension
 
@@ -249,7 +268,15 @@ namespace GtbTools
 			{
 			    string savePath = dlg.FileName;
 			   	string content = File.ReadAllText(savePath);
-			    string[] coordArray = content.Split(':');
+				if(decSeparator == '.')
+                {
+					content = content.Replace(',', '.');
+                }
+				if (decSeparator == ',')
+				{
+					content = content.Replace('.', ',');
+				}
+				string[] coordArray = content.Split(':');
 				XYZ p;
 				XYZ q;
 				try
@@ -279,6 +306,11 @@ namespace GtbTools
 			}
 		}
 		
+		private char GetThreadDecimalSeparator()
+        {
+			return Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+		}
+
 		private IList<XYZ> GetActiveViewPQCoords()
 		{
 			View activeView = _uiDoc.Document.ActiveView;

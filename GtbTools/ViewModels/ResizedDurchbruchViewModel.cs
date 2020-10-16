@@ -10,6 +10,7 @@ namespace ViewModels
         public string ElementId { get; set; }
         public string Shape { get; set; }
         public string Diameter { get; set; }
+        public string Offset { get; set; }
         public string Width { get; set; }
         public string Height { get; set; }
         public string Depth { get; set; }

@@ -35,10 +35,11 @@ namespace ViewModels
 
         List<FamilyInstance> _familyInstancesAll;
         List<DurchbruchModel> _modelDurchbrucheAll;
+        public List<int> OldPositionMarkers { get; set; }
 
         public DurchbruchMemoryViewModel()
         {
-            
+            OldPositionMarkers = new List<int>();
         }
 
         public void InitializeDurchbruche()
@@ -116,32 +117,50 @@ namespace ViewModels
             tx.Start();
             FamilyInstance instance = Document.Create.NewFamilyInstance(xyz1, fs, StructuralType.NonStructural);
 
-            try
-            {
-                Line line = Line.CreateBound(xyz1, xyz2);
-                Plane plane = Plane.CreateByThreePoints(xyz1, xyz2, new XYZ(0, 0, 0));
-                SketchPlane sketchPlane = SketchPlane.Create(Document, plane);
-                ModelCurve curve = Document.Create.NewModelCurve(line, sketchPlane);
-                CurrentItem.OldPositionModelCurve = curve.Id.IntegerValue;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Can't create line marker" + Environment.NewLine + ex.ToString());
-            }
+            //line creation postponed because of too many issues
+            //try
+            //{
+            //    Line line = Line.CreateBound(xyz1, xyz2);
+            //    Plane plane = Plane.CreateByThreePoints(xyz1, xyz2, new XYZ(0, 0, 0));
+            //    SketchPlane sketchPlane = SketchPlane.Create(Document, plane);
+            //    ModelCurve curve = Document.Create.NewModelCurve(line, sketchPlane);
+            //    CurrentItem.OldPositionModelCurve = curve.Id.IntegerValue;
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Can't create line marker" + Environment.NewLine + ex.ToString());
+            //}
             tx.Commit();
             CurrentItem.OldPositionMarker = instance.Id.IntegerValue;
+            OldPositionMarkers.Add(instance.Id.IntegerValue);
         }
 
         public void DeleteOldPositionMarker()
         {
             if (CurrentItem == null || CurrentItem.OldPositionMarker == 0) return;
             if (Document.GetElement(new ElementId(CurrentItem.OldPositionMarker)) == null) return;
+            OldPositionMarkers.Remove(CurrentItem.OldPositionMarker);
             Transaction tx = new Transaction(Document, "Deleted position marker");
             tx.Start();
             Document.Delete(new ElementId(CurrentItem.OldPositionMarker));
             tx.Commit();
         }
 
+        public void DeleteAllPositionMarkers()
+        {
+            Transaction tx = new Transaction(Document, "Deleted position markers");
+            tx.Start();
+            foreach (int idInteger in OldPositionMarkers)
+            {
+                ElementId id = new ElementId(idInteger);
+                if (Document.GetElement(id) == null) continue;
+                Document.Delete(id);
+            }
+            tx.Commit();
+            OldPositionMarkers.Clear();
+        }
+
+        //postponed
         public void DeleteOldPositionCurve()
         {
             if (CurrentItem == null || CurrentItem.OldPositionModelCurve == 0) return;
@@ -192,8 +211,7 @@ namespace ViewModels
             foreach (FamilyInstance fi in genModelInstances)
             {
                 Parameter gtbParameter = fi.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
-                if (gtbParameter == null) continue;
-                _familyInstancesAll.Add(fi);
+                if (gtbParameter != null && gtbParameter.AsString() != "GTB_Tools_location_marker") _familyInstancesAll.Add(fi);
             }
         }
 

@@ -12,6 +12,7 @@ namespace ViewModels
         None,
         ShowElement,
         ShowPosition,
-        DeletePosition
+        DeletePosition,
+        DeleteRemainingMarkers
     }
 }

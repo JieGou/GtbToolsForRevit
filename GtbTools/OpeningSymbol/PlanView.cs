@@ -114,9 +114,11 @@ namespace OpeningSymbol
             foreach (FamilyInstance fi in genModelInstances)
             {
                 Parameter gtbParameter = fi.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
-                if (gtbParameter == null) continue;
-                if (fi.Symbol.Family.Name.ToUpper().Contains("RECTANGULAR")) _rectFamilyInstances.Add(fi);
-                if (fi.Symbol.Family.Name.ToUpper().Contains("ROUND")) _roundFamilyInstances.Add(fi);
+                if (gtbParameter != null && gtbParameter.AsString() != "GTB_Tools_location_marker")
+                {
+                    if (fi.Symbol.Family.Name.ToUpper().Contains("RECTANGULAR")) _rectFamilyInstances.Add(fi);
+                    if (fi.Symbol.Family.Name.ToUpper().Contains("ROUND")) _roundFamilyInstances.Add(fi);
+                }
             }
             int roundIns = _roundFamilyInstances.Count;
             int rectIns = _rectFamilyInstances.Count;

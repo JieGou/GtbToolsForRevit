@@ -18,6 +18,7 @@ namespace Model
         public Parameter Width { get; set; }
         public Parameter Height { get; set; }
         public Parameter Depth { get; set; }
+        public Parameter CutOffset { get; set; }
         public List<View> Views { get; set; }
         public Parameter OpeningMark { get; set; }
         public DurchbruchStatus DurchbruchStatus { get; set; }
@@ -57,6 +58,7 @@ namespace Model
             Width = FamilyInstance.get_Parameter(new Guid("46982e85-76c3-43fb-828f-ddf7a643566f"));
             Height = FamilyInstance.get_Parameter(new Guid("8eb274b3-fc0c-43e0-a46b-236bf59f292d"));
             Diameter = FamilyInstance.get_Parameter(new Guid("9c805bcc-ebc9-4d4c-8d73-26970789417a"));
+            CutOffset = FamilyInstance.get_Parameter(new Guid("12f574e0-19fb-46bd-9b7e-0f329356db8a"));
         }
 
         private void SetShape()
