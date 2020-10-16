@@ -48,6 +48,7 @@ namespace GtbTools
         public ErrorLog ErrorLog { get; set; }
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
         public Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
+        public Functions.RevitOpenedViews RevitOpenedViews { get; set; }
         RibbonItem _button;
         ExternalEvent _toggleEvent;
 
@@ -64,6 +65,7 @@ namespace GtbTools
             ErrorLog = new ErrorLog();
             DurchbruchMemoryViewModel = new DurchbruchMemoryViewModel();
             DurchbruchRotationFix = new Functions.DurchbruchRotationFix();
+            RevitOpenedViews = new Functions.RevitOpenedViews();
             string path = Assembly.GetExecutingAssembly().Location;
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
@@ -105,7 +107,18 @@ namespace GtbTools
         public void SwitchDockPanelButton(UIApplication application)
         {
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
-            DockablePane dp = application.GetDockablePane(dpid);
+            DockablePane dp = null;
+            try
+            {
+                dp = application.GetDockablePane(dpid);
+            }
+            catch (Exception)
+            {
+                ErrorLog.WriteToLog("User cancelled document loading. Panel was not created yet.");
+                ErrorLog.RemoveLog = false;
+                return;
+            }
+            
             if(dp.IsShown() && _button.ItemText == "Anzeigen")
             {
                 _button.ItemText = "Ausblenden";
@@ -194,9 +207,13 @@ namespace GtbTools
 
             DurchbruchRotationFix.SetExternalEvents(fixRotationExEvent);
 
+            IExternalEventHandler handler12 = new ExternalEventRevitOpenedViews();
+            ExternalEvent exEvent12 = ExternalEvent.Create(handler12);
+            RevitOpenedViews.SetEvent(exEvent12);
+
             DockablePaneProviderData data = new DockablePaneProviderData();
 
-            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11);
+            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11, RevitOpenedViews);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;

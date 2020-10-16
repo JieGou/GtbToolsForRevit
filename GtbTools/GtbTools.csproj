@@ -87,6 +87,11 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <HintPath>..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.Office.Interop.Excel\15.0.0.0__71e9bce111e9429c\Microsoft.Office.Interop.Excel.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Desktop\Json\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="RevitAPI" Condition="'$(Configuration)' == 'Debug2018' Or '$(Configuration)' == 'Release2018'">
@@ -141,6 +146,7 @@
     <Compile Include="DurchbruchRotationFix\RotationFixViewModel.cs" />
     <Compile Include="DurchbruchRotationFix\WindowDecision.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
+    <Compile Include="Functions\RevitOpenedViews.cs" />
     <Compile Include="GUI\DurchbruchRotationFixWindow.xaml.cs">
       <DependentUpon>DurchbruchRotationFixWindow.xaml</DependentUpon>
     </Compile>
@@ -189,6 +195,7 @@
     <Compile Include="GUI\ZoomWindow.xaml.cs" />
     <Compile Include="Model\DurchbruchModel.cs" />
     <Compile Include="Model\DurchbruchStatus.cs" />
+    <Compile Include="Model\OpenedView.cs" />
     <Compile Include="OpeningSymbol\ControlledSymbolType.cs" />
     <Compile Include="OpeningSymbol\OpeningHost.cs" />
     <Compile Include="OpeningSymbol\OperationStatus.cs" />

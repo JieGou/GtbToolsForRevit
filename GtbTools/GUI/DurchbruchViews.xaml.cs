@@ -24,26 +24,19 @@ namespace GUI
 
         public List<ModelView> Views { get; set; }
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
-        public DurchbruchViews(List<ModelView> views)
+        public DurchbruchViews(List<ModelView> views, Window owner)
         {
+            Owner = owner;
             Views = views;
             InitializeComponent();
-            DataGridViews.DataContext = this;
+            MyComboBox.DataContext = this;
         }
 
         private void Btn_Click_ShowView(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            ModelView sendingClass = (ModelView)button.DataContext;
-            DurchbruchMemoryViewModel.DesiredView = sendingClass.View;
-            DurchbruchMemoryViewModel.OpenViewEvent.Raise();
-        }
-
-        private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            Label label = (Label)sender;
-            ModelView sendingClass = (ModelView)label.DataContext;
-            DurchbruchMemoryViewModel.DesiredView = sendingClass.View;
+            if (MyComboBox.SelectedIndex < 0) return;
+            ModelView mv = Views[MyComboBox.SelectedIndex];
+            DurchbruchMemoryViewModel.DesiredView = mv.View;
             DurchbruchMemoryViewModel.OpenViewEvent.Raise();
         }
     }

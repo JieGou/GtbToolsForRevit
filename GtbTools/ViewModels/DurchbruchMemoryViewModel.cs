@@ -92,10 +92,19 @@ namespace ViewModels
             }
         }
 
+        private FamilySymbol FindPositionMarker()
+        {
+            FilteredElementCollector ficol = new FilteredElementCollector(Document);
+            List<FamilySymbol> genModelInstances = ficol.OfClass(typeof(FamilySymbol))
+                        .Select(x => x as FamilySymbol)
+                            .Where(y => y.Category.Id.IntegerValue == (int)BuiltInCategory.OST_GenericModel).ToList();
+            FamilySymbol fs = genModelInstances.Where(e => e.Name == "LocationMarker").FirstOrDefault();
+            return fs;
+        }
+
         public void CreateOldPositionMarker()
         {
-            ElementId id = new ElementId(372571);
-            FamilySymbol fs = Document.GetElement(id) as FamilySymbol;
+            FamilySymbol fs = FindPositionMarker();
 
             string oldPosition = CurrentItem.DurchbruchModel.OpeningMemory.OldPosition;
             string[] coords = oldPosition.Split(';');

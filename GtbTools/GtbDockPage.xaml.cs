@@ -24,6 +24,7 @@ using ViewModels;
 using System.Threading;
 using GUI;
 using System.Windows.Threading;
+using Functions;
 
 namespace GtbTools.Forms
 {
@@ -46,7 +47,9 @@ namespace GtbTools.Forms
         ExternalEvent _cutOpeningMemory;
         ExternalEvent _mepExtract;
         ExternalEvent _copyElevations;
-        
+        RevitOpenedViews _revitOpenedViews;
+
+
         private Guid m_targetGuid;
         private DockPosition m_position = DockPosition.Bottom;
         private int m_left = 1;
@@ -54,7 +57,7 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel, ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,ExternalEvent copyElevations)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel, ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -68,6 +71,7 @@ namespace GtbTools.Forms
             DurchbruchRotationFix = rotationFix;
             DurchbruchMemoryViewModel = durchbruchMemoryViewModel;
             _copyElevations = copyElevations;
+            _revitOpenedViews = revitOpenedViews;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -196,6 +200,20 @@ namespace GtbTools.Forms
         private void CopyElevations_Click(object sender, RoutedEventArgs e)
         {
             _copyElevations.Raise();
+        }
+
+        private void Btn_Click_SaveAllOpenedViews(object sender, RoutedEventArgs e)
+        {
+            _revitOpenedViews.IsSaving = true;
+            _revitOpenedViews.IsLoading = false;
+            _revitOpenedViews.OneEvent.Raise();
+        }
+
+        private void Btn_Click_LoadAllSaved(object sender, RoutedEventArgs e)
+        {
+            _revitOpenedViews.IsLoading = true;
+            _revitOpenedViews.IsSaving = false;
+            _revitOpenedViews.OneEvent.Raise();
         }
     }
 }

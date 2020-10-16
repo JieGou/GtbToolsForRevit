@@ -1,4 +1,5 @@
 ﻿using GtbTools;
+using OwnerSearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,19 @@ namespace GUI
 
         public DurchbruchMemoryWindow(DurchbruchMemoryViewModel durchbruchMemoryViewModel)
         {
+            SetOwner();
             DurchbruchMemoryViewModel = durchbruchMemoryViewModel;
             InitializeComponent();
             DataGridNew.DataContext = this.DurchbruchMemoryViewModel;
             DataGridMoved.DataContext = this.DurchbruchMemoryViewModel;
             DataGridResized.DataContext = this.DurchbruchMemoryViewModel;
             DataGridMovedAndResized.DataContext = this.DurchbruchMemoryViewModel;
+        }
+
+        private void SetOwner()
+        {
+            WindowHandleSearch revitHandleSearch = WindowHandleSearch.MainWindowHandle;
+            revitHandleSearch.SetAsOwner(this);
         }
 
         private void Btn_Click_ClearAll(object sender, RoutedEventArgs e)
@@ -56,7 +64,7 @@ namespace GUI
         {
             Button button = (Button)sender;
             NewDurchbruchViewModel sendingClass = (NewDurchbruchViewModel)button.DataContext;
-            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
+            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views, this);
             durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
             durchbruchViews.ShowDialog();
         }
@@ -64,7 +72,7 @@ namespace GUI
         {
             Button button = (Button)sender;
             MovedAndResizedDbViewModel sendingClass = (MovedAndResizedDbViewModel)button.DataContext;
-            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
+            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views, this);
             durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
             durchbruchViews.ShowDialog();
         }
@@ -72,7 +80,7 @@ namespace GUI
         {
             Button button = (Button)sender;
             ResizedDurchbruchViewModel sendingClass = (ResizedDurchbruchViewModel)button.DataContext;
-            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
+            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views, this);
             durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
             durchbruchViews.ShowDialog();
         }
@@ -81,7 +89,7 @@ namespace GUI
         {
             Button button = (Button)sender;
             MovedAndResizedDbViewModel sendingClass = (MovedAndResizedDbViewModel)button.DataContext;
-            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views);
+            DurchbruchViews durchbruchViews = new DurchbruchViews(sendingClass.Views, this);
             durchbruchViews.DurchbruchMemoryViewModel = DurchbruchMemoryViewModel;
             durchbruchViews.ShowDialog();
         }

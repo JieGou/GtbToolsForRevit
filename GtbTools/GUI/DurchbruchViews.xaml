@@ -5,23 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
-        Title="DurchbruchViews" Height="300" Width="500">
+        WindowStartupLocation="CenterOwner"
+        Title="DurchbruchViews" Height="78" Width="426">
     <Grid Background="#FFEAEAEA">
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <StackPanel Margin="5" Background="White">
-        <DataGrid x:Name="DataGridViews" ItemsSource="{Binding Views}" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Ansicht name" Binding="{Binding Path=Name}"/>
-                <DataGridTemplateColumn Header="Open View">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Label Content="--Double click to open the view--" Foreground="Blue" MouseDoubleClick="Label_MouseDoubleClick"></Label>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-    </StackPanel>
-    </ScrollViewer>
+        <ComboBox x:Name="MyComboBox" HorizontalAlignment="Left" ItemsSource="{Binding Views}" DisplayMemberPath="Name" Margin="10,10,0,0" VerticalAlignment="Top" Width="300"/>
+        <Button Content="Go!" HorizontalAlignment="Left" Margin="315,10,0,0" VerticalAlignment="Top" Width="93" Height="22" Click="Btn_Click_ShowView"/>
     </Grid>
 </Window>

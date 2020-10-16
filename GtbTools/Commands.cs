@@ -545,4 +545,36 @@ namespace GtbTools
             return "Copied elevations.";
         }
     }
+
+    class ExternalEventRevitOpenedViews : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Revit opened views tool initialized");
+            try
+            {
+                RevitOpenedViews model = App.Instance.RevitOpenedViews;
+                model.LoadContext(uiapp);
+                if(model.IsLoading == true)
+                {
+                    model.LoadSavedViews();
+                }
+                if (model.IsSaving == true)
+                {
+                    model.SaveOpenedViews();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Revit opened views";
+        }
+    }
 }
