@@ -363,7 +363,6 @@ namespace GtbTools
                 if (model.DurchbruchMemoryAction == DurchbruchMemoryAction.DeletePosition)
                 {
                     model.DeleteOldPositionMarker();
-                    //model.DeleteOldPositionCurve();
                 }
                 if (model.DurchbruchMemoryAction == DurchbruchMemoryAction.DeleteRemainingMarkers)
                 {
@@ -474,6 +473,14 @@ namespace GtbTools
             try
             {
                 App.Instance.DurchbruchMemoryViewModel.SaveOpeningsToExStorage();
+                if(App.Instance.DurchbruchMemoryViewModel.SaveAllToStorage)
+                {
+                    TaskDialog.Show("Info", "All openings have been saved!");
+                }
+                else
+                {
+                    TaskDialog.Show("Info", "New openings have been saved!");
+                }
             }
             catch (Exception ex)
             {
@@ -575,6 +582,58 @@ namespace GtbTools
         public string GetName()
         {
             return "Revit opened views";
+        }
+    }
+
+    class ExternalEventChangeDurchbruchDiameter : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Changing durchbruch value");
+            try
+            {
+                DurchbruchMemoryViewModel model = App.Instance.DurchbruchMemoryViewModel;
+                //there have to be separate events because change selection event is conflicted with edit ending event
+                model.CurrentModel.SetNewDiameter(uiapp.ActiveUIDocument.Document);
+                //model.CurrentModel.SetNewOffset(uiapp.ActiveUIDocument.Document);               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Change durchbruch value";
+        }
+    }
+
+    class ExternalEventChangeDurchbruchOffset : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Changing durchbruch value");
+            try
+            {
+                DurchbruchMemoryViewModel model = App.Instance.DurchbruchMemoryViewModel;
+                //there have to be separate events because change selection event is conflicted with edit ending event
+                model.CurrentModel.SetNewOffset(uiapp.ActiveUIDocument.Document);
+                //model.CurrentModel.SetNewOffset(uiapp.ActiveUIDocument.Document);               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Change durchbruch value";
         }
     }
 }

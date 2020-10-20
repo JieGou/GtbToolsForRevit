@@ -15,6 +15,7 @@ namespace Model
         public ElementId ElementId { get; set; }
         public DurchbruchShape Shape { get; set; }
         public Parameter Diameter { get; set; }
+        public Parameter PipeDiameter { get; set; }
         public Parameter Width { get; set; }
         public Parameter Height { get; set; }
         public Parameter Depth { get; set; }
@@ -24,6 +25,8 @@ namespace Model
         public DurchbruchStatus DurchbruchStatus { get; set; }
         public FamilyInstance FamilyInstance { get; set; }
         public OpeningMemory OpeningMemory { get; set; }
+        public double NewDiameter { get; set; }
+        public double NewOffset { get; set; }
 
         UIDocument _uiDoc;
 
@@ -47,6 +50,28 @@ namespace Model
             return result;
         }
 
+        public void SetNewDiameter(Document doc)
+        {
+            using (Transaction tx = new Transaction(doc, "Setting new diameter"))
+            {
+                tx.Start();
+                double newValue = UnitUtils.ConvertToInternalUnits(NewDiameter, DisplayUnitType.DUT_MILLIMETERS);
+                PipeDiameter.Set(newValue);
+                tx.Commit();
+            }
+        }
+
+        public void SetNewOffset(Document doc)
+        {
+            using(Transaction tx =  new Transaction(doc, "Setting new offset"))
+            {
+                tx.Start();
+                double newValue = UnitUtils.ConvertToInternalUnits(NewOffset, DisplayUnitType.DUT_MILLIMETERS);
+                CutOffset.Set(newValue);
+                tx.Commit();
+            }
+        }
+
         private void SetId()
         {
             ElementId = FamilyInstance.Id;
@@ -59,6 +84,7 @@ namespace Model
             Height = FamilyInstance.get_Parameter(new Guid("8eb274b3-fc0c-43e0-a46b-236bf59f292d"));
             Diameter = FamilyInstance.get_Parameter(new Guid("9c805bcc-ebc9-4d4c-8d73-26970789417a"));
             CutOffset = FamilyInstance.get_Parameter(new Guid("12f574e0-19fb-46bd-9b7e-0f329356db8a"));
+            PipeDiameter = FamilyInstance.LookupParameter("D");
         }
 
         private void SetShape()
@@ -107,14 +133,14 @@ namespace Model
 
         private void SetStatus()
         {
-            if(OpeningMemory.IsDimChanged && OpeningMemory.IsPosChanged)
-            {
-                DurchbruchStatus = DurchbruchStatus.MovedAndResized;
-                return;
-            }
-            if(OpeningMemory.IsNew)
+            if (OpeningMemory.IsNew)
             {
                 DurchbruchStatus = DurchbruchStatus.New;
+                return;
+            }
+            if (OpeningMemory.IsDimChanged && OpeningMemory.IsPosChanged)
+            {
+                DurchbruchStatus = DurchbruchStatus.MovedAndResized;
                 return;
             }
             if (OpeningMemory.IsPosChanged)

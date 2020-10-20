@@ -41,7 +41,7 @@ namespace ExStorage
 
         private void CompareData()
         {
-            if(OldDateSaved == "-1")
+            if (OldDateSaved == "-1" || OldDateSaved == "")
             {
                 IsNew = true;
                 return;
@@ -82,23 +82,37 @@ namespace ExStorage
         private void ReadCurrentSettings()
         {
             LocationPoint locationPoint = _familyInstance.Location as LocationPoint;
-            NewPosition = locationPoint.Point.X.ToString("F4") + ";" + locationPoint.Point.Y.ToString("F4") + ";" + locationPoint.Point.Z.ToString("F4");
+            NewPosition = locationPoint.Point.X.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) 
+                            + ";" + locationPoint.Point.Y.ToString("F4", System.Globalization.CultureInfo.InvariantCulture) 
+                                + ";" + locationPoint.Point.Z.ToString("F4", System.Globalization.CultureInfo.InvariantCulture);
             Parameter depth = _familyInstance.get_Parameter(new Guid("17a96ef5-1311-49f2-a0d1-4fe5f3f3854b"));
             Parameter diameter = _familyInstance.get_Parameter(new Guid("9c805bcc-ebc9-4d4c-8d73-26970789417a"));
             Parameter width = _familyInstance.get_Parameter(new Guid("46982e85-76c3-43fb-828f-ddf7a643566f"));
             Parameter height = _familyInstance.get_Parameter(new Guid("8eb274b3-fc0c-43e0-a46b-236bf59f292d"));
-            if(depth != null && width != null && height != null)
+
+            Parameter offSet = _familyInstance.get_Parameter(new Guid("12f574e0-19fb-46bd-9b7e-0f329356db8a"));
+            Parameter pipeDiameter = _familyInstance.LookupParameter("D");
+            if (depth != null && width != null && height != null)
             {
                 double widthMetric = width.AsDouble() * 304.8;
                 double heightMetric = height.AsDouble() * 304.8;
                 double depthMetric = depth.AsDouble() * 304.8;
-                NewDimensions = widthMetric.ToString("F1") + "x" + heightMetric.ToString("F1") + "x" + depthMetric.ToString("F1");
+                double cutOffsetMetric = offSet.AsDouble() * 304.8;
+                NewDimensions = widthMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) 
+                                    + "x" + heightMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) 
+                                        + "x" + depthMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)
+                                            + "x" + cutOffsetMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
             }
             if (depth != null && diameter != null)
             {
                 double depthMetric = depth.AsDouble() * 304.8;
                 double diameterMetric = diameter.AsDouble() * 304.8;
-                NewDimensions = diameterMetric.ToString("F1") + "x" + depthMetric.ToString("F1");
+                double pipeDiameterMetric = pipeDiameter.AsDouble() * 304.8;
+                double cutOffsetMetric = offSet.AsDouble() * 304.8;
+                NewDimensions = diameterMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture) 
+                                    + "x" + depthMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)
+                                        +"x" + pipeDiameterMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)
+                                            + "x" + cutOffsetMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
             }
             NewDateSaved = DateTime.Now.ToString("dd-MM-yyyy");
         }

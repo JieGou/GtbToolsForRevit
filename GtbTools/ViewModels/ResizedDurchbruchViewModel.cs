@@ -2,27 +2,79 @@
 using GtbTools;
 using Model;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ViewModels
 {
-    public class ResizedDurchbruchViewModel
+    public class ResizedDurchbruchViewModel : INotifyPropertyChanged
     {
         public string ElementId { get; set; }
         public string Shape { get; set; }
-        public string Diameter { get; set; }
-        public string Offset { get; set; }
-        public string Width { get; set; }
-        public string Height { get; set; }
+
+        public string _diameter;
+        public string Diameter //Total durchbruch diameter
+        {
+            get => _diameter;
+            set
+            {
+                if (_diameter != value)
+                {
+                    _diameter = value;
+                    OnPropertyChanged(nameof(Diameter));
+                }
+            }
+        } 
+
+        public string _pipeDiameter;
+        public string PipeDiameter
+        {
+            get => _pipeDiameter;
+            set
+            {
+                if (_pipeDiameter != value)
+                {
+                    _pipeDiameter = value;
+                    OnPropertyChanged(nameof(PipeDiameter));
+                }
+            }
+        } //editable in datagrid
+
+        public string _offset;
+        public string Offset //editable in datagrid
+        {
+            get => _offset;
+            set
+            {
+                if (_offset != value)
+                {
+                    _offset = value;
+                    OnPropertyChanged(nameof(Offset));
+                }
+            }
+        }
+
+        public string Width { get; set; } //Total Width
+        public string Height { get; set; } //Total Height
         public string Depth { get; set; }
         public List<ModelView> Views { get; set; }
         public string OpeningMark { get; set; }
         public DurchbruchModel DurchbruchModel { get; set; }
+
 
         public string OldDiameter { get; set; }
         public string OldWidth { get; set; }
         public string OldHeight { get; set; }
         public string OldDepth { get; set; }
         public string DateSaved { get; set; }
+
+        public string OldPipeDiameter { get; set; }
+        public string OldOffset { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         private ResizedDurchbruchViewModel()
         {
@@ -61,22 +113,28 @@ namespace ViewModels
 
         private void SetDimensions()
         {
+            //F1 + culture: One decimal place and culture for decimal separator
             double depthMetric = DurchbruchModel.Depth.AsDouble() * 304.8;
-            Depth = depthMetric.ToString("F1");
+            double offsetMetric = DurchbruchModel.CutOffset.AsDouble() * 304.8;
+            Offset = offsetMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+            Depth = depthMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
             if (DurchbruchModel.Shape == DurchbruchShape.Round)
             {
                 Width = "---";
                 Height = "---";
                 double diameterMetric = DurchbruchModel.Diameter.AsDouble() * 304.8;
-                Diameter = diameterMetric.ToString("F1");
+                Diameter = diameterMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                double pipeDiameterMetric = DurchbruchModel.PipeDiameter.AsDouble() * 304.8;
+                PipeDiameter = pipeDiameterMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
             }
             if (DurchbruchModel.Shape == DurchbruchShape.Rectangular)
             {
                 double widthMetric = DurchbruchModel.Width.AsDouble() * 304.8;
                 double heightMetric = DurchbruchModel.Height.AsDouble() * 304.8;
-                Width = widthMetric.ToString("F1");
-                Height = heightMetric.ToString("F1");
+                Width = widthMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                Height = heightMetric.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
                 Diameter = "---";
+                PipeDiameter = "---";
             }
         }
 
@@ -108,6 +166,7 @@ namespace ViewModels
                 OldWidth = dims[0];
                 OldHeight = dims[1];
                 OldDepth = dims[2];
+                OldOffset = dims[3];
                 OldDiameter = "---";
             }
             if (DurchbruchModel.Shape == DurchbruchShape.Round)
@@ -115,6 +174,8 @@ namespace ViewModels
                 string[] dims = DurchbruchModel.OpeningMemory.OldDimensions.Split('x');
                 OldDiameter = dims[0];
                 OldDepth = dims[1];
+                OldPipeDiameter = dims[2];
+                OldOffset = dims[3];
                 OldWidth = "---";
                 OldHeight = "---";
             }

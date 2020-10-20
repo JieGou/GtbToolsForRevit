@@ -13,6 +13,8 @@ namespace ViewModels
         ShowElement,
         ShowPosition,
         DeletePosition,
-        DeleteRemainingMarkers
+        DeleteRemainingMarkers,
+        SetNewOffset,
+        SetNewDiameter
     }
 }

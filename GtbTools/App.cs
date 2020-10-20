@@ -191,7 +191,13 @@ namespace GtbTools
             IExternalEventHandler saveDataExEventHandler = new ExternalEventSaveData();
             ExternalEvent saveDataEventHandler = ExternalEvent.Create(saveDataExEventHandler);
 
-            DurchbruchMemoryViewModel.SetExternalEvents(exEvent8, showElementEventHandler, openViewEventHandler, saveDataEventHandler);
+            IExternalEventHandler changeValue1ExEventHandler = new ExternalEventChangeDurchbruchDiameter();
+            ExternalEvent changeValueEvent1 = ExternalEvent.Create(changeValue1ExEventHandler);
+
+            IExternalEventHandler changeValue2ExEventHandler = new ExternalEventChangeDurchbruchOffset();
+            ExternalEvent changeValueEvent2 = ExternalEvent.Create(changeValue2ExEventHandler);
+
+            DurchbruchMemoryViewModel.SetExternalEvents(exEvent8, showElementEventHandler, openViewEventHandler, saveDataEventHandler, changeValueEvent1, changeValueEvent2);
 
             IExternalEventHandler handler_event9 = new ExternalEventCutOpeningMemory();
             ExternalEvent exEvent9 = ExternalEvent.Create(handler_event9);
@@ -213,7 +219,8 @@ namespace GtbTools
 
             DockablePaneProviderData data = new DockablePaneProviderData();
 
-            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11, RevitOpenedViews);
+            GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, 
+                                                                DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11, RevitOpenedViews);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;
@@ -250,7 +257,6 @@ namespace GtbTools
             }
             catch (Exception ex)
             {
-                TaskDialog.Show("bla", ex.ToString());
                 return null;
             }
         }

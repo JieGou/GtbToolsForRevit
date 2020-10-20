@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
         Title="DurchbruchViews" Height="78" Width="426">
     <Grid Background="#FFEAEAEA">
         <ComboBox x:Name="MyComboBox" HorizontalAlignment="Left" ItemsSource="{Binding Views}" DisplayMemberPath="Name" Margin="10,10,0,0" VerticalAlignment="Top" Width="300"/>

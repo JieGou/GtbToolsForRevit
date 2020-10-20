@@ -90,9 +90,9 @@ namespace Functions
             
 
             string[] coords = positionXYZ.Split(';');
-            double x = Convert.ToDouble(coords[0]);
-            double y = Convert.ToDouble(coords[1]);
-            double z = Convert.ToDouble(coords[2]);
+            double x = Convert.ToDouble(coords[0], System.Globalization.CultureInfo.InvariantCulture);
+            double y = Convert.ToDouble(coords[1], System.Globalization.CultureInfo.InvariantCulture);
+            double z = Convert.ToDouble(coords[2], System.Globalization.CultureInfo.InvariantCulture);
 
             XYZ xyz = new XYZ(x, y, z);
 

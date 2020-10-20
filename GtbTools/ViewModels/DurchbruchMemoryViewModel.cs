@@ -17,9 +17,12 @@ namespace ViewModels
         public UIApplication UIApplication { get; set; }
         public UIDocument UIDocument {get; set;}
         public Document Document { get; set; }
+        public DurchbruchModel CurrentModel { get; set; }
         public ElementId CurrentSelection { get; set; }
         public MovedAndResizedDbViewModel CurrentItem { get; set; }
         public View DesiredView { get; set; }
+        public ExternalEvent ChangeDiameterEvent { get; set; }
+        public ExternalEvent ChangeOffsetEvent { get; set; }
         public ExternalEvent LoadContextEvent { get; set; }
         public ExternalEvent ShowElementEvent { get; set; }
         public ExternalEvent OpenViewEvent { get; set; }
@@ -56,12 +59,16 @@ namespace ViewModels
             Document = UIApplication.ActiveUIDocument.Document;
         }
 
-        public void SetExternalEvents(ExternalEvent loadContextEvent, ExternalEvent showElementEvent, ExternalEvent openViewEvent, ExternalEvent saveDataToExStorageEvent)
+        public void SetExternalEvents(ExternalEvent loadContextEvent, ExternalEvent showElementEvent
+                                        , ExternalEvent openViewEvent, ExternalEvent saveDataToExStorageEvent
+                                            , ExternalEvent changeDiameterEvent, ExternalEvent changeOffsetEvent)
         {
             LoadContextEvent = loadContextEvent;
             ShowElementEvent = showElementEvent;
             OpenViewEvent = openViewEvent;
             SaveDataToExStorageEvent = saveDataToExStorageEvent;
+            ChangeDiameterEvent = changeDiameterEvent;
+            ChangeOffsetEvent = changeOffsetEvent;
         }
 
         public void ShowElement()
@@ -87,6 +94,7 @@ namespace ViewModels
                 {
                     SaveMovedOpenings();
                     SaveResizedOpenings();
+                    SaveMovedAndResizedOpenings();
                 }
                 tx.Commit();
             }
@@ -106,19 +114,25 @@ namespace ViewModels
         {
             FamilySymbol fs = FindPositionMarker();
 
+            if (fs == null)
+            {
+                TaskDialog.Show("Info", "Can't find position marker family type!");
+                return;
+            }
+
             string oldPosition = CurrentItem.DurchbruchModel.OpeningMemory.OldPosition;
             string[] coords = oldPosition.Split(';');
-            double x1 = Convert.ToDouble(coords[0]);
-            double y1 = Convert.ToDouble(coords[1]);
-            double z1 = Convert.ToDouble(coords[2]);
+            double x1 = Convert.ToDouble(coords[0], System.Globalization.CultureInfo.InvariantCulture);
+            double y1 = Convert.ToDouble(coords[1], System.Globalization.CultureInfo.InvariantCulture);
+            double z1 = Convert.ToDouble(coords[2], System.Globalization.CultureInfo.InvariantCulture);
 
             XYZ xyz1 = new XYZ(x1, y1, z1);
 
             string newPosition = CurrentItem.DurchbruchModel.OpeningMemory.NewPosition;
             string[] coordsNew = newPosition.Split(';');
-            double x2 = Convert.ToDouble(coordsNew[0]);
-            double y2 = Convert.ToDouble(coordsNew[1]);
-            double z2 = Convert.ToDouble(coordsNew[2]);
+            double x2 = Convert.ToDouble(coordsNew[0], System.Globalization.CultureInfo.InvariantCulture);
+            double y2 = Convert.ToDouble(coordsNew[1], System.Globalization.CultureInfo.InvariantCulture);
+            double z2 = Convert.ToDouble(coordsNew[2], System.Globalization.CultureInfo.InvariantCulture);
 
             XYZ xyz2 = new XYZ(x2, y2, z2);
 
@@ -203,6 +217,15 @@ namespace ViewModels
         private void SaveMovedOpenings()
         {
             foreach (MovedAndResizedDbViewModel item in MovedDurchbruche)
+            {
+                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+            }
+        }
+        private void SaveMovedAndResizedOpenings()
+        {
+            foreach (MovedAndResizedDbViewModel item in MovedAndResizedDurchbruche)
             {
                 item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
                 item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
