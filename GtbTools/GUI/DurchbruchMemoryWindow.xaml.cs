@@ -49,7 +49,10 @@ namespace GUI
             lblMoved.Content = movedLbl;
             lblResized.Content = resLbl;
             lblMovRes.Content = movresLbl;
-
+            if (DurchbruchMemoryViewModel.NewDurchbruche.Count > 0) lblNew.FontWeight = FontWeights.Bold;
+            if (DurchbruchMemoryViewModel.MovedDurchbruche.Count > 0) lblMoved.FontWeight = FontWeights.Bold;
+            if (DurchbruchMemoryViewModel.ResizedDurchbruche.Count > 0) lblResized.FontWeight = FontWeights.Bold;
+            if (DurchbruchMemoryViewModel.MovedAndResizedDurchbruche.Count > 0) lblMovRes.FontWeight = FontWeights.Bold;
         }
 
         private void SetOwner()
@@ -68,13 +71,20 @@ namespace GUI
 
         private void Btn_Click_SaveNew(object sender, RoutedEventArgs e)
         {
+            DurchbruchMemoryViewModel.SaveAllToStorage = false;
             DurchbruchMemoryViewModel.SaveDataToExStorageEvent.Raise();
+            DurchbruchMemoryViewModel.SignalEvent.WaitOne();
+            DurchbruchMemoryViewModel.SignalEvent.Reset();
+            SetLabels();
         }
 
         private void Btn_Click_SaveAll(object sender, RoutedEventArgs e)
         {
             DurchbruchMemoryViewModel.SaveAllToStorage = true;
             DurchbruchMemoryViewModel.SaveDataToExStorageEvent.Raise();
+            DurchbruchMemoryViewModel.SignalEvent.WaitOne();
+            DurchbruchMemoryViewModel.SignalEvent.Reset();
+            SetLabels();
         }
 
         private void BtnClick_NewDurchBruchViews(object sender, RoutedEventArgs e)

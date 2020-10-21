@@ -21,7 +21,7 @@
                 <DataGrid x:Name="DataGridNew"
                             HorizontalScrollBarVisibility="Auto"
                             VerticalScrollBarVisibility="Auto"
-                            ItemsSource="{Binding NewDurchbruche}" 
+                            ItemsSource="{Binding NewDurchbruche, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                             AutoGenerateColumns="False" 
                             SelectionChanged="DataGridNew_SelectionChanged" 
                             CellEditEnding="DataGridNew_CellEditEnding">
@@ -49,7 +49,7 @@
                 <DataGrid x:Name="DataGridMoved"
                             HorizontalScrollBarVisibility="Auto"
                             VerticalScrollBarVisibility="Auto"
-                            ItemsSource="{Binding MovedDurchbruche}" 
+                            ItemsSource="{Binding MovedDurchbruche, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                             AutoGenerateColumns="False"
                             SelectionChanged="DataGridMoved_SelectionChanged"
                             CellEditEnding="DataGridMoved_CellEditEnding">
@@ -89,7 +89,7 @@
                 <DataGrid x:Name="DataGridResized"
                             HorizontalScrollBarVisibility="Auto"
                             VerticalScrollBarVisibility="Auto"
-                            ItemsSource="{Binding ResizedDurchbruche}" 
+                            ItemsSource="{Binding ResizedDurchbruche, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                             AutoGenerateColumns="False" 
                             SelectionChanged="DataGridResized_SelectionChanged" 
                             CellEditEnding="DataGridResized_CellEditEnding">

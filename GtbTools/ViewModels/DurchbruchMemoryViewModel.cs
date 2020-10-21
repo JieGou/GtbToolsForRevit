@@ -4,6 +4,7 @@ using Autodesk.Revit.UI;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -12,7 +13,7 @@ using System.Windows;
 
 namespace ViewModels
 {
-    public class DurchbruchMemoryViewModel
+    public class DurchbruchMemoryViewModel : INotifyPropertyChanged
     {
         public UIApplication UIApplication { get; set; }
         public UIDocument UIDocument {get; set;}
@@ -27,10 +28,58 @@ namespace ViewModels
         public ExternalEvent ShowElementEvent { get; set; }
         public ExternalEvent OpenViewEvent { get; set; }
         public ExternalEvent SaveDataToExStorageEvent { get; set; }
-        public List<NewDurchbruchViewModel> NewDurchbruche { get; set; }
-        public List<MovedAndResizedDbViewModel> MovedDurchbruche { get; set; }
-        public List<ResizedDurchbruchViewModel> ResizedDurchbruche { get; set; }
-        public List<MovedAndResizedDbViewModel> MovedAndResizedDurchbruche { get; set; }
+        public List<NewDurchbruchViewModel> _newDurchbruche;
+        public List<NewDurchbruchViewModel> NewDurchbruche
+        {
+            get => _newDurchbruche;
+            set
+            {
+                if (_newDurchbruche != value)
+                {
+                    _newDurchbruche = value;
+                    OnPropertyChanged(nameof(NewDurchbruche));
+                }
+            }
+        }
+        public List<MovedAndResizedDbViewModel> _movedDurchbruche;
+        public List<MovedAndResizedDbViewModel> MovedDurchbruche
+        {
+            get => _movedDurchbruche;
+            set
+            {
+                if (_movedDurchbruche != value)
+                {
+                    _movedDurchbruche = value;
+                    OnPropertyChanged(nameof(MovedDurchbruche));
+                }
+            }
+        }
+        public List<ResizedDurchbruchViewModel> _resizedDurchbruche;
+        public List<ResizedDurchbruchViewModel> ResizedDurchbruche
+        {
+            get => _resizedDurchbruche;
+            set
+            {
+                if (_resizedDurchbruche != value)
+                {
+                    _resizedDurchbruche = value;
+                    OnPropertyChanged(nameof(ResizedDurchbruche));
+                }
+            }
+        }
+        public List<MovedAndResizedDbViewModel> _movedAndResizedDurchbruche;
+        public List<MovedAndResizedDbViewModel> MovedAndResizedDurchbruche
+        {
+            get => _movedAndResizedDurchbruche;
+            set
+            {
+                if (_movedAndResizedDurchbruche != value)
+                {
+                    _movedAndResizedDurchbruche = value;
+                    OnPropertyChanged(nameof(MovedAndResizedDurchbruche));
+                }
+            }
+        }
         public bool SaveAllToStorage { get; set; } = false;
         public DurchbruchMemoryAction DurchbruchMemoryAction { get; set; }
 
@@ -40,12 +89,25 @@ namespace ViewModels
         List<DurchbruchModel> _modelDurchbrucheAll;
         public List<int> OldPositionMarkers { get; set; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public DurchbruchMemoryViewModel()
         {
             OldPositionMarkers = new List<int>();
         }
 
         public void InitializeDurchbruche()
+        {
+            SetAllDurchbruche();
+            SetAllModelDurchbruche();
+            SetChangedDurchbruche();
+        }
+
+        public void UpdateDurchbruche()
         {
             SetAllDurchbruche();
             SetAllModelDurchbruche();
@@ -86,6 +148,7 @@ namespace ViewModels
 
         public void SaveOpeningsToExStorage()
         {
+            UpdateDurchbruche();
             using (Transaction tx = new Transaction(Document, "GTB-Tool ExStorage Write"))
             {
                 tx.Start();
@@ -98,6 +161,7 @@ namespace ViewModels
                 }
                 tx.Commit();
             }
+            UpdateDurchbruche();
         }
 
         private FamilySymbol FindPositionMarker()
@@ -183,7 +247,7 @@ namespace ViewModels
             OldPositionMarkers.Clear();
         }
 
-        //postponed
+        //method postponed
         public void DeleteOldPositionCurve()
         {
             if (CurrentItem == null || CurrentItem.OldPositionModelCurve == 0) return;

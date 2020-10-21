@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,7 @@ namespace Model
     {
         public string Name { get; set; }
         public int ID { get; set; }
+        public ViewType ViewType { get; set; }
+        public IList<XYZ> ZoomCorners { get; set; }
     }
 }

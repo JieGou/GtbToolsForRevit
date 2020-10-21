@@ -481,6 +481,8 @@ namespace GtbTools
                 {
                     TaskDialog.Show("Info", "New openings have been saved!");
                 }
+                App.Instance.DurchbruchMemoryViewModel.InitializeDurchbruche();
+                App.Instance.DurchbruchMemoryViewModel.SignalEvent.Set();
             }
             catch (Exception ex)
             {
