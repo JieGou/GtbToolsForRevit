@@ -1,14 +1,14 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Structure;
 using Autodesk.Revit.UI;
+using GtbTools;
+using GUI;
 using Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ViewModels
@@ -80,13 +80,16 @@ namespace ViewModels
                 }
             }
         }
-        public bool SaveAllToStorage { get; set; } = false;
+        public MemorySaveOption MemorySaveOption { get; set; }
         public DurchbruchMemoryAction DurchbruchMemoryAction { get; set; }
+        public List<DurchbruchModel> SelectedToSave { get; set; }
 
         public ManualResetEvent SignalEvent = new ManualResetEvent(false);
 
         List<FamilyInstance> _familyInstancesAll;
+        List<FamilyInstance> _familyInstancesView;
         List<DurchbruchModel> _modelDurchbrucheAll;
+        public OptimisationChoice OptimisationChoice { get; set; }
         public List<int> OldPositionMarkers { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -103,15 +106,94 @@ namespace ViewModels
         public void InitializeDurchbruche()
         {
             SetAllDurchbruche();
-            SetAllModelDurchbruche();
+            SetViewDurchbruche();
+            List<ModelView> selectedViews =  EstimateProject();
+            if(OptimisationChoice == OptimisationChoice.Fast)
+            {
+                SetAllModelDurchbruche(_familyInstancesView);
+                SetActiveViewToAllModelDurchbruche();
+            }
+            if(OptimisationChoice == OptimisationChoice.Medium)
+            {
+                SetAllModelDurchbruche(_familyInstancesAll);
+            }
+            if (OptimisationChoice == OptimisationChoice.Slow)
+            {
+                SetAllModelDurchbruche(_familyInstancesAll);
+                SetAllModelDurchbrucheViews(selectedViews);
+            }
+            if (OptimisationChoice == OptimisationChoice.None)
+            {
+                return;
+            }
             SetChangedDurchbruche();
+        }
+
+        public List<ModelView> EstimateProject()
+        {
+            int fullNumber = _familyInstancesAll.Count;
+            int viewNumber = _familyInstancesView.Count;
+            List<ModelView> viewSelection = SetViewModels();
+            string label1 = String.Format("There are {0} openings found in this project.", fullNumber);
+            string label2 = String.Format("There are {0} openings found in this view.", viewNumber);
+            MemoryFunctionOptimisation window = new MemoryFunctionOptimisation(label1, label2, viewSelection);
+            window.ShowDialog();
+            OptimisationChoice = window.OptimisationChoice;
+            return window.SelectedViews;
+        }
+
+        private List<ModelView> SetViewModels()
+        {
+            List<ModelView> result = new List<ModelView>();
+            FilteredElementCollector ficol = new FilteredElementCollector(Document);
+            ficol.OfClass(typeof(View));
+            foreach (View view in ficol)
+            {
+                if (view.IsTemplate) continue;
+                if (view.ViewType == ViewType.FloorPlan || view.ViewType == ViewType.CeilingPlan || view.ViewType == ViewType.EngineeringPlan || view.ViewType == ViewType.Section)
+                {
+                    ModelView mv = new ModelView() { Name = view.Name, View = view, IsSelected = false };
+                    result.Add(mv);
+                }
+            }
+            return result;
         }
 
         public void UpdateDurchbruche()
         {
             SetAllDurchbruche();
-            SetAllModelDurchbruche();
+            SetViewDurchbruche();
+            if (OptimisationChoice == OptimisationChoice.Fast)
+            {
+                SetAllModelDurchbruche(_familyInstancesView);
+            }
+            else
+            {
+                SetAllModelDurchbruche(_familyInstancesAll);
+            }
             SetChangedDurchbruche();
+        }
+
+        private void SetAllModelDurchbrucheViews(List<ModelView> views)
+        {
+            foreach (ModelView modelView in views)
+            {
+                FilteredElementCollector ficol2 = new FilteredElementCollector(Document, modelView.View.Id);
+                foreach (DurchbruchModel dbm in _modelDurchbrucheAll)
+                {
+                    FamilyInstance fi = dbm.FamilyInstance;
+                    List<FamilyInstance> instances = ficol2.OfClass(typeof(FamilyInstance)).Select(x => x as FamilyInstance).Where(y => y.Id.IntegerValue == fi.Id.IntegerValue).ToList();
+                    if (instances.Count > 0) dbm.Views.Add(modelView.View);
+                }
+            }
+        }
+
+        private void SetActiveViewToAllModelDurchbruche()
+        {
+            foreach (DurchbruchModel dbm in _modelDurchbrucheAll)
+            {
+                dbm.Views.Add(Document.ActiveView);
+            }
         }
 
         public void LoadContext(UIApplication uIApplication)
@@ -152,16 +234,24 @@ namespace ViewModels
             using (Transaction tx = new Transaction(Document, "GTB-Tool ExStorage Write"))
             {
                 tx.Start();
-                SaveNewOpenings();
-                if (SaveAllToStorage)
+                if(MemorySaveOption == MemorySaveOption.New)
                 {
+                    SaveNewOpenings();
+                }
+                if(MemorySaveOption == MemorySaveOption.All)
+                {
+                    SaveNewOpenings();
                     SaveMovedOpenings();
                     SaveResizedOpenings();
                     SaveMovedAndResizedOpenings();
                 }
+                if(MemorySaveOption == MemorySaveOption.Selected)
+                {
+                    SaveSelectedOpenings();
+                }
                 tx.Commit();
             }
-            UpdateDurchbruche();
+            UpdateDurchbruche(); // search another way
         }
 
         private FamilySymbol FindPositionMarker()
@@ -258,6 +348,16 @@ namespace ViewModels
             tx.Commit();
         }
 
+        private void SaveSelectedOpenings()
+        {
+            foreach (DurchbruchModel item in SelectedToSave)
+            {
+                item.OpeningMemory.SaveDateTostorage();
+                item.OpeningMemory.SaveDimensionsTostorage();
+                item.OpeningMemory.SavePositionTostorage();
+            }
+        }
+
         private void SaveNewOpenings()
         {
             foreach (NewDurchbruchViewModel item in NewDurchbruche)
@@ -311,11 +411,25 @@ namespace ViewModels
             }
         }
 
-        private void SetAllModelDurchbruche()
+        private void SetViewDurchbruche()
+        {
+            FilteredElementCollector ficol = new FilteredElementCollector(Document, Document.ActiveView.Id);
+            List<FamilyInstance> genModelInstances = ficol.OfClass(typeof(FamilyInstance))
+                                    .Select(x => x as FamilyInstance)
+                                        .Where(y => y.Symbol.Family.FamilyCategory.Id.IntegerValue == (int)BuiltInCategory.OST_GenericModel).ToList();
+            _familyInstancesView = new List<FamilyInstance>();
+            foreach (FamilyInstance fi in genModelInstances)
+            {
+                Parameter gtbParameter = fi.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
+                if (gtbParameter != null && gtbParameter.AsString() != "GTB_Tools_location_marker") _familyInstancesView.Add(fi);
+            }
+        }
+
+        private void SetAllModelDurchbruche(List<FamilyInstance> familyInstances)
         {
             _modelDurchbrucheAll = new List<DurchbruchModel>();
 
-            foreach (FamilyInstance fi in _familyInstancesAll)
+            foreach (FamilyInstance fi in familyInstances)
             {
                 DurchbruchModel durchbruchModel = DurchbruchModel.Initialize(fi, UIDocument);
                 _modelDurchbrucheAll.Add(durchbruchModel);

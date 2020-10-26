@@ -16,6 +16,9 @@ namespace ExStorage
         public int FBSymbol { get; set; }
         public int ABSymbol { get; set; }
         public int ManSymbol { get; set; }
+
+        bool _checkboxNotFound = false;
+
         Schema _schema;
         FamilyInstance _familyInstance;
         public int _discipline;
@@ -38,6 +41,8 @@ namespace ExStorage
 
         public bool CompareData()
         {
+            if (_checkboxNotFound) return false;
+
             _disciplineX = false;
             if (Discipline == 1 && _discipline == 0) _disciplineX = true;
             if (Discipline == 2 && _discipline == 1) _disciplineX = true;
@@ -73,6 +78,12 @@ namespace ExStorage
             Parameter parOben = _familyInstance.LookupParameter("Über Schnitt Ebene (TGA, Grundrisse)");
             Parameter manSym = _familyInstance.LookupParameter("Manuelles Symbol");
 
+            if (parARC == null || parTop == null || parLR == null || parFB == null || parOben == null || manSym == null)
+            {
+                _checkboxNotFound = true;
+                return;
+            }
+
             _discipline = parARC.AsInteger();
             _topSymbol = parTop.AsInteger();
             _lRSymbol = parLR.AsInteger();
@@ -83,6 +94,7 @@ namespace ExStorage
 
         public void ReadExternalStorage()
         {
+            if (_checkboxNotFound) return;
             GetSchema();
             Entity retrievedEntity = _familyInstance.GetEntity(_schema);
             for (int i = 0; i < 6; i++)

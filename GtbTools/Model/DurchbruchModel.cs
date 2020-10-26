@@ -22,6 +22,8 @@ namespace Model
         public Parameter CutOffset { get; set; }
         public List<View> Views { get; set; }
         public Parameter OpeningMark { get; set; }
+        public Parameter SystemType { get; set; }
+        public Parameter FireRating { get; set; }
         public DurchbruchStatus DurchbruchStatus { get; set; }
         public FamilyInstance FamilyInstance { get; set; }
         public OpeningMemory OpeningMemory { get; set; }
@@ -44,7 +46,8 @@ namespace Model
             result.SetDimensions();
             result.SetShape();
             result.SetOpeningMark();
-            result.SetViews();
+            result.SetSystemTypeAndFireRating();
+            result.Views = new List<View>();
             result.SetMemory();
             result.SetStatus();
             return result;
@@ -70,6 +73,12 @@ namespace Model
                 CutOffset.Set(newValue);
                 tx.Commit();
             }
+        }
+
+        private void SetSystemTypeAndFireRating()
+        {
+            SystemType = FamilyInstance.get_Parameter(new Guid("b0a9a9db-7bf3-44e7-a50f-7c8dacbf6214"));
+            FireRating = FamilyInstance.get_Parameter(new Guid("731e30b3-63a2-4a2c-bb0c-c98c0f4eb46b"));
         }
 
         private void SetId()
@@ -104,6 +113,7 @@ namespace Model
             OpeningMark = FamilyInstance.get_Parameter(new Guid("ed25fc8e-129f-4a2b-8d69-4de0c6615ec5"));
         }
 
+        //optimisation: postponed this method
         private void SetViews()
         {
             Views = new List<View>();

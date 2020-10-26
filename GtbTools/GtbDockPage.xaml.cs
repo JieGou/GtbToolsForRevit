@@ -35,6 +35,7 @@ namespace GtbTools.Forms
     {
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
         Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
+        Functions.CopyParameterFromHost CopyParameterFromHost { get; set; }
 
         #region Data
         ExternalEvent _exEventCopyCoords;
@@ -57,7 +58,11 @@ namespace GtbTools.Forms
         private int m_top = 1;
         private int m_bottom = 1;
         #endregion
-        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews, ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel, ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel, ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews)
+        public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews,
+                            ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel,
+                                ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel,
+                                    ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,
+                                        ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -72,6 +77,7 @@ namespace GtbTools.Forms
             DurchbruchMemoryViewModel = durchbruchMemoryViewModel;
             _copyElevations = copyElevations;
             _revitOpenedViews = revitOpenedViews;
+            CopyParameterFromHost = copyParameterFromHost;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -171,6 +177,7 @@ namespace GtbTools.Forms
                 DurchbruchMemoryViewModel.LoadContextEvent.Raise();
                 DurchbruchMemoryViewModel.SignalEvent.WaitOne();
                 DurchbruchMemoryViewModel.SignalEvent.Reset();
+                if (DurchbruchMemoryViewModel.OptimisationChoice == OptimisationChoice.None) return;
                 DurchbruchMemoryWindow durchbruchMemoryWindow = new DurchbruchMemoryWindow(DurchbruchMemoryViewModel);
                 durchbruchMemoryWindow.Show();
                 Dispatcher.Run();
@@ -214,6 +221,11 @@ namespace GtbTools.Forms
             _revitOpenedViews.IsLoading = true;
             _revitOpenedViews.IsSaving = false;
             _revitOpenedViews.OneEvent.Raise();
+        }
+
+        private void CopyPasteParameters_Click(object sender, RoutedEventArgs e)
+        {
+            CopyParameterFromHost.InitializeEvent.Raise();
         }
     }
 }

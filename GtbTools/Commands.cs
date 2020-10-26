@@ -473,15 +473,18 @@ namespace GtbTools
             try
             {
                 App.Instance.DurchbruchMemoryViewModel.SaveOpeningsToExStorage();
-                if(App.Instance.DurchbruchMemoryViewModel.SaveAllToStorage)
+                if(App.Instance.DurchbruchMemoryViewModel.MemorySaveOption == MemorySaveOption.All)
                 {
                     TaskDialog.Show("Info", "All openings have been saved!");
                 }
-                else
+                if (App.Instance.DurchbruchMemoryViewModel.MemorySaveOption == MemorySaveOption.New)
                 {
                     TaskDialog.Show("Info", "New openings have been saved!");
                 }
-                App.Instance.DurchbruchMemoryViewModel.InitializeDurchbruche();
+                if (App.Instance.DurchbruchMemoryViewModel.MemorySaveOption == MemorySaveOption.Selected)
+                {
+                    TaskDialog.Show("Info", "Selected openings have been saved!");
+                }
                 App.Instance.DurchbruchMemoryViewModel.SignalEvent.Set();
             }
             catch (Exception ex)
@@ -625,6 +628,45 @@ namespace GtbTools
                 //there have to be separate events because change selection event is conflicted with edit ending event
                 model.CurrentModel.SetNewOffset(uiapp.ActiveUIDocument.Document);
                 //model.CurrentModel.SetNewOffset(uiapp.ActiveUIDocument.Document);               
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Change durchbruch value";
+        }
+    }
+
+    class ExternalEventCopyParameter : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Copy parameter from host or self");
+            try
+            {
+                CopyParameterFromHost copyParameterFromHost = App.Instance.CopyParameterFromHost;
+                if(copyParameterFromHost.IsInitialized)
+                {
+                    if(copyParameterFromHost._hostClicked)
+                    {
+                        copyParameterFromHost.CopyParametersHost();
+                    }
+                    if(copyParameterFromHost._selfClicked)
+                    {
+                        copyParameterFromHost.CopyParametersSelf();
+                    }
+                }
+                else
+                {
+                    copyParameterFromHost.Initialize(uiapp.ActiveUIDocument.Document);
+                    copyParameterFromHost.DisplayWindow();
+                }
             }
             catch (Exception ex)
             {

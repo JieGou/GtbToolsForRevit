@@ -49,6 +49,7 @@ namespace GtbTools
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
         public Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
         public Functions.RevitOpenedViews RevitOpenedViews { get; set; }
+        public Functions.CopyParameterFromHost CopyParameterFromHost { get; set; }
         RibbonItem _button;
         ExternalEvent _toggleEvent;
 
@@ -66,6 +67,7 @@ namespace GtbTools
             DurchbruchMemoryViewModel = new DurchbruchMemoryViewModel();
             DurchbruchRotationFix = new Functions.DurchbruchRotationFix();
             RevitOpenedViews = new Functions.RevitOpenedViews();
+            CopyParameterFromHost = new Functions.CopyParameterFromHost();
             string path = Assembly.GetExecutingAssembly().Location;
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
@@ -217,10 +219,14 @@ namespace GtbTools
             ExternalEvent exEvent12 = ExternalEvent.Create(handler12);
             RevitOpenedViews.SetEvent(exEvent12);
 
+            IExternalEventHandler eventHandlerCopyParameter = new ExternalEventCopyParameter();
+            ExternalEvent exEventCopyParameter = ExternalEvent.Create(eventHandlerCopyParameter);
+            CopyParameterFromHost.SetEvents(exEventCopyParameter);
+
             DockablePaneProviderData data = new DockablePaneProviderData();
 
             GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, 
-                                                                DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11, RevitOpenedViews);
+                                                                DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11, RevitOpenedViews, CopyParameterFromHost);
             data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
             data.InitialState = new DockablePaneState();
             data.InitialState.DockPosition = DockPosition.Floating;

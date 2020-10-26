@@ -10,7 +10,19 @@ namespace ViewModels
     {
         public string ElementId { get; set; }
         public string Shape { get; set; }
-
+        public System.Windows.Visibility _visibility;
+        public System.Windows.Visibility Visibility
+        {
+            get => _visibility;
+            set
+            {
+                if (_visibility != value)
+                {
+                    _visibility = value;
+                    OnPropertyChanged(nameof(Visibility));
+                }
+            }
+        }
         public string _diameter;
         public string Diameter //Total durchbruch diameter
         {
@@ -58,6 +70,8 @@ namespace ViewModels
         public string Depth { get; set; }
         public List<ModelView> Views { get; set; }
         public string OpeningMark { get; set; }
+        public string SystemType { get; set; }
+        public string FireRating { get; set; }
         public string DateSaved { get; set; }
         public DurchbruchModel DurchbruchModel { get; set; }
         public int OldPositionMarker { get; set; }
@@ -89,6 +103,7 @@ namespace ViewModels
             result.SetShape();
             result.SetDimensions();
             result.SetMark();
+            result.SetSystemTypeAndFireRating();
             result.SetViews();
             result.GetOldDimensions();
             result.SetDateSaved();
@@ -141,6 +156,26 @@ namespace ViewModels
         private void SetMark()
         {
             OpeningMark = DurchbruchModel.OpeningMark.AsString();
+        }
+
+        private void SetSystemTypeAndFireRating()
+        {
+            if(DurchbruchModel.SystemType != null)
+            {
+                SystemType = DurchbruchModel.SystemType.AsString();
+            }
+            else
+            {
+                SystemType = "#NA";
+            }
+            if (DurchbruchModel.FireRating != null)
+            {
+                FireRating = DurchbruchModel.FireRating.AsString();
+            }
+            else
+            {
+                FireRating = "#NA";
+            }
         }
 
         private void SetViews()

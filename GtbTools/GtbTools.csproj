@@ -146,8 +146,12 @@
     <Compile Include="DurchbruchRotationFix\DurchbruchRotation.cs" />
     <Compile Include="DurchbruchRotationFix\RotationFixViewModel.cs" />
     <Compile Include="DurchbruchRotationFix\WindowDecision.cs" />
+    <Compile Include="Functions\CopyParameterFromHost.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
     <Compile Include="Functions\RevitOpenedViews.cs" />
+    <Compile Include="GUI\CopyPasteWindow.xaml.cs">
+      <DependentUpon>CopyPasteWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\DurchbruchRotationFixWindow.xaml.cs">
       <DependentUpon>DurchbruchRotationFixWindow.xaml</DependentUpon>
     </Compile>
@@ -181,6 +185,9 @@
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\GtbWindowResult.cs" />
+    <Compile Include="GUI\MemoryFunctionOptimisation.xaml.cs">
+      <DependentUpon>MemoryFunctionOptimisation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\OpeningsMainWindow.xaml.cs">
       <DependentUpon>OpeningsMainWindow.xaml</DependentUpon>
     </Compile>
@@ -192,6 +199,9 @@
     </Compile>
     <Compile Include="GUI\SymbolToolWarning.xaml.cs">
       <DependentUpon>SymbolToolWarning.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ViewSelection.xaml.cs">
+      <DependentUpon>ViewSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\ZoomWindow.xaml.cs" />
     <Compile Include="Model\DurchbruchModel.cs" />
@@ -220,10 +230,12 @@
     <Compile Include="ViewModels\DurchbruchMemoryViewModel.cs" />
     <Compile Include="ViewModels\DurchbruchShape.cs" />
     <Compile Include="ViewModels\DurchbruchValueEditor.cs" />
+    <Compile Include="ViewModels\MemorySaveOption.cs" />
     <Compile Include="ViewModels\ModelView.cs" />
     <Compile Include="ViewModels\NewDurchbruchViewModel.cs" />
     <Compile Include="ViewModels\OpeningWindowMainViewModel.cs" />
     <Compile Include="ViewModels\MovedAndResizedDbViewModel.cs" />
+    <Compile Include="ViewModels\OptimisationChoice.cs" />
     <Compile Include="ViewModels\ResizedDurchbruchViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +249,10 @@
     <EmbeddedResource Include="Resources\GtbInactive.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="GUI\CopyPasteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\DurchbruchRotationFixWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -261,6 +277,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\MemoryFunctionOptimisation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\OpeningsMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -274,6 +294,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\SymbolToolWarning.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\ViewSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

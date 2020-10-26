@@ -3,6 +3,7 @@ using GtbTools;
 using Model;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows;
 
 namespace ViewModels
 {
@@ -10,6 +11,19 @@ namespace ViewModels
     {
         public string ElementId { get; set; }
         public string Shape { get; set; }
+        public System.Windows.Visibility _visibility;
+        public System.Windows.Visibility Visibility
+        {
+            get => _visibility;
+            set
+            {
+                if (_visibility != value)
+                {
+                    _visibility = value;
+                    OnPropertyChanged(nameof(Visibility));
+                }
+            }
+        }
 
         public string _diameter;
         public string Diameter //Total durchbruch diameter
@@ -58,6 +72,8 @@ namespace ViewModels
         public string Depth { get; set; }
         public List<ModelView> Views { get; set; }
         public string OpeningMark { get; set; }
+        public string SystemType { get; set; }
+        public string FireRating { get; set; }
         public DurchbruchModel DurchbruchModel { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -68,7 +84,7 @@ namespace ViewModels
 
         private NewDurchbruchViewModel()
         {
-
+            Visibility = System.Windows.Visibility.Visible;
         }
 
         public static NewDurchbruchViewModel Initialize(DurchbruchModel durchbruchModel)
@@ -79,6 +95,7 @@ namespace ViewModels
             result.SetShape();
             result.SetDimensions();
             result.SetMark();
+            result.SetSystemTypeAndFireRating();
             result.SetViews();
             return result;
         }
@@ -124,6 +141,28 @@ namespace ViewModels
         private void SetMark()
         {
             OpeningMark = DurchbruchModel.OpeningMark.AsString();
+        }
+
+        private void SetSystemTypeAndFireRating()
+        {
+            if (DurchbruchModel.SystemType != null)
+            {
+                SystemType = DurchbruchModel.SystemType.AsString();
+                if (SystemType == null) SystemType = "";
+            }
+            else
+            {
+                SystemType = "#NA";
+            }
+            if (DurchbruchModel.FireRating != null)
+            {
+                FireRating = DurchbruchModel.FireRating.AsString();
+                if (FireRating == null) FireRating = "";
+            }
+            else
+            {
+                FireRating = "#NA";
+            }
         }
 
         private void SetViews()
