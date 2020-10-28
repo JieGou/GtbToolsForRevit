@@ -11,20 +11,6 @@ namespace ViewModels
     {
         public string ElementId { get; set; }
         public string Shape { get; set; }
-        public System.Windows.Visibility _visibility;
-        public System.Windows.Visibility Visibility
-        {
-            get => _visibility;
-            set
-            {
-                if (_visibility != value)
-                {
-                    _visibility = value;
-                    OnPropertyChanged(nameof(Visibility));
-                }
-            }
-        }
-
         public string _diameter;
         public string Diameter //Total durchbruch diameter
         {
@@ -38,7 +24,6 @@ namespace ViewModels
                 }
             }
         }
-
         public string _pipeDiameter;
         public string PipeDiameter
         {
@@ -52,7 +37,6 @@ namespace ViewModels
                 }
             }
         } //editable in datagrid
-
         public string _offset;
         public string Offset //editable in datagrid
         {
@@ -66,14 +50,85 @@ namespace ViewModels
                 }
             }
         }
-
-        public string Width { get; set; }
-        public string Height { get; set; }
-        public string Depth { get; set; }
+        public string _width;
+        public string Width
+        {
+            get => _width;
+            set
+            {
+                if (_width != value)
+                {
+                    _width = value;
+                    OnPropertyChanged(nameof(Width));
+                }
+            }
+        }
+        public string _height;
+        public string Height
+        {
+            get => _height;
+            set
+            {
+                if (_height != value)
+                {
+                    _height = value;
+                    OnPropertyChanged(nameof(Height));
+                }
+            }
+        }
+        public string _depth;
+        public string Depth
+        {
+            get => _depth;
+            set
+            {
+                if (_depth != value)
+                {
+                    _depth = value;
+                    OnPropertyChanged(nameof(Depth));
+                }
+            }
+        }
         public List<ModelView> Views { get; set; }
-        public string OpeningMark { get; set; }
-        public string SystemType { get; set; }
-        public string FireRating { get; set; }
+        public string _openingMark;
+        public string OpeningMark
+        {
+            get => _openingMark;
+            set
+            {
+                if (_openingMark != value)
+                {
+                    _openingMark = value;
+                    OnPropertyChanged(nameof(OpeningMark));
+                }
+            }
+        }
+        public string _systemType;
+        public string SystemType
+        {
+            get => _systemType;
+            set
+            {
+                if (_systemType != value)
+                {
+                    _systemType = value;
+                    OnPropertyChanged(nameof(SystemType));
+                }
+            }
+        }
+        public string _fireRating;
+        public string FireRating
+        {
+            get => _fireRating;
+            set
+            {
+                if (_fireRating != value)
+                {
+                    _fireRating = value;
+                    OnPropertyChanged(nameof(FireRating));
+                }
+            }
+        }
         public DurchbruchModel DurchbruchModel { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -84,7 +139,7 @@ namespace ViewModels
 
         private NewDurchbruchViewModel()
         {
-            Visibility = System.Windows.Visibility.Visible;
+
         }
 
         public static NewDurchbruchViewModel Initialize(DurchbruchModel durchbruchModel)
@@ -98,6 +153,23 @@ namespace ViewModels
             result.SetSystemTypeAndFireRating();
             result.SetViews();
             return result;
+        }
+
+        public void UpdateDurchbruch()
+        {
+            DurchbruchModel.OpeningMemory.UpdateCurrentSettings();
+            SetDimensions();
+            SetMark();
+            SetSystemTypeAndFireRating();
+        }
+
+        public void UpdateDurchbruchDeep()
+        {
+            DurchbruchModel.UpdateMemory();
+            DurchbruchModel.UpdateStatus();
+            SetDimensions();
+            SetMark();
+            SetSystemTypeAndFireRating();
         }
 
         private void SetElementId()

@@ -25,20 +25,15 @@
                             AutoGenerateColumns="False" 
                             SelectionChanged="DataGridNew_SelectionChanged" 
                             CellEditEnding="DataGridNew_CellEditEnding">
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Setter Property="Visibility" Value="{Binding Visibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        </Style>
-                    </DataGrid.RowStyle>
                     <DataGrid.Columns>
                         <DataGridTextColumn IsReadOnly="True" Header="ID" Binding="{Binding Path=ElementId}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Shape" Binding="{Binding Path=Shape}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="DB Diameter" Binding="{Binding Path=Diameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Pipe Diameter" Binding="{Binding Path=PipeDiameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Cut Offset" Binding="{Binding Path=Offset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTemplateColumn Header="Views">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -46,9 +41,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -66,9 +61,9 @@
                         <DataGridTextColumn IsReadOnly="True" Header="DB Diameter" Binding="{Binding Path=Diameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Pipe Diameter" Binding="{Binding Path=PipeDiameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Cut Offset" Binding="{Binding Path=Offset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTemplateColumn Header="Views">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -76,9 +71,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Date Saved" Binding="{Binding Path=DateSaved}"/>
                         <DataGridCheckBoxColumn Header="Old position marker" IsReadOnly="False">
                             <DataGridCheckBoxColumn.CellStyle>
@@ -108,9 +103,9 @@
                         <DataGridTextColumn IsReadOnly="True" Header="DB Diameter" Binding="{Binding Path=Diameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Pipe Diameter" Binding="{Binding Path=PipeDiameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Cut Offset" Binding="{Binding Path=Offset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTemplateColumn Header="Views">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -118,9 +113,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Old DB Diameter" Binding="{Binding Path=OldDiameter}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Old Pipe Diameter" Binding="{Binding Path=OldPipeDiameter}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Old Cut Offset" Binding="{Binding Path=OldOffset}"/>
@@ -145,9 +140,9 @@
                         <DataGridTextColumn IsReadOnly="True" Header="DB Diameter" Binding="{Binding Path=Diameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Pipe Diameter" Binding="{Binding Path=PipeDiameter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="False" Header="Cut Offset" Binding="{Binding Path=Offset, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Width" Binding="{Binding Path=Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Height" Binding="{Binding Path=Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="DB Depth" Binding="{Binding Path=Depth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTemplateColumn Header="Views">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -155,9 +150,9 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType}"/>
-                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Mark" Binding="{Binding Path=OpeningMark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="System Typ" Binding="{Binding Path=SystemType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <DataGridTextColumn IsReadOnly="True" Header="Feuerklasse" Binding="{Binding Path=FireRating, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Old DB Diameter" Binding="{Binding Path=OldDiameter}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Old Pipe Diameter" Binding="{Binding Path=OldPipeDiameter}"/>
                         <DataGridTextColumn IsReadOnly="True" Header="Old Cut Offset" Binding="{Binding Path=OldOffset}"/>
@@ -193,6 +188,9 @@
             <ComboBox x:Name="ComboBoxFilter" Margin="15,0"/>
             <TextBox x:Name="TextBoxFilter" Height="23" TextWrapping="Wrap" Text="" Margin="15,5,15,0"/>
             <Button Content="Filter" Margin="15,5" Click="Btn_Click_Filter"/>
+            <Button Content="Multi - selection" Margin="15,20,15,5" Click="Btn_Click_MultipleSelection"/>
+            <Button Content="Refresh Context" Margin="15,5" Click="Btn_Click_RefreshContext"/>
+
         </StackPanel>
     </Grid>
 </Window>

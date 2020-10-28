@@ -15,6 +15,7 @@ namespace ViewModels
         DeletePosition,
         DeleteRemainingMarkers,
         SetNewOffset,
-        SetNewDiameter
+        SetNewDiameter,
+        ShowElements
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using ViewModels;
 using System.Collections.Generic;
 using System.Windows.Data;
+using Autodesk.Revit.DB;
 
 namespace GUI
 {
@@ -27,6 +28,14 @@ namespace GUI
             DataGridMovedAndResized.DataContext = this.DurchbruchMemoryViewModel;
             ComboBoxFilter.ItemsSource = CreateComboBoxFilters();
             SetLabels();
+        }
+
+        private void SetDataContext()
+        {
+            DataGridNew.DataContext = this.DurchbruchMemoryViewModel;
+            DataGridMoved.DataContext = this.DurchbruchMemoryViewModel;
+            DataGridResized.DataContext = this.DurchbruchMemoryViewModel;
+            DataGridMovedAndResized.DataContext = this.DurchbruchMemoryViewModel;
         }
 
         private List<string> CreateComboBoxFilters()
@@ -74,6 +83,7 @@ namespace GUI
             DurchbruchMemoryViewModel.SaveDataToExStorageEvent.Raise();
             DurchbruchMemoryViewModel.SignalEvent.WaitOne();
             DurchbruchMemoryViewModel.SignalEvent.Reset();
+            SetDataContext();
             SetLabels();
         }
 
@@ -83,6 +93,7 @@ namespace GUI
             DurchbruchMemoryViewModel.SaveDataToExStorageEvent.Raise();
             DurchbruchMemoryViewModel.SignalEvent.WaitOne();
             DurchbruchMemoryViewModel.SignalEvent.Reset();
+            SetDataContext();
             SetLabels();
         }
 
@@ -615,193 +626,148 @@ namespace GUI
             DurchbruchMemoryViewModel.SaveDataToExStorageEvent.Raise();
             DurchbruchMemoryViewModel.SignalEvent.WaitOne();
             DurchbruchMemoryViewModel.SignalEvent.Reset();
+            SetDataContext();
             SetLabels();
         }
 
         private void Btn_Click_Filter(object sender, RoutedEventArgs e)
         {
-            //New Durchbruche
+            if (MyTabs.SelectedIndex == 0) FilterDatagridNew();
+            if (MyTabs.SelectedIndex == 1) FilterDatagridMoved();
+            if (MyTabs.SelectedIndex == 2) FilterDatagridResized();
+            if (MyTabs.SelectedIndex == 3) FilterDatagridMovedAndResized();
+        }
+        private void FilterDatagridNew()
+        {
+            var collection = DataGridNew.Items;
+            if(ComboBoxFilter.SelectedIndex == 0)
+            {
+                collection.Filter = null;
+            }
+            if (ComboBoxFilter.SelectedIndex == 1)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+            if (ComboBoxFilter.SelectedIndex == 2)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+        }
+
+        private void FilterDatagridMoved()
+        {
+            var collection = DataGridMoved.Items;
+            if (ComboBoxFilter.SelectedIndex == 0)
+            {
+                collection.Filter = null;
+            }
+            if (ComboBoxFilter.SelectedIndex == 1)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+            if (ComboBoxFilter.SelectedIndex == 2)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+        }
+
+        private void FilterDatagridResized()
+        {
+            var collection = DataGridResized.Items;
+            if (ComboBoxFilter.SelectedIndex == 0)
+            {
+                collection.Filter = null;
+            }
+            if (ComboBoxFilter.SelectedIndex == 1)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+            if (ComboBoxFilter.SelectedIndex == 2)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+        }
+
+        private void FilterDatagridMovedAndResized()
+        {
+            var collection = DataGridMovedAndResized.Items;
+            if (ComboBoxFilter.SelectedIndex == 0)
+            {
+                collection.Filter = null;
+            }
+            if (ComboBoxFilter.SelectedIndex == 1)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+            if (ComboBoxFilter.SelectedIndex == 2)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+        }
+
+        private void SelectMultipleItems()
+        {
             if (MyTabs.SelectedIndex == 0)
             {
-                if (ComboBoxFilter.SelectedIndex == 0)
+                DurchbruchMemoryViewModel.SelectedIds = new List<ElementId>();
+                var selectedItems = DataGridNew.SelectedItems;
+                foreach (var item in selectedItems)
                 {
-                    foreach (NewDurchbruchViewModel item in DurchbruchMemoryViewModel.NewDurchbruche)
-                    {
-                        item.Visibility = Visibility.Visible;
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 1)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (NewDurchbruchViewModel item in DurchbruchMemoryViewModel.NewDurchbruche)
-                    {
-                        if(item.SystemType.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 2)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (NewDurchbruchViewModel item in DurchbruchMemoryViewModel.NewDurchbruche)
-                    {
-                        if (item.FireRating.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
+                    NewDurchbruchViewModel model = item as NewDurchbruchViewModel;
+                    DurchbruchMemoryViewModel.SelectedIds.Add(model.DurchbruchModel.ElementId);
                 }
             }
-
-            //Moved Durchbruche
             if (MyTabs.SelectedIndex == 1)
             {
-                if (ComboBoxFilter.SelectedIndex == 0)
+                DurchbruchMemoryViewModel.SelectedIds = new List<ElementId>();
+                var selectedItems = DataGridMoved.SelectedItems;
+                foreach (var item in selectedItems)
                 {
-                    foreach (MovedAndResizedDbViewModel item in DurchbruchMemoryViewModel.MovedDurchbruche)
-                    {
-                        item.Visibility = Visibility.Visible;
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 1)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (MovedAndResizedDbViewModel item in DurchbruchMemoryViewModel.MovedDurchbruche)
-                    {
-                        if (item.SystemType.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 2)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (MovedAndResizedDbViewModel item in DurchbruchMemoryViewModel.MovedDurchbruche)
-                    {
-                        if (item.FireRating.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
+                    MovedAndResizedDbViewModel model = item as MovedAndResizedDbViewModel;
+                    DurchbruchMemoryViewModel.SelectedIds.Add(model.DurchbruchModel.ElementId);
                 }
             }
-
-            //Resized Durchbruche
             if (MyTabs.SelectedIndex == 2)
             {
-                if (ComboBoxFilter.SelectedIndex == 0)
+                DurchbruchMemoryViewModel.SelectedIds = new List<ElementId>();
+                var selectedItems = DataGridResized.SelectedItems;
+                foreach (var item in selectedItems)
                 {
-                    foreach (ResizedDurchbruchViewModel item in DurchbruchMemoryViewModel.ResizedDurchbruche)
-                    {
-                        item.Visibility = Visibility.Visible;
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 1)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (ResizedDurchbruchViewModel item in DurchbruchMemoryViewModel.ResizedDurchbruche)
-                    {
-                        if (item.SystemType.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 2)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (ResizedDurchbruchViewModel item in DurchbruchMemoryViewModel.ResizedDurchbruche)
-                    {
-                        if (item.FireRating.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
+                    ResizedDurchbruchViewModel model = item as ResizedDurchbruchViewModel;
+                    DurchbruchMemoryViewModel.SelectedIds.Add(model.DurchbruchModel.ElementId);
                 }
             }
-
-            //Moved and Resized Durchbruche
             if (MyTabs.SelectedIndex == 3)
             {
-                if (ComboBoxFilter.SelectedIndex == 0)
+                DurchbruchMemoryViewModel.SelectedIds = new List<ElementId>();
+                var selectedItems = DataGridMovedAndResized.SelectedItems;
+                foreach (var item in selectedItems)
                 {
-                    foreach (MovedAndResizedDbViewModel item in DurchbruchMemoryViewModel.MovedAndResizedDurchbruche)
-                    {
-                        item.Visibility = Visibility.Visible;
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 1)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (MovedAndResizedDbViewModel item in DurchbruchMemoryViewModel.MovedAndResizedDurchbruche)
-                    {
-                        if (item.SystemType.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
-                }
-                if (ComboBoxFilter.SelectedIndex == 2)
-                {
-                    string filter = TextBoxFilter.Text;
-                    foreach (MovedAndResizedDbViewModel item in DurchbruchMemoryViewModel.MovedAndResizedDurchbruche)
-                    {
-                        if (item.FireRating.ToUpper().Contains(filter.ToUpper()))
-                        {
-                            item.Visibility = Visibility.Visible;
-                        }
-                        else
-                        {
-                            item.Visibility = Visibility.Collapsed;
-                        }
-                    }
+                    MovedAndResizedDbViewModel model = item as MovedAndResizedDbViewModel;
+                    DurchbruchMemoryViewModel.SelectedIds.Add(model.DurchbruchModel.ElementId);
                 }
             }
         }
-        private void Btn_Click_Filter2(object sender, RoutedEventArgs e)
+
+        private void Btn_Click_MultipleSelection(object sender, RoutedEventArgs e)
         {
-            //New Durchbruche
-            if (MyTabs.SelectedIndex == 0)
-            {
-                var collection = DataGridNew.Items;
-                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.Contains("test"));
-                collection.Filter = myFilter;
-                //USE COLLECTION FILTER INSTEAD OF BINDING VISIBILITY
-            }
+            SelectMultipleItems();
+            DurchbruchMemoryViewModel.DurchbruchMemoryAction = DurchbruchMemoryAction.ShowElements;
+            DurchbruchMemoryViewModel.SignalEvent.Set();
+            DurchbruchMemoryViewModel.ShowElementEvent.Raise();
         }
-        private void ShowOnlyFiltered(object sender, FilterEventArgs e)
+
+        private void Btn_Click_RefreshContext(object sender, RoutedEventArgs e)
         {
-            
+            DurchbruchMemoryViewModel.UpdateDurchbrucheLight();
         }
     }
 }

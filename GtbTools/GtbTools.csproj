@@ -146,6 +146,7 @@
     <Compile Include="DurchbruchRotationFix\DurchbruchRotation.cs" />
     <Compile Include="DurchbruchRotationFix\RotationFixViewModel.cs" />
     <Compile Include="DurchbruchRotationFix\WindowDecision.cs" />
+    <Compile Include="FamilyTools\CheckboxLabelReplace.cs" />
     <Compile Include="Functions\CopyParameterFromHost.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
     <Compile Include="Functions\RevitOpenedViews.cs" />
@@ -183,6 +184,9 @@
     </Compile>
     <Compile Include="GUI\ExcelDataImport.xaml.cs">
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FamilyToolsWindow.xaml.cs">
+      <DependentUpon>FamilyToolsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\GtbWindowResult.cs" />
     <Compile Include="GUI\MemoryFunctionOptimisation.xaml.cs">
@@ -277,6 +281,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\FamilyToolsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\MemoryFunctionOptimisation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -309,6 +317,8 @@
   <ItemGroup>
     <Resource Include="Resources\GTB_logo_new.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FamilyEdit.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

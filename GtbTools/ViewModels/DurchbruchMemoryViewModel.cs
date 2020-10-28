@@ -83,6 +83,7 @@ namespace ViewModels
         public MemorySaveOption MemorySaveOption { get; set; }
         public DurchbruchMemoryAction DurchbruchMemoryAction { get; set; }
         public List<DurchbruchModel> SelectedToSave { get; set; }
+        public List<ElementId> SelectedIds { get; set; }
 
         public ManualResetEvent SignalEvent = new ManualResetEvent(false);
 
@@ -159,19 +160,31 @@ namespace ViewModels
             return result;
         }
 
-        public void UpdateDurchbruche()
+        public void UpdateDurchbrucheDeep()
         {
-            SetAllDurchbruche();
-            SetViewDurchbruche();
-            if (OptimisationChoice == OptimisationChoice.Fast)
+            foreach (var item in NewDurchbruche)
             {
-                SetAllModelDurchbruche(_familyInstancesView);
+                item.UpdateDurchbruchDeep();
             }
-            else
+            NewDurchbruche = NewDurchbruche.Where(e => e.DurchbruchModel.DurchbruchStatus == DurchbruchStatus.New).ToList();
+
+            foreach (var item in MovedDurchbruche)
             {
-                SetAllModelDurchbruche(_familyInstancesAll);
+                item.UpdateDurchbruchDeep();
             }
-            SetChangedDurchbruche();
+            MovedDurchbruche = MovedDurchbruche.Where(e => e.DurchbruchModel.DurchbruchStatus == DurchbruchStatus.Moved).ToList();
+
+            foreach (var item in ResizedDurchbruche)
+            {
+                item.UpdateDurchbruchDeep();
+            }
+            ResizedDurchbruche = ResizedDurchbruche.Where(e => e.DurchbruchModel.DurchbruchStatus == DurchbruchStatus.Resized).ToList();
+
+            foreach (var item in MovedAndResizedDurchbruche)
+            {
+                item.UpdateDurchbruchDeep();
+            }
+            MovedAndResizedDurchbruche = MovedAndResizedDurchbruche.Where(e => e.DurchbruchModel.DurchbruchStatus == DurchbruchStatus.MovedAndResized).ToList();
         }
 
         private void SetAllModelDurchbrucheViews(List<ModelView> views)
@@ -218,7 +231,16 @@ namespace ViewModels
         public void ShowElement()
         {
             UIDocument.Selection.SetElementIds(new List<ElementId>() { CurrentSelection });
-            //UIDocument.ShowElements(CurrentSelection);
+        }
+
+        public void ShowElements()
+        {
+            UIDocument.Selection.SetElementIds(SelectedIds);
+        }
+
+        public void SetSelection(List<ElementId> elementIds)
+        {
+            SelectedIds = elementIds;
         }
 
         public void OpenView()
@@ -230,7 +252,7 @@ namespace ViewModels
 
         public void SaveOpeningsToExStorage()
         {
-            UpdateDurchbruche();
+            UpdateDurchbrucheDeep();
             using (Transaction tx = new Transaction(Document, "GTB-Tool ExStorage Write"))
             {
                 tx.Start();
@@ -251,7 +273,7 @@ namespace ViewModels
                 }
                 tx.Commit();
             }
-            UpdateDurchbruche(); // search another way
+            UpdateDurchbrucheDeep(); // search another way
         }
 
         private FamilySymbol FindPositionMarker()
@@ -352,6 +374,7 @@ namespace ViewModels
         {
             foreach (DurchbruchModel item in SelectedToSave)
             {
+                item.OpeningMemory.UpdateCurrentSettings();
                 item.OpeningMemory.SaveDateTostorage();
                 item.OpeningMemory.SaveDimensionsTostorage();
                 item.OpeningMemory.SavePositionTostorage();
@@ -465,6 +488,26 @@ namespace ViewModels
                     MovedAndResizedDbViewModel movedAndResizedDbViewModel = MovedAndResizedDbViewModel.Initialize(dbm);
                     MovedAndResizedDurchbruche.Add(movedAndResizedDbViewModel);
                 }
+            }
+        }
+
+        public void UpdateDurchbrucheLight()
+        {
+            foreach (var item in NewDurchbruche)
+            {
+                item.UpdateDurchbruch();
+            }
+            foreach (var item in MovedDurchbruche)
+            {
+                item.UpdateDurchbruch();
+            }
+            foreach (var item in ResizedDurchbruche)
+            {
+                item.UpdateDurchbruch();
+            }
+            foreach (var item in MovedAndResizedDurchbruche)
+            {
+                item.UpdateDurchbruch();
             }
         }
     }

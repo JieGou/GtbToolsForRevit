@@ -79,6 +79,18 @@ namespace ExStorage
             GtbSchema.SetEntityField(_familyInstance, "dateSaved", NewDateSaved);
         }
 
+        public void UpdateCurrentSettings()
+        {
+            ReadCurrentSettings();
+        }
+
+        public void UpdateFull()
+        {
+            ReadCurrentSettings();
+            ReadExternalStorage();
+            CompareData();
+        }
+
         private void ReadCurrentSettings()
         {
             LocationPoint locationPoint = _familyInstance.Location as LocationPoint;

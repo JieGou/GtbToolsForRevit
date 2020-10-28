@@ -141,6 +141,11 @@ namespace Model
             OpeningMemory = OpeningMemory.Initialize(FamilyInstance);
         }
 
+        public void UpdateMemory()
+        {
+            SetMemory();
+        }
+
         private void SetStatus()
         {
             if (OpeningMemory.IsNew)
@@ -165,6 +170,11 @@ namespace Model
             }
 
             DurchbruchStatus = DurchbruchStatus.Unchanged;
+        }
+
+        public void UpdateStatus()
+        {
+            SetStatus();
         }
     }
 }

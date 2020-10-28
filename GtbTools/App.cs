@@ -28,7 +28,7 @@ namespace GtbTools
         public const string AssemblyYear = "2021";
 #endif
         public const string AssemblyMinorVersion = "2";
-        public const string AssemblyBuildVersion = "3";
+        public const string AssemblyBuildVersion = "4";
         public const string AssemblyRevisionVersion = "3";
         #endregion
 
@@ -70,9 +70,15 @@ namespace GtbTools
             CopyParameterFromHost = new Functions.CopyParameterFromHost();
             string path = Assembly.GetExecutingAssembly().Location;
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
+
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
             pushButtonGtbPanelControl.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
             _button = gtbPanel.AddItem(pushButtonGtbPanelControl);
+
+            PushButtonData pushButtonFamilyEdit = new PushButtonData("Family Edit", "Family Edit", path, "GtbTools.FamilyEditButton");
+            pushButtonFamilyEdit.LargeImage = GetEmbeddedImage("Resources.FamilyEdit.png");
+            gtbPanel.AddItem(pushButtonFamilyEdit);
+
             RegisterDockableWindow(application);
             IExternalEventHandler handler_event = new ExternalEventShowHideDock();
             _toggleEvent = ExternalEvent.Create(handler_event);
