@@ -310,12 +310,12 @@ namespace GtbTools
                 OpeningWindowMainViewModel openingWindowMainViewModel = OpeningWindowMainViewModel.Initialize(uiapp.ActiveUIDocument);
                 OpeningsMainWindow openingsMainWindow = new OpeningsMainWindow(openingWindowMainViewModel);
                 openingsMainWindow.ShowDialog();
-                GtbSchema gtbSchema = new GtbSchema();
-                gtbSchema.SetGtbSchema();
+                //GtbSchema gtbSchema = new GtbSchema();
+                //gtbSchema.SetGtbSchema();
                 if (openingsMainWindow.OpeningSymbolTool != null)
                 {
-                    openingsMainWindow.OpeningSymbolTool.GtbSchema = gtbSchema;
-                    openingsMainWindow.OpeningSymbolTool.ProcessSelectedViews();
+                    //openingsMainWindow.OpeningSymbolTool.GtbSchema = gtbSchema;
+                    openingsMainWindow.OpeningSymbolTool.ProcessSelectedViewsLight();
                     //openingsMainWindow.OpeningSymbolTool.DisplayProblematic();
                 }
             }

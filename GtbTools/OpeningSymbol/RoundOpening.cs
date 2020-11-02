@@ -356,6 +356,120 @@ namespace OpeningSymbol
             string symbolToolString = sts.CreateJsonString(OpeningExStorage);
             gtbSchema.SetEntityField(FamilyInstance, "symbolTool", symbolToolString);
         }
+
+        public void SwitchSymbolLight()
+        {
+            Parameter parARC = FamilyInstance.LookupParameter("TWP");
+            Parameter parTop = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, Top Symbol)");
+            Parameter parLR = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, LR Symbol)");
+            Parameter parFB = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, FB Symbol)");
+            Parameter parOben = FamilyInstance.LookupParameter("Über Schnitt Ebene (TGA, Grundrisse)");
+
+            //Settings for ARC
+            if (_viewDiscipline == ViewDiscipline.TWP)
+            {
+                parARC.Set(1);
+
+                if (OpeningHost == OpeningHost.Wall && _isCutByView)
+                {
+                    if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
+                    {
+                        parFB.Set(1);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
+                    {
+                        parLR.Set(1);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.TopSymbol)
+                    {
+                        parTop.Set(1);
+                    }
+                }
+                if (OpeningHost == OpeningHost.Wall && !_isCutByView)
+                {
+                    if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
+                    {
+                        parFB.Set(0);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
+                    {
+                        parLR.Set(0);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.TopSymbol)
+                    {
+                        parTop.Set(0);
+                    }
+                }
+                if (OpeningHost == OpeningHost.FloorOrCeiling && _isCutByView)
+                {
+                    if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
+                    {
+                        parFB.Set(1);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
+                    {
+                        parLR.Set(1);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.TopSymbol)
+                    {
+                        parTop.Set(1);
+                    }
+                }
+                if (OpeningHost == OpeningHost.FloorOrCeiling && !_isCutByView)
+                {
+                    if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
+                    {
+                        parFB.Set(0);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
+                    {
+                        parLR.Set(0);
+                    }
+                    if (SymbolVisibility == SymbolVisibility.TopSymbol)
+                    {
+                        parTop.Set(0);
+                    }
+                }
+            }
+
+            //Settings for TGA
+            if (_viewDiscipline == ViewDiscipline.TGA)
+            {
+                if (OpeningExStorage._disciplineX) DisciplineUserModified = true;
+                parARC.Set(0);
+
+                if (OpeningHost == OpeningHost.Wall)
+                {
+                    parOben.Set(0);
+                }
+                if (OpeningHost == OpeningHost.FloorOrCeiling)
+                {
+                    if (_viewDirection == ViewDirection.PlanDown)
+                    {
+                        if (PlanViewLocation == PlanViewLocation.AboveCutPlane)
+                        {
+                            parOben.Set(1);
+                        }
+                        else
+                        {
+                            parOben.Set(0);
+                        }
+                    }
+                    if (_viewDirection == ViewDirection.PlanUp)
+                    {
+                        if (PlanViewLocation == PlanViewLocation.BelowCutPlane)
+                        {
+                            parOben.Set(1);
+                        }
+                        else
+                        {
+                            parOben.Set(0);
+                        }
+                    }
+                }
+            }
+        }
+
         public List<string> GetManualChanges()
         {
             List<string> result = new List<string>();

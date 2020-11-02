@@ -97,15 +97,15 @@ namespace Functions
             }
         }
 
-        public void ProcessSelectedViews()
+        public void ProcessSelectedViewsLight()
         {
             Dispatcher dispatcher;
             OperationStatus = OperationStatus.Initialize("Symbol changing tool initialized...");
             OperationStatus.Progress = 0;
             double full = 100;
             double sum = SectionViews.Count + PlanViews.Count;
-            double progressStep = 0;
-            if (sum != 0) progressStep = full / sum;
+            double progressSection = 0;
+            if (sum != 0) progressSection = full / sum;
 
             Thread windowThread = new Thread(delegate ()
             {
@@ -119,131 +119,39 @@ namespace Functions
 
             OperationStatus.SignalEvent.WaitOne();
             OperationStatus.SignalEvent.Reset();
-
-            OperationStatus.AddLineToTextMessage("Processing section views:");
-
-            using(TransactionGroup transactionGroup = new TransactionGroup(OpeningWindowMainViewModel.Document))
+           
+            using (TransactionGroup transactionGroup = new TransactionGroup(OpeningWindowMainViewModel.Document))
             {
                 transactionGroup.Start("GTB Symbol Tool");
 
+                OperationStatus.AddLineToTextMessage("Processing section views:");
                 foreach (SectionView sectionView in SectionViews)
                 {
                     string info = "Changing symbols on: " + sectionView.View.Name;
                     OperationStatus.AddLineToTextMessage(info);
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", sectionView.RoundOpenings.Count));
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", sectionView.RectangularOpenings.Count));
-                    OperationStatus.Progress += progressStep;
+                    double openingsSum = sectionView.RoundOpenings.Count + sectionView.RectangularOpenings.Count;
+                    double progressStep = 0;
+                    if (sum != 0)
+                    {
+                        progressStep = progressSection / openingsSum;
+                    }
                     using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
                     {
-                        tx.Start("Label unsupported instances");
+                        tx.Start("Modyfing openings on sections");
                         sectionView.LabelUnsupportedInstances();
-                        tx.Commit();
                         foreach (RoundOpening ro in sectionView.RoundOpenings)
                         {
-                            UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
-                            View view = sectionView.View;
-                            WarningWindowResult warningWindowResult = WarningWindowResult.None;
-                            List<string> manualChanges = ro.GetManualChanges();
-                            if (manualChanges.Count > 0)
-                            {
-                                if (NoToAll) continue;
-                                if (YesToall)
-                                {
-                                    tx.Start(info);
-                                    ro.SwitchSymbol(GtbSchema);
-                                    tx.Commit();
-                                    continue;
-                                }
-                                uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
-                                uiDoc.ActiveView = view;
-                                uiDoc.ShowElements(ro.FamilyInstance.Id);
-                                UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
-                                SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
-                                symbolToolWarning.DisplayWindow(manualChanges);
-                                warningWindowResult = symbolToolWarning.WarningWindowResult;
-                            }
-                            else
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.No)
-                            {
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.NoToAll)
-                            {
-                                NoToAll = true;
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.Yes)
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.YesToAll)
-                            {
-                                YesToall = true;
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
+                            ro.SwitchSymbolLight();
+                            OperationStatus.Progress += progressStep;
                         }
                         foreach (RectangularOpening ro in sectionView.RectangularOpenings)
                         {
-                            UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
-                            View view = sectionView.View;
-                            WarningWindowResult warningWindowResult = WarningWindowResult.None;
-                            List<string> manualChanges = ro.GetManualChanges();
-                            if (manualChanges.Count > 0)
-                            {
-                                if (NoToAll) continue;
-                                if (YesToall)
-                                {
-                                    tx.Start(info);
-                                    ro.SwitchSymbol(GtbSchema);
-                                    tx.Commit();
-                                    continue;
-                                }
-                                uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
-                                uiDoc.ActiveView = view;
-                                uiDoc.ShowElements(ro.FamilyInstance.Id);
-                                UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
-                                SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
-                                symbolToolWarning.DisplayWindow(manualChanges);
-                                warningWindowResult = symbolToolWarning.WarningWindowResult;
-                            }
-                            else
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.No)
-                            {
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.NoToAll)
-                            {
-                                NoToAll = true;
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.Yes)
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.YesToAll)
-                            {
-                                YesToall = true;
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
+                            ro.SwitchSymbolLight();
+                            OperationStatus.Progress += progressStep;
                         }
+                        tx.Commit();
                     }
                     if (OperationStatus.UserAborted)
                     {
@@ -257,125 +165,34 @@ namespace Functions
                 }
 
                 OperationStatus.AddLineToTextMessage("Processing plan views:");
-
                 foreach (PlanView planView in PlanViews)
                 {
                     string info = "Changing symbols on: " + planView.View.Name;
                     OperationStatus.AddLineToTextMessage(info);
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", planView.RoundOpenings.Count));
                     OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", planView.RectangularOpenings.Count));
-                    OperationStatus.Progress += progressStep;
+                    double openingsSum = planView.RoundOpenings.Count + planView.RectangularOpenings.Count;
+                    double progressStep = 0;
+                    if (sum != 0)
+                    {
+                        progressStep = progressSection / openingsSum;
+                    }
                     using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
                     {
-                        tx.Start("Label unsupported instances");
+                        tx.Start("Modyfying openings on plan views");
                         planView.LabelUnsupportedInstances();
-                        tx.Commit();
+                        //tx.Commit();
                         foreach (RoundOpening ro in planView.RoundOpenings)
                         {
-                            UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
-                            View view = planView.View;
-                            WarningWindowResult warningWindowResult = WarningWindowResult.None;
-                            List<string> manualChanges = ro.GetManualChanges();
-                            if (manualChanges.Count > 0)
-                            {
-                                if (NoToAll) continue;
-                                if (YesToall)
-                                {
-                                    tx.Start(info);
-                                    ro.SwitchSymbol(GtbSchema);
-                                    tx.Commit();
-                                    continue;
-                                }
-                                uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
-                                uiDoc.ActiveView = view;
-                                uiDoc.ShowElements(ro.FamilyInstance.Id);
-                                UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
-                                SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
-                                symbolToolWarning.DisplayWindow(manualChanges);
-                                warningWindowResult = symbolToolWarning.WarningWindowResult;
-                            }
-                            else
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.No)
-                            {
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.NoToAll)
-                            {
-                                NoToAll = true;
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.Yes)
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.YesToAll)
-                            {
-                                YesToall = true;
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
+                            ro.SwitchSymbolLight();
+                            OperationStatus.Progress += progressStep;
                         }
                         foreach (RectangularOpening ro in planView.RectangularOpenings)
                         {
-                            UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
-                            View view = planView.View;
-                            WarningWindowResult warningWindowResult = WarningWindowResult.None;
-                            List<string> manualChanges = ro.GetManualChanges();
-                            if (manualChanges.Count > 0)
-                            {
-                                if (NoToAll) continue;
-                                if (YesToall)
-                                {
-                                    tx.Start(info);
-                                    ro.SwitchSymbol(GtbSchema);
-                                    tx.Commit();
-                                    continue;
-                                }
-                                uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
-                                uiDoc.ActiveView = view;
-                                uiDoc.ShowElements(ro.FamilyInstance.Id);
-                                UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
-                                SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
-                                symbolToolWarning.DisplayWindow(manualChanges);
-                                warningWindowResult = symbolToolWarning.WarningWindowResult;
-                            }
-                            else
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.No)
-                            {
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.NoToAll)
-                            {
-                                NoToAll = true;
-                                continue;
-                            }
-                            if (warningWindowResult == WarningWindowResult.Yes)
-                            {
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
-                            if (warningWindowResult == WarningWindowResult.YesToAll)
-                            {
-                                YesToall = true;
-                                tx.Start(info);
-                                ro.SwitchSymbol(GtbSchema);
-                                tx.Commit();
-                            }
+                            ro.SwitchSymbolLight();
+                            OperationStatus.Progress += progressStep;
                         }
+                        tx.Commit();
                     }
                     if (OperationStatus.UserAborted)
                     {
@@ -394,10 +211,326 @@ namespace Functions
             OperationStatus.AddLineToTextMessage("Application ended successfully!");
             OperationStatus.AddLineToTextMessage("Symbols have been changed.");
             OperationStatus.CloseButtonEnabled = true;
-            //OperationStatus.ShowCountDown(5);
-            //dispatcher = Dispatcher.FromThread(windowThread);
-            //dispatcher.Invoke(OperationStatus.CloseOperationWindow);
         }
+
+        //public void ProcessSelectedViews()
+        //{
+        //    Dispatcher dispatcher;
+        //    OperationStatus = OperationStatus.Initialize("Symbol changing tool initialized...");
+        //    OperationStatus.Progress = 0;
+        //    double full = 100;
+        //    double sum = SectionViews.Count + PlanViews.Count;
+        //    double progressSection = 0;
+        //    if (sum != 0) progressSection = full / sum;
+
+        //    Thread windowThread = new Thread(delegate ()
+        //    {
+        //        ProcessWindow processWindow = new ProcessWindow(OperationStatus);
+        //        processWindow.Show();
+        //        OperationStatus.SignalEvent.Set();
+        //        Dispatcher.Run();
+        //    });
+        //    windowThread.SetApartmentState(ApartmentState.STA);
+        //    windowThread.Start();
+
+        //    OperationStatus.SignalEvent.WaitOne();
+        //    OperationStatus.SignalEvent.Reset();
+
+        //    OperationStatus.AddLineToTextMessage("Processing section views:");
+
+        //    using(TransactionGroup transactionGroup = new TransactionGroup(OpeningWindowMainViewModel.Document))
+        //    {
+        //        transactionGroup.Start("GTB Symbol Tool");
+
+        //        foreach (SectionView sectionView in SectionViews)
+        //        {
+        //            string info = "Changing symbols on: " + sectionView.View.Name;
+        //            OperationStatus.AddLineToTextMessage(info);
+        //            OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", sectionView.RoundOpenings.Count));
+        //            OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", sectionView.RectangularOpenings.Count));
+        //            double openingsSum = sectionView.RoundOpenings.Count + sectionView.RectangularOpenings.Count;
+        //            double progressStep = 0;
+        //            if (sum != 0)
+        //            {
+        //                progressStep = progressSection / openingsSum;
+        //            }
+        //            using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
+        //            {
+        //                tx.Start("Modyfing openings on sections");
+        //                sectionView.LabelUnsupportedInstances();
+        //                //tx.Commit();
+        //                foreach (RoundOpening ro in sectionView.RoundOpenings)
+        //                {                           
+        //                    UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
+        //                    View view = sectionView.View;
+        //                    WarningWindowResult warningWindowResult = WarningWindowResult.None;
+        //                    List<string> manualChanges = ro.GetManualChanges();
+        //                    if (manualChanges.Count > 0)
+        //                    {
+        //                        if (NoToAll) continue;
+        //                        if (YesToall)
+        //                        {
+        //                            //tx.Start(info);
+        //                            ro.SwitchSymbol(GtbSchema);
+        //                            //tx.Commit();
+        //                            continue;
+        //                        }
+        //                        uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
+        //                        //uiDoc.ActiveView = view;
+        //                        uiDoc.ShowElements(ro.FamilyInstance.Id);
+        //                        UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
+        //                        SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
+        //                        symbolToolWarning.DisplayWindow(manualChanges);
+        //                        warningWindowResult = symbolToolWarning.WarningWindowResult;
+        //                    }
+        //                    else
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.No)
+        //                    {
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.NoToAll)
+        //                    {
+        //                        NoToAll = true;
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.Yes)
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.YesToAll)
+        //                    {
+        //                        YesToall = true;
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    OperationStatus.Progress += progressStep;
+        //                    //tx.Commit();
+        //                }
+        //                foreach (RectangularOpening ro in sectionView.RectangularOpenings)
+        //                {
+        //                    UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
+        //                    View view = sectionView.View;
+        //                    WarningWindowResult warningWindowResult = WarningWindowResult.None;
+        //                    List<string> manualChanges = ro.GetManualChanges();
+        //                    if (manualChanges.Count > 0)
+        //                    {
+        //                        if (NoToAll) continue;
+        //                        if (YesToall)
+        //                        {
+        //                            //tx.Start(info);
+        //                            ro.SwitchSymbol(GtbSchema);
+        //                            //tx.Commit();
+        //                            continue;
+        //                        }
+        //                        uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
+        //                        //uiDoc.ActiveView = view;
+        //                        uiDoc.ShowElements(ro.FamilyInstance.Id);
+        //                        UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
+        //                        SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
+        //                        symbolToolWarning.DisplayWindow(manualChanges);
+        //                        warningWindowResult = symbolToolWarning.WarningWindowResult;
+        //                    }
+        //                    else
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.No)
+        //                    {
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.NoToAll)
+        //                    {
+        //                        NoToAll = true;
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.Yes)
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.YesToAll)
+        //                    {
+        //                        YesToall = true;
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    OperationStatus.Progress += progressStep;
+        //                }
+        //                tx.Commit();
+        //            }
+        //            if (OperationStatus.UserAborted)
+        //            {
+        //                OperationStatus.AddLineToTextMessage("Process aborted by user. Rolling back changes...");
+        //                OperationStatus.ShowCountDown(3);
+        //                dispatcher = Dispatcher.FromThread(windowThread);
+        //                dispatcher.Invoke(OperationStatus.CloseOperationWindow);
+        //                transactionGroup.RollBack();
+        //                return;
+        //            }
+        //        }
+
+        //        OperationStatus.AddLineToTextMessage("Processing plan views:");
+
+        //        foreach (PlanView planView in PlanViews)
+        //        {
+        //            string info = "Changing symbols on: " + planView.View.Name;
+        //            OperationStatus.AddLineToTextMessage(info);
+        //            OperationStatus.AddLineToTextMessage(String.Format("Found {0} round openings", planView.RoundOpenings.Count));
+        //            OperationStatus.AddLineToTextMessage(String.Format("Found {0} rectangular openings", planView.RectangularOpenings.Count));
+        //            double openingsSum = planView.RoundOpenings.Count + planView.RectangularOpenings.Count;
+        //            double progressStep = 0;
+        //            if (sum != 0)
+        //            {
+        //                progressStep = progressSection / openingsSum;
+        //            }
+        //            using (Transaction tx = new Transaction(OpeningWindowMainViewModel.Document))
+        //            {
+        //                tx.Start("Modyfying openings on plan views");
+        //                planView.LabelUnsupportedInstances();
+        //                //tx.Commit();
+        //                foreach (RoundOpening ro in planView.RoundOpenings)
+        //                {
+        //                    UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
+        //                    View view = planView.View;
+        //                    WarningWindowResult warningWindowResult = WarningWindowResult.None;
+        //                    List<string> manualChanges = ro.GetManualChanges();
+        //                    if (manualChanges.Count > 0)
+        //                    {
+        //                        if (NoToAll) continue;
+        //                        if (YesToall)
+        //                        {
+        //                            //tx.Start(info);
+        //                            ro.SwitchSymbol(GtbSchema);
+        //                            //tx.Commit();
+        //                            continue;
+        //                        }
+        //                        uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
+        //                        //uiDoc.ActiveView = view;
+        //                        uiDoc.ShowElements(ro.FamilyInstance.Id);
+        //                        UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
+        //                        SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
+        //                        symbolToolWarning.DisplayWindow(manualChanges);
+        //                        warningWindowResult = symbolToolWarning.WarningWindowResult;
+        //                    }
+        //                    else
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.No)
+        //                    {
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.NoToAll)
+        //                    {
+        //                        NoToAll = true;
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.Yes)
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.YesToAll)
+        //                    {
+        //                        YesToall = true;
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    OperationStatus.Progress += progressStep;
+        //                }
+        //                foreach (RectangularOpening ro in planView.RectangularOpenings)
+        //                {
+        //                    UIDocument uiDoc = OpeningWindowMainViewModel.UIDocument;
+        //                    View view = planView.View;
+        //                    WarningWindowResult warningWindowResult = WarningWindowResult.None;
+        //                    List<string> manualChanges = ro.GetManualChanges();
+        //                    if (manualChanges.Count > 0)
+        //                    {
+        //                        if (NoToAll) continue;
+        //                        if (YesToall)
+        //                        {
+        //                            //tx.Start(info);
+        //                            ro.SwitchSymbol(GtbSchema);
+        //                            //tx.Commit();
+        //                            continue;
+        //                        }
+        //                        uiDoc.Selection.SetElementIds(new List<ElementId>() { ro.FamilyInstance.Id });
+        //                        //uiDoc.ActiveView = view;
+        //                        uiDoc.ShowElements(ro.FamilyInstance.Id);
+        //                        UIView uiView = OpenViewsTool.GetUIView(view, uiDoc);
+        //                        SymbolToolWarning symbolToolWarning = new SymbolToolWarning(uiView);
+        //                        symbolToolWarning.DisplayWindow(manualChanges);
+        //                        warningWindowResult = symbolToolWarning.WarningWindowResult;
+        //                    }
+        //                    else
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.No)
+        //                    {
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.NoToAll)
+        //                    {
+        //                        NoToAll = true;
+        //                        continue;
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.Yes)
+        //                    {
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    if (warningWindowResult == WarningWindowResult.YesToAll)
+        //                    {
+        //                        YesToall = true;
+        //                        //tx.Start(info);
+        //                        ro.SwitchSymbol(GtbSchema);
+        //                        //tx.Commit();
+        //                    }
+        //                    OperationStatus.Progress += progressStep;
+        //                }
+        //                tx.Commit();
+        //            }
+        //            if (OperationStatus.UserAborted)
+        //            {
+        //                OperationStatus.AddLineToTextMessage("Process aborted by user. Rolling back changes...");
+        //                OperationStatus.ShowCountDown(3);
+        //                dispatcher = Dispatcher.FromThread(windowThread);
+        //                dispatcher.Invoke(OperationStatus.CloseOperationWindow);
+        //                transactionGroup.RollBack();
+        //                return;
+        //            }
+        //        }
+
+        //        transactionGroup.Assimilate();
+        //    }
+        //    OperationStatus.DisableAbortButton();
+        //    OperationStatus.AddLineToTextMessage("Application ended successfully!");
+        //    OperationStatus.AddLineToTextMessage("Symbols have been changed.");
+        //    OperationStatus.CloseButtonEnabled = true;
+        //    //OperationStatus.ShowCountDown(5);
+        //    //dispatcher = Dispatcher.FromThread(windowThread);
+        //    //dispatcher.Invoke(OperationStatus.CloseOperationWindow);
+        //}
 
         public void DisplayProblematic()
         {
