@@ -94,29 +94,28 @@ namespace ExStorage
 
         public void ReadExternalStorage()
         {
-            if (_checkboxNotFound) return;
-            GetSchema();
-            Entity retrievedEntity = _familyInstance.GetEntity(_schema);
-            for (int i = 0; i < 6; i++)
+        if (_checkboxNotFound) return;
+        GetSchema();
+        Entity retrievedEntity = _familyInstance.GetEntity(_schema);
+            try
             {
-                try
-                {
-                    if (i == 0) Discipline = retrievedEntity.Get<int>(_schema.GetField("discipline"));
-                    if (i == 1) TopSymbol = retrievedEntity.Get<int>(_schema.GetField("topSymbol"));
-                    if (i == 2) LRSymbol = retrievedEntity.Get<int>(_schema.GetField("lrSymbol"));
-                    if (i == 3) FBSymbol = retrievedEntity.Get<int>(_schema.GetField("fbSymbol"));
-                    if (i == 4) ABSymbol = retrievedEntity.Get<int>(_schema.GetField("abSymbol"));
-                    if (i == 5) ManSymbol = retrievedEntity.Get<int>(_schema.GetField("manSymbol"));
-                }
-                catch
-                {
-                    if (i == 0) Discipline = -1;
-                    if (i == 1) TopSymbol = -1;
-                    if (i == 2) LRSymbol = -1;
-                    if (i == 3) FBSymbol = -1;
-                    if (i == 4) ABSymbol = -1;
-                    if (i == 5) ManSymbol = -1;
-                }
+                string jsonString = retrievedEntity.Get<string>(_schema.GetField("symbolTool"));
+                SymbolToolString sts = SymbolToolString.ReadJsonString(jsonString);
+                Discipline = sts.Discipline;
+                TopSymbol = sts.TopSymbol;
+                LRSymbol = sts.LRSymbol;
+                FBSymbol = sts.FBSymbol;
+                ABSymbol = sts.ABSymbol;
+                ManSymbol = sts.ManSymbol;
+            }
+            catch
+            {
+                Discipline = -1;
+                TopSymbol = -1;
+                LRSymbol = -1;
+                FBSymbol = -1;
+                ABSymbol = -1;
+                ManSymbol = -1;
             }
         }
         private void GetSchema()

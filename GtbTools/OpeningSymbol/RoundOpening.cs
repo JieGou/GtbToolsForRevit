@@ -210,29 +210,34 @@ namespace OpeningSymbol
             Parameter parLR = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, LR Symbol)");
             Parameter parFB = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, FB Symbol)");
             Parameter parOben = FamilyInstance.LookupParameter("Über Schnitt Ebene (TGA, Grundrisse)");
+            SymbolToolString sts = new SymbolToolString();
 
             //Settings for ARC
             if (_viewDiscipline == ViewDiscipline.TWP)
             {
                 parARC.Set(1);
-                gtbSchema.SetEntityField(FamilyInstance, "discipline", 1);
+                //gtbSchema.SetEntityField(FamilyInstance, "discipline", 1);
+                sts.Discipline = 1;
 
                 if (OpeningHost == OpeningHost.Wall && _isCutByView)
                 {
                     if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
                     {
                         parFB.Set(1);
-                        gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 1);
+                        //gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 1);
+                        sts.FBSymbol = 1;
                     }
                     if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
                     {
                         parLR.Set(1);
-                        gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 1);
+                        //gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 1);
+                        sts.LRSymbol = 1;
                     }
                     if (SymbolVisibility == SymbolVisibility.TopSymbol)
                     {
                         parTop.Set(1);
-                        gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 1);
+                        //gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 1);
+                        sts.TopSymbol = 1;
                     }
                 }
                 if (OpeningHost == OpeningHost.Wall && !_isCutByView)
@@ -240,17 +245,20 @@ namespace OpeningSymbol
                     if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
                     {
                         parFB.Set(0);
-                        gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 2);
+                        //gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 2);
+                        sts.FBSymbol = 2;
                     }
                     if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
                     {
                         parLR.Set(0);
-                        gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 2);
+                        //gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 2);
+                        sts.LRSymbol = 2;
                     }
                     if (SymbolVisibility == SymbolVisibility.TopSymbol)
                     {
                         parTop.Set(0);
-                        gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 2);
+                        //gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 2);
+                        sts.TopSymbol = 2;
                     }
                 }
                 if (OpeningHost == OpeningHost.FloorOrCeiling && _isCutByView)
@@ -258,17 +266,20 @@ namespace OpeningSymbol
                     if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
                     {
                         parFB.Set(1);
-                        gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 1);
+                        //gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 1);
+                        sts.FBSymbol = 1;
                     }
                     if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
                     {
                         parLR.Set(1);
-                        gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 1);
+                        //gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 1);
+                        sts.LRSymbol = 1;
                     }
                     if (SymbolVisibility == SymbolVisibility.TopSymbol)
                     {
                         parTop.Set(1);
-                        gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 1);
+                        //gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 1);
+                        sts.TopSymbol = 1;
                     }
                 }
                 if (OpeningHost == OpeningHost.FloorOrCeiling && !_isCutByView)
@@ -276,17 +287,20 @@ namespace OpeningSymbol
                     if (SymbolVisibility == SymbolVisibility.FrontBackSymbol)
                     {
                         parFB.Set(0);
-                        gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 2);
+                        //gtbSchema.SetEntityField(FamilyInstance, "fbSymbol", 2);
+                        sts.FBSymbol = 2;
                     }
                     if (SymbolVisibility == SymbolVisibility.RightLeftSymbol)
                     {
                         parLR.Set(0);
-                        gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 2);
+                        //gtbSchema.SetEntityField(FamilyInstance, "lrSymbol", 2);
+                        sts.LRSymbol = 2;
                     }
                     if (SymbolVisibility == SymbolVisibility.TopSymbol)
                     {
                         parTop.Set(0);
-                        gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 2);
+                        //gtbSchema.SetEntityField(FamilyInstance, "topSymbol", 2);
+                        sts.TopSymbol = 2;
                     }
                 }
             }
@@ -296,12 +310,14 @@ namespace OpeningSymbol
             {
                 if (OpeningExStorage._disciplineX) DisciplineUserModified = true;
                 parARC.Set(0);
-                gtbSchema.SetEntityField(FamilyInstance, "discipline", 2);
+                //gtbSchema.SetEntityField(FamilyInstance, "discipline", 2);
+                sts.Discipline = 2;
 
                 if (OpeningHost == OpeningHost.Wall)
                 {
                     parOben.Set(0);
-                    gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                    //gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                    sts.ABSymbol = 2;
                 }
                 if (OpeningHost == OpeningHost.FloorOrCeiling)
                 {
@@ -310,12 +326,14 @@ namespace OpeningSymbol
                         if(PlanViewLocation == PlanViewLocation.AboveCutPlane)
                         {
                             parOben.Set(1);
-                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
+                            //gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
+                            sts.ABSymbol = 1;
                         }
                         else
                         {
                             parOben.Set(0);
-                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                            //gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                            sts.ABSymbol = 2;
                         }
                     }
                     if (_viewDirection == ViewDirection.PlanUp)
@@ -323,16 +341,20 @@ namespace OpeningSymbol
                         if(PlanViewLocation == PlanViewLocation.BelowCutPlane)
                         {
                             parOben.Set(1);
-                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
+                            //gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 1);
+                            sts.ABSymbol = 1;
                         }
                         else
                         {
                             parOben.Set(0);
-                            gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                            //gtbSchema.SetEntityField(FamilyInstance, "abSymbol", 2);
+                            sts.ABSymbol = 2;
                         }
                     }
                 }
             }
+            string symbolToolString = sts.CreateJsonString(OpeningExStorage);
+            gtbSchema.SetEntityField(FamilyInstance, "symbolTool", symbolToolString);
         }
         public List<string> GetManualChanges()
         {

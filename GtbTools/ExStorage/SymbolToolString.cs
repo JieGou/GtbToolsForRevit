@@ -16,7 +16,7 @@ namespace ExStorage
         public int ABSymbol { get; set; }
         public int ManSymbol { get; set; }
 
-        private SymbolToolString()
+        public SymbolToolString()
         {
 
         }
@@ -27,16 +27,16 @@ namespace ExStorage
             return result;
         }
 
-        public static string CreateJsonString(OpeningExStorage openingExStorage)
+        public string CreateJsonString(OpeningExStorage openingExStorage)
         {
-            SymbolToolString sts = new SymbolToolString();
-            sts.Discipline = openingExStorage.Discipline;
-            sts.TopSymbol = openingExStorage.TopSymbol;
-            sts.LRSymbol = openingExStorage.LRSymbol;
-            sts.FBSymbol = openingExStorage.FBSymbol;
-            sts.ABSymbol = openingExStorage.ABSymbol;
-            sts.ManSymbol = openingExStorage.ManSymbol;
-            string result = JsonConvert.SerializeObject(sts);
+            if (Discipline == 0) Discipline = openingExStorage._discipline;
+            if (TopSymbol == 0) TopSymbol = openingExStorage._topSymbol;
+            if (LRSymbol == 0) LRSymbol = openingExStorage._lRSymbol;
+            if (FBSymbol == 0) FBSymbol = openingExStorage._fBSymbol;
+            if (ABSymbol == 0) ABSymbol = openingExStorage._aBSymbol;
+            if (ManSymbol == 0) ManSymbol = openingExStorage._manSymbol;
+
+            string result = JsonConvert.SerializeObject(this);
             return result;
         }
     }
