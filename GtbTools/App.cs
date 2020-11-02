@@ -1,14 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Collections.Generic;
 using System.Windows.Media.Imaging;
-using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using GtbTools.Forms;
-using Autodesk.Revit.UI.Events;
 using ViewModels;
 
 namespace GtbTools
@@ -46,15 +43,19 @@ namespace GtbTools
 
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
         public ErrorLog ErrorLog { get; set; }
+
+        //References to some functions are fetched to dockpanel when it is registered, further methods are called by events
         public DurchbruchMemoryViewModel DurchbruchMemoryViewModel { get; set; }
         public Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
         public Functions.RevitOpenedViews RevitOpenedViews { get; set; }
         public Functions.CopyParameterFromHost CopyParameterFromHost { get; set; }
+
+        //fields to cotnrol show hide button and dock panel visibility
         RibbonItem _button;
         ExternalEvent _toggleEvent;
 
+        //Provides access to current UIControlledApplication instance
         internal static App _app = null;
-
         public static App Instance
         {
             get { return _app; }
@@ -69,22 +70,31 @@ namespace GtbTools
             RevitOpenedViews = new Functions.RevitOpenedViews();
             CopyParameterFromHost = new Functions.CopyParameterFromHost();
             string path = Assembly.GetExecutingAssembly().Location;
+
+            //Creating ribbon in Add-ins tab
             RibbonPanel gtbPanel = application.CreateRibbonPanel("GTB - Berlin");
 
+            //Pushbutton to hide show dockpanel
             PushButtonData pushButtonGtbPanelControl = new PushButtonData( "GTB", "Anzeigen", path, "GtbTools.ShowHideDock");
             pushButtonGtbPanelControl.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
             _button = gtbPanel.AddItem(pushButtonGtbPanelControl);
 
+            //Pushbutton to start familyedit window
             PushButtonData pushButtonFamilyEdit = new PushButtonData("Family Edit", "Family Edit", path, "GtbTools.FamilyEditButton");
             pushButtonFamilyEdit.LargeImage = GetEmbeddedImage("Resources.FamilyEdit.png");
             gtbPanel.AddItem(pushButtonFamilyEdit);
 
             RegisterDockableWindow(application);
-            IExternalEventHandler handler_event = new ExternalEventShowHideDock();
-            _toggleEvent = ExternalEvent.Create(handler_event);
-            application.DockableFrameVisibilityChanged += OnDockableFrameVisibilityChanged;
-            application.ViewActivated += OnDockableFrameVisibilityChanged;
 
+            //creating external event to change button state and text
+            IExternalEventHandler handler_event = new ExternalEventShowHideDock();
+            _toggleEvent = ExternalEvent.Create(handler_event);            
+
+            //when user closes dock panel using "x", button state and text must be changed
+            application.DockableFrameVisibilityChanged += OnDockableFrameVisibilityChanged;
+            //when documents is loaded dockpanel may be visible or not therefore button state and text must be also aligned with current visibility
+            application.ViewActivated += OnDockableFrameVisibilityChanged;
+            
             return Result.Succeeded;
         }
 
@@ -94,57 +104,39 @@ namespace GtbTools
             return Result.Succeeded;
         }
 
+        /// <summary>
+        /// Method to show hide dock panel. Button state and text are changed by event
+        /// </summary>
         public void Toggle(UIApplication application)
         {
             if(_button.ItemText == "Anzeigen")
             {
-                //_button.ItemText = "Ausblenden";
-                //PushButton pb = _button as PushButton;
-                //pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
                 ShowDockableWindow(application);
             }
             else
             {
-                //_button.ItemText = "Anzeigen";
-                //PushButton pb = _button as PushButton;
-                //pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
                 HideDockableWindow(application);
             }
         }
 
+        /// <summary>
+        /// Aligns dockpanel button state and text with dockpanel current visibility
+        /// </summary>
         public void SwitchDockPanelButton(UIApplication application)
         {
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
-            DockablePane dp = null;
-            try
+            DockablePane dp;
+
+            //When user cancels loading document DockablePaneId is invalid
+            if (DockablePane.PaneExists(dpid))
             {
                 dp = application.GetDockablePane(dpid);
             }
-            catch (Exception)
+            else
             {
-                ErrorLog.WriteToLog("User cancelled document loading. Panel was not created yet.");
-                ErrorLog.RemoveLog = false;
                 return;
             }
-            
-            if(dp.IsShown() && _button.ItemText == "Anzeigen")
-            {
-                _button.ItemText = "Ausblenden";
-                PushButton pb = _button as PushButton;
-                pb.LargeImage = GetEmbeddedImage("Resources.GtbActive.png");
-            }
-            if (!dp.IsShown() && _button.ItemText == "Ausblenden")
-            {
-                _button.ItemText = "Anzeigen";
-                PushButton pb = _button as PushButton;
-                pb.LargeImage = GetEmbeddedImage("Resources.GtbInactive.png");
-            }
-        }
 
-        public void FixDockPanelButton(UIControlledApplication application)
-        {
-            DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
-            DockablePane dp = application.GetDockablePane(dpid);
             if (dp.IsShown() && _button.ItemText == "Anzeigen")
             {
                 _button.ItemText = "Ausblenden";
@@ -159,11 +151,17 @@ namespace GtbTools
             }
         }
 
+        /// <summary>
+        /// Event to raise iexternal event
+        /// </summary>
         private void OnDockableFrameVisibilityChanged(object sender, EventArgs e)
         {
             _toggleEvent.Raise();
         }
 
+        /// <summary>
+        /// Registering dock panel, creating events and asigning events to functions
+        /// </summary>
         private void RegisterDockableWindow(UIControlledApplication app)
         {
             IExternalEventHandler handler_event = new ExternalEventApplyCoordsToViews();
@@ -233,17 +231,15 @@ namespace GtbTools
 
             GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, 
                                                                 DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11, RevitOpenedViews, CopyParameterFromHost);
-            data.FrameworkElement = GtbDockableWindow as System.Windows.FrameworkElement;
-            data.InitialState = new DockablePaneState();
-            data.InitialState.DockPosition = DockPosition.Floating;
-            data.InitialState.SetFloatingRectangle(new Autodesk.Revit.DB.Rectangle(100, 100, 360, 540));
-            data.InitialState.TabBehind = DockablePanes.BuiltInDockablePanes.ProjectBrowser;
 
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             
             app.RegisterDockablePane(dpid, "GTB-Berlin", GtbDockableWindow as IDockablePaneProvider);
         }
 
+        /// <summary>
+        /// Shows dock panel
+        /// </summary>
         private void ShowDockableWindow(UIApplication application)
         {
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
@@ -252,6 +248,9 @@ namespace GtbTools
             dp.Show();
         }
 
+        /// <summary>
+        /// Hides dock panel
+        /// </summary>
         private void HideDockableWindow(UIApplication application)
         {
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
@@ -259,6 +258,9 @@ namespace GtbTools
             dp.Hide();
         }
 
+        /// <summary>
+        /// Gets bitmap source from embedded image
+        /// </summary>
         private BitmapSource GetEmbeddedImage(string name)
         {
             try
@@ -267,7 +269,7 @@ namespace GtbTools
                 Stream stream = assembly.GetManifestResourceStream(name);
                 return BitmapFrame.Create(stream);
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }

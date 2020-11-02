@@ -133,7 +133,7 @@ namespace ExStorage
         {
             GetSchema();
             Entity retrievedEntity = _familyInstance.GetEntity(_schema);
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 3; i++)
             {
                 try
                 {

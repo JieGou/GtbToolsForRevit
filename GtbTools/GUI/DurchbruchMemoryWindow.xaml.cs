@@ -7,6 +7,7 @@ using ViewModels;
 using System.Collections.Generic;
 using System.Windows.Data;
 using Autodesk.Revit.DB;
+using System.Windows.Input;
 
 namespace GUI
 {
@@ -44,6 +45,7 @@ namespace GUI
             result.Add("No filter");
             result.Add("Systemtyp");
             result.Add("Feuerklasse");
+            result.Add("Opening Mark");
             return result;
         }
 
@@ -654,6 +656,11 @@ namespace GUI
                 var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
                 collection.Filter = myFilter;
             }
+            if (ComboBoxFilter.SelectedIndex == 3)
+            {
+                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).OpeningMark.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
         }
 
         private void FilterDatagridMoved()
@@ -665,12 +672,17 @@ namespace GUI
             }
             if (ComboBoxFilter.SelectedIndex == 1)
             {
-                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                var myFilter = new Predicate<object>(item => ((MovedAndResizedDbViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
                 collection.Filter = myFilter;
             }
             if (ComboBoxFilter.SelectedIndex == 2)
             {
-                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                var myFilter = new Predicate<object>(item => ((MovedAndResizedDbViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+            if (ComboBoxFilter.SelectedIndex == 3)
+            {
+                var myFilter = new Predicate<object>(item => ((MovedAndResizedDbViewModel)item).OpeningMark.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
                 collection.Filter = myFilter;
             }
         }
@@ -684,12 +696,17 @@ namespace GUI
             }
             if (ComboBoxFilter.SelectedIndex == 1)
             {
-                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                var myFilter = new Predicate<object>(item => ((ResizedDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
                 collection.Filter = myFilter;
             }
             if (ComboBoxFilter.SelectedIndex == 2)
             {
-                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                var myFilter = new Predicate<object>(item => ((ResizedDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+            if (ComboBoxFilter.SelectedIndex == 3)
+            {
+                var myFilter = new Predicate<object>(item => ((ResizedDurchbruchViewModel)item).OpeningMark.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
                 collection.Filter = myFilter;
             }
         }
@@ -703,12 +720,17 @@ namespace GUI
             }
             if (ComboBoxFilter.SelectedIndex == 1)
             {
-                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                var myFilter = new Predicate<object>(item => ((MovedAndResizedDbViewModel)item).SystemType.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
                 collection.Filter = myFilter;
             }
             if (ComboBoxFilter.SelectedIndex == 2)
             {
-                var myFilter = new Predicate<object>(item => ((NewDurchbruchViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                var myFilter = new Predicate<object>(item => ((MovedAndResizedDbViewModel)item).FireRating.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
+                collection.Filter = myFilter;
+            }
+            if (ComboBoxFilter.SelectedIndex == 3)
+            {
+                var myFilter = new Predicate<object>(item => ((MovedAndResizedDbViewModel)item).OpeningMark.ToUpper().Contains(TextBoxFilter.Text.ToUpper()));
                 collection.Filter = myFilter;
             }
         }
@@ -768,6 +790,18 @@ namespace GUI
         private void Btn_Click_RefreshContext(object sender, RoutedEventArgs e)
         {
             DurchbruchMemoryViewModel.UpdateDurchbrucheLight();
+        }
+
+        private void DataGridCell_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGridCell cell = sender as DataGridCell;
+            if (cell.Content is TextBlock)
+            {
+                string copy = (cell.Content as TextBlock).Text;
+                Clipboard.SetText(copy);
+                TextBoxFilter.Text = copy;
+            }
+            e.Handled = true;
         }
     }
 }

@@ -191,11 +191,14 @@ namespace ViewModels
         {
             foreach (ModelView modelView in views)
             {
-                FilteredElementCollector ficol2 = new FilteredElementCollector(Document, modelView.View.Id);
+                FilteredElementCollector ficol = new FilteredElementCollector(Document, modelView.View.Id);
+                List<FamilyInstance> genModelInstances = ficol.OfClass(typeof(FamilyInstance))
+                        .Select(x => x as FamilyInstance)
+                            .Where(y => y.Symbol.Family.FamilyCategory.Id.IntegerValue == (int)BuiltInCategory.OST_GenericModel).ToList();
                 foreach (DurchbruchModel dbm in _modelDurchbrucheAll)
                 {
                     FamilyInstance fi = dbm.FamilyInstance;
-                    List<FamilyInstance> instances = ficol2.OfClass(typeof(FamilyInstance)).Select(x => x as FamilyInstance).Where(y => y.Id.IntegerValue == fi.Id.IntegerValue).ToList();
+                    List<FamilyInstance> instances = genModelInstances.Where(y => y.Id.IntegerValue == fi.Id.IntegerValue).ToList();
                     if (instances.Count > 0) dbm.Views.Add(modelView.View);
                 }
             }
@@ -230,17 +233,14 @@ namespace ViewModels
 
         public void ShowElement()
         {
+            UIDocument.Selection.SetElementIds(new List<ElementId>());
             UIDocument.Selection.SetElementIds(new List<ElementId>() { CurrentSelection });
         }
 
         public void ShowElements()
         {
+            UIDocument.Selection.SetElementIds(new List<ElementId>());
             UIDocument.Selection.SetElementIds(SelectedIds);
-        }
-
-        public void SetSelection(List<ElementId> elementIds)
-        {
-            SelectedIds = elementIds;
         }
 
         public void OpenView()
@@ -357,17 +357,6 @@ namespace ViewModels
             }
             tx.Commit();
             OldPositionMarkers.Clear();
-        }
-
-        //method postponed
-        public void DeleteOldPositionCurve()
-        {
-            if (CurrentItem == null || CurrentItem.OldPositionModelCurve == 0) return;
-            if (Document.GetElement(new ElementId(CurrentItem.OldPositionModelCurve)) == null) return;
-            Transaction tx = new Transaction(Document, "Deleted position curve");
-            tx.Start();
-            Document.Delete(new ElementId(CurrentItem.OldPositionModelCurve));
-            tx.Commit();
         }
 
         private void SaveSelectedOpenings()

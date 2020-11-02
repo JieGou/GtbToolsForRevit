@@ -13,6 +13,9 @@ using ViewModels;
 
 namespace GtbTools
 {
+    /// <summary>
+    /// Shows and hides dock panel. Is asigned to revit user interface show/hide button
+    /// </summary>
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
     public class ShowHideDock : IExternalCommand
@@ -35,6 +38,10 @@ namespace GtbTools
             }
         }
     }
+
+    /// <summary>
+    /// Initiates family tools window. Is asigned to family edit button
+    /// </summary>
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
     public class FamilyEditButton : IExternalCommand
@@ -59,14 +66,16 @@ namespace GtbTools
             }
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Changes dock panel button state and text when user closes dock panel with "x". Aligns button state and text with dockpanel visibility on startup.
+    /// </summary>
     class ExternalEventShowHideDock : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Changing dockpanel visibility by event");
+            errorLog.WriteToLog("Using event to change show hide button state and text.");
             try
             {
                 App.Instance.SwitchDockPanelButton(uiapp);
@@ -80,11 +89,13 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Changed dockpanel visibility";
+            return "Show hide dock button visibility correction by event.";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Initiates view coords tool and copies coordinates from active view to all opened plan views.
+    /// </summary>
     class ExternalEventApplyCoordsToViews : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -114,11 +125,13 @@ namespace GtbTools
 }
         public string GetName()
         {
-            return "Applied coords to views";
+            return "Copy active view coordinates to opened views.";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Opens selected views with user defined settings
+    /// </summary>
     class ExternalEventOpenViews : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -149,11 +162,13 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Opened multiple views";
+            return "Open multiple views";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Saves currect view coordinates to file.
+    /// </summary>
     class ExternalEventSaveCoords : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -202,8 +217,10 @@ namespace GtbTools
             return "Saved coordinates";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Loads saved coordinates from file
+    /// </summary>
     class ExternalEventOpenCoords : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -251,8 +268,10 @@ namespace GtbTools
             return "Loaded coordinates";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Excel data importer. Not active solution
+    /// </summary>
     class ExternalEventExcelDataImporter : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -276,8 +295,10 @@ namespace GtbTools
             return "Excel data import";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Align symbol visibility.
+    /// </summary>
     class ExternalEventSymbolHandler : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -310,8 +331,10 @@ namespace GtbTools
             return "Symbol handler";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Tag all openings on view
+    /// </summary>
     class ExternalEventTagAllOpenings : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -348,8 +371,10 @@ namespace GtbTools
             return "Tag all openings";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Opening memory loading data context and initializing openings
+    /// </summary>
     class ExternalEventUpdateViewModel : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -374,14 +399,16 @@ namespace GtbTools
             return "Current context loaded";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Opening memory events
+    /// </summary>
     class ExternalEventShowElement : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Loading current context to view model");
+            errorLog.WriteToLog("Opening memory events");
             try
             {
                 DurchbruchMemoryViewModel model = App.Instance.DurchbruchMemoryViewModel;
@@ -421,17 +448,19 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Current context loaded";
+            return "Opening memory events";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Old version of cut opening memory
+    /// </summary>
     class ExternalEventCutOpeningMemory : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Initiated roof symbol selector");
+            errorLog.WriteToLog("Old cut opening memories");
             try
             {
                 CutOpeningMemory cutOpeningMemory = new CutOpeningMemory(uiapp.ActiveUIDocument);
@@ -453,11 +482,13 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Symbol roof selector";
+            return "Old cut openings memory";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Extract mep system data
+    /// </summary>
     class ExternalEventMepExtract : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -481,8 +512,10 @@ namespace GtbTools
             return "MEP systems extract";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Open view and select element opening memory
+    /// </summary>
     class ExternalEventShowOnView : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -505,8 +538,10 @@ namespace GtbTools
             return "Opened selected view";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Saving opening memory elements to external storage
+    /// </summary>
     class ExternalEventSaveData : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -542,8 +577,10 @@ namespace GtbTools
             return "data saved to exstorage";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Rotation issue fix tool
+    /// </summary>
     class ExternalEventFixRotationIssue : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -576,8 +613,10 @@ namespace GtbTools
             return "Fixed rotation issue";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Opening elevation copy tool
+    /// </summary>
     class ExternalEventCopyElevations : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -588,7 +627,8 @@ namespace GtbTools
             {
                 GetSetElevation getSetElevation = new GetSetElevation(uiapp.ActiveUIDocument.Document);
                 getSetElevation.GetOpenings();
-                getSetElevation.SetElevations();
+                CopyElevationWindow window = new CopyElevationWindow(getSetElevation);
+                window.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -602,8 +642,10 @@ namespace GtbTools
             return "Copied elevations.";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Save currently opened views. Loads saved views.
+    /// </summary>
     class ExternalEventRevitOpenedViews : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -635,8 +677,10 @@ namespace GtbTools
             return "Revit opened views";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Openings diameter change event
+    /// </summary>
     class ExternalEventChangeDurchbruchDiameter : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -662,8 +706,10 @@ namespace GtbTools
             return "Change durchbruch value";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Openings offset change event
+    /// </summary>
     class ExternalEventChangeDurchbruchOffset : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -689,8 +735,10 @@ namespace GtbTools
             return "Change durchbruch value";
         }
     }
-    [Transaction(TransactionMode.Manual)]
-    [Regeneration(RegenerationOption.Manual)]
+
+    /// <summary>
+    /// Parameter copy paste between host and opening generic model family instance
+    /// </summary>
     class ExternalEventCopyParameter : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
@@ -700,13 +748,13 @@ namespace GtbTools
             try
             {
                 CopyParameterFromHost copyParameterFromHost = App.Instance.CopyParameterFromHost;
-                if(copyParameterFromHost.IsInitialized)
+                if (copyParameterFromHost.IsInitialized)
                 {
-                    if(copyParameterFromHost._hostClicked)
+                    if (copyParameterFromHost._hostClicked)
                     {
                         copyParameterFromHost.CopyParametersHost();
                     }
-                    if(copyParameterFromHost._selfClicked)
+                    if (copyParameterFromHost._selfClicked)
                     {
                         copyParameterFromHost.CopyParametersSelf();
                     }
@@ -726,7 +774,7 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "Change durchbruch value";
+            return "Copy parameter form host";
         }
     }
 }
