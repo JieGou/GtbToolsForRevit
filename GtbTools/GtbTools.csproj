@@ -147,14 +147,19 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="CuttingElementTool\CuttingElementType.cs" />
+    <Compile Include="CuttingElementTool\CutSearchOpeningModel.cs" />
+    <Compile Include="CuttingElementTool\CuttingElement.cs" />
     <Compile Include="DurchbruchRotationFix\DurchbruchOrientation.cs" />
     <Compile Include="DurchbruchRotationFix\DurchbruchRotatedModel.cs" />
     <Compile Include="DurchbruchRotationFix\DurchbruchRotation.cs" />
     <Compile Include="DurchbruchRotationFix\RotationFixViewModel.cs" />
     <Compile Include="DurchbruchRotationFix\WindowDecision.cs" />
+    <Compile Include="ExStorage\OpeningMemoryString.cs" />
     <Compile Include="ExStorage\SymbolToolString.cs" />
     <Compile Include="FamilyTools\CheckboxLabelReplace.cs" />
     <Compile Include="Functions\CopyParameterFromHost.cs" />
+    <Compile Include="Functions\CuttingElementSearch.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
     <Compile Include="Functions\RevitOpenedViews.cs" />
     <Compile Include="GUI\CopyElevationWindow.xaml.cs">

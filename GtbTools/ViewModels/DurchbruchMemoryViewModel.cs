@@ -273,7 +273,7 @@ namespace ViewModels
                 }
                 tx.Commit();
             }
-            UpdateDurchbrucheDeep(); // search another way
+            UpdateDurchbrucheDeep();
         }
 
         private FamilySymbol FindPositionMarker()
@@ -364,9 +364,10 @@ namespace ViewModels
             foreach (DurchbruchModel item in SelectedToSave)
             {
                 item.OpeningMemory.UpdateCurrentSettings();
-                item.OpeningMemory.SaveDateTostorage();
-                item.OpeningMemory.SaveDimensionsTostorage();
-                item.OpeningMemory.SavePositionTostorage();
+                item.OpeningMemory.SaveDataToStorage();
+                //item.OpeningMemory.SaveDateTostorage();
+                //item.OpeningMemory.SaveDimensionsTostorage();
+                //item.OpeningMemory.SavePositionTostorage();
             }
         }
 
@@ -374,9 +375,10 @@ namespace ViewModels
         {
             foreach (NewDurchbruchViewModel item in NewDurchbruche)
             {
-                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
-                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
-                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDataToStorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                //item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
             }
         }
 
@@ -384,9 +386,10 @@ namespace ViewModels
         {
             foreach (ResizedDurchbruchViewModel item in ResizedDurchbruche)
             {
-                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
-                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
-                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDataToStorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                //item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
             }
         }
 
@@ -394,18 +397,20 @@ namespace ViewModels
         {
             foreach (MovedAndResizedDbViewModel item in MovedDurchbruche)
             {
-                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
-                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
-                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDataToStorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                //item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
             }
         }
         private void SaveMovedAndResizedOpenings()
         {
             foreach (MovedAndResizedDbViewModel item in MovedAndResizedDurchbruche)
             {
-                item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
-                item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
-                item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
+                item.DurchbruchModel.OpeningMemory.SaveDataToStorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDateTostorage();
+                //item.DurchbruchModel.OpeningMemory.SaveDimensionsTostorage();
+                //item.DurchbruchModel.OpeningMemory.SavePositionTostorage();
             }
         }
 

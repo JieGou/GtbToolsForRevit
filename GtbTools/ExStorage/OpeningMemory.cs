@@ -1,5 +1,6 @@
 ﻿using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using Autodesk.Revit.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,19 +65,25 @@ namespace ExStorage
             }
         }
 
-        public void SavePositionTostorage()
-        {
-            GtbSchema.SetEntityField(_familyInstance, "positionXYZ", NewPosition);
-        }
+        //public void SavePositionTostorage()
+        //{
+        //    GtbSchema.SetEntityField(_familyInstance, "positionXYZ", NewPosition);
+        //}
 
-        public void SaveDimensionsTostorage()
-        {
-            GtbSchema.SetEntityField(_familyInstance, "dimensions", NewDimensions);
-        }
+        //public void SaveDimensionsTostorage()
+        //{
+        //    GtbSchema.SetEntityField(_familyInstance, "dimensions", NewDimensions);
+        //}
 
-        public void SaveDateTostorage()
+        //public void SaveDateTostorage()
+        //{
+        //    GtbSchema.SetEntityField(_familyInstance, "dateSaved", NewDateSaved);
+        //}
+
+        public void SaveDataToStorage()
         {
-            GtbSchema.SetEntityField(_familyInstance, "dateSaved", NewDateSaved);
+            string jsonString = OpeningMemoryString.CreateJsonString(NewPosition, NewDimensions, NewDateSaved);
+            GtbSchema.SetEntityField(_familyInstance, "openingMemory", jsonString);
         }
 
         public void UpdateCurrentSettings()
@@ -133,20 +140,19 @@ namespace ExStorage
         {
             GetSchema();
             Entity retrievedEntity = _familyInstance.GetEntity(_schema);
-            for (int i = 0; i < 3; i++)
+            if(retrievedEntity.IsValid())
             {
-                try
-                {
-                    if (i == 0) OldPosition = retrievedEntity.Get<string>(_schema.GetField("positionXYZ"));
-                    if (i == 1) OldDimensions = retrievedEntity.Get<string>(_schema.GetField("dimensions"));
-                    if (i == 2) OldDateSaved = retrievedEntity.Get<string>(_schema.GetField("dateSaved"));
-                }
-                catch
-                {
-                    if (i == 0) OldPosition = "-1";
-                    if (i == 1) OldDimensions = "-1";
-                    if (i == 2) OldDateSaved = "-1";
-                }
+                string jsonString = retrievedEntity.Get<string>(_schema.GetField("openingMemory"));
+                OpeningMemoryString openingMemoryString = OpeningMemoryString.ReadJsonString(jsonString);
+                OldPosition = openingMemoryString.Position;
+                OldDimensions = openingMemoryString.Dimensions;
+                OldDateSaved = openingMemoryString.Date;
+            }
+            else
+            {
+                OldPosition = "";
+                OldDimensions = "";
+                OldDateSaved = "";
             }
         }
 

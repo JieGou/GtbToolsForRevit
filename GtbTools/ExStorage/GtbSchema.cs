@@ -87,14 +87,20 @@ namespace ExStorage
             schemaBuilder.SetVendorId("GTBE");
             schemaBuilder.SetSchemaName("gtb_schema");
             FieldBuilder symbolTool = schemaBuilder.AddSimpleField("symbolTool", typeof(string));
-            FieldBuilder positionXYZ = schemaBuilder.AddSimpleField("positionXYZ", typeof(string));
-            FieldBuilder dimensions = schemaBuilder.AddSimpleField("dimensions", typeof(string));
-            FieldBuilder dateSaved = schemaBuilder.AddSimpleField("dateSaved", typeof(string));
-            symbolTool.SetDocumentation("Symbol tool settings (0 - never set, 1 - true, 2 false)");
-            positionXYZ.SetDocumentation("XYZ saved position of opening (0.00;0.00;0.00");
-            dimensions.SetDocumentation("Opening dimensions: rectangular WidthxHeightxDepth, round DiameterxDepth");
-            dateSaved.SetDocumentation("Date of saving opening information DD-MM-YYYY");
-            
+            FieldBuilder openingMemory = schemaBuilder.AddSimpleField("openingMemory", typeof(string));
+            FieldBuilder gtbField1 = schemaBuilder.AddSimpleField("gtbField1", typeof(string));
+            FieldBuilder gtbField2 = schemaBuilder.AddSimpleField("gtbField2", typeof(string));
+            //FieldBuilder positionXYZ = schemaBuilder.AddSimpleField("positionXYZ", typeof(string));
+            //FieldBuilder dimensions = schemaBuilder.AddSimpleField("dimensions", typeof(string));
+            //FieldBuilder dateSaved = schemaBuilder.AddSimpleField("dateSaved", typeof(string));
+            symbolTool.SetDocumentation("Symbol tool settings json string");
+            symbolTool.SetDocumentation("Opening memory json string (position, size, date");
+            symbolTool.SetDocumentation("Spare field1");
+            symbolTool.SetDocumentation("Spare field2");
+            //positionXYZ.SetDocumentation("XYZ saved position of opening (0.00;0.00;0.00");
+            //dimensions.SetDocumentation("Opening dimensions: rectangular WidthxHeightxDepth, round DiameterxDepth");
+            //dateSaved.SetDocumentation("Date of saving opening information DD-MM-YYYY");
+
             return schemaBuilder.Finish();
         }
     }

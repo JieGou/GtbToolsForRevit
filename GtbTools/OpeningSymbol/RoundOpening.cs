@@ -359,11 +359,14 @@ namespace OpeningSymbol
 
         public void SwitchSymbolLight()
         {
-            Parameter parARC = FamilyInstance.LookupParameter("TWP");
-            Parameter parTop = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, Top Symbol)");
-            Parameter parLR = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, LR Symbol)");
-            Parameter parFB = FamilyInstance.LookupParameter("Durchbruch durchgeschnitten (TWP, FB Symbol)");
-            Parameter parOben = FamilyInstance.LookupParameter("Über Schnitt Ebene (TGA, Grundrisse)");
+            Parameter parARC = FamilyInstance.get_Parameter(new Guid("20fc21fc-4af8-45fd-b412-aec0a0e7b8d5"));
+            Parameter parTop = FamilyInstance.get_Parameter(new Guid("4fb37f53-ace7-4ff2-9e26-8cb09e41292e"));
+            Parameter parLR = FamilyInstance.get_Parameter(new Guid("4381cf1b-088e-4127-9fd9-2c57366ab8d8"));
+            Parameter parFB = FamilyInstance.get_Parameter(new Guid("6d06390a-c816-4108-8536-35d468a7ee3f"));
+            Parameter parOben = FamilyInstance.get_Parameter(new Guid("19896ed8-279b-41d2-bf81-b77387d55c76"));
+            Parameter manualSymbol = FamilyInstance.get_Parameter(new Guid("d985a238-7abd-4bee-a8c9-fcb2540b1eda"));
+
+            if (manualSymbol.AsInteger() == 1) return;
 
             //Settings for ARC
             if (_viewDiscipline == ViewDiscipline.TWP)
