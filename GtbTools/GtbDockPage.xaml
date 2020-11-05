@@ -4,7 +4,7 @@
         xmlns:dat="clr-namespace:System.Windows.Data;assembly=PresentationFramework"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
-        Title="Dockable Dialogs" Height="360" Width="250"
+        Title="Dockable Dialogs" Height="400" Width="250"
         x:Name="DockableDialogs"  Background="White" Loaded="DockableDialogs_Loaded">
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -53,6 +53,8 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -63,6 +65,7 @@
                         <Button x:Name="RotationFixButton" Content="Durchbruch Rotation Fix" HorizontalAlignment="Center" Grid.Row="4" VerticalAlignment="Center" Width="200" Click="RotationFixButton_Click"/>
                         <Button x:Name="CopyElevations" Content="Copy Elevation to Op.Elevation" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="200" Click="CopyElevations_Click"/>
                         <Button x:Name="CopyPasteParameters" Content="Copy Paste Parameters" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="Center" Width="200" Click="CopyPasteParameters_Click"/>
+                        <Button x:Name="FixDiameterBtn" Content="Diameter fix" HorizontalAlignment="Center" Grid.Row="7" VerticalAlignment="Center" Width="200" Click="FixDiameterBtn_Click"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">

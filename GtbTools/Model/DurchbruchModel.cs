@@ -58,7 +58,11 @@ namespace Model
             using (Transaction tx = new Transaction(doc, "Setting new diameter"))
             {
                 tx.Start();
+#if DEBUG2021 || RELEASE2021
+                double newValue = UnitUtils.ConvertToInternalUnits(NewDiameter, UnitTypeId.Millimeters);
+#else
                 double newValue = UnitUtils.ConvertToInternalUnits(NewDiameter, DisplayUnitType.DUT_MILLIMETERS);
+#endif
                 PipeDiameter.Set(newValue);
                 tx.Commit();
             }
@@ -69,7 +73,11 @@ namespace Model
             using(Transaction tx =  new Transaction(doc, "Setting new offset"))
             {
                 tx.Start();
+#if DEBUG2021 || RELEASE2021
+                double newValue = UnitUtils.ConvertToInternalUnits(NewOffset, UnitTypeId.Millimeters);
+#else
                 double newValue = UnitUtils.ConvertToInternalUnits(NewOffset, DisplayUnitType.DUT_MILLIMETERS);
+#endif
                 CutOffset.Set(newValue);
                 tx.Commit();
             }

@@ -11,7 +11,7 @@ namespace ViewModels
     {
         public string ElementId { get; set; }
         public string Shape { get; set; }
-        public string _diameter;
+        private string _diameter;
         public string Diameter //Total durchbruch diameter
         {
             get => _diameter;
@@ -24,7 +24,7 @@ namespace ViewModels
                 }
             }
         }
-        public string _pipeDiameter;
+        private string _pipeDiameter;
         public string PipeDiameter
         {
             get => _pipeDiameter;
@@ -37,7 +37,7 @@ namespace ViewModels
                 }
             }
         } //editable in datagrid
-        public string _offset;
+        private string _offset;
         public string Offset //editable in datagrid
         {
             get => _offset;
@@ -50,7 +50,7 @@ namespace ViewModels
                 }
             }
         }
-        public string _width;
+        private string _width;
         public string Width
         {
             get => _width;
@@ -63,7 +63,7 @@ namespace ViewModels
                 }
             }
         }
-        public string _height;
+        private string _height;
         public string Height
         {
             get => _height;
@@ -76,7 +76,7 @@ namespace ViewModels
                 }
             }
         }
-        public string _depth;
+        private string _depth;
         public string Depth
         {
             get => _depth;
@@ -90,7 +90,7 @@ namespace ViewModels
             }
         }
         public List<ModelView> Views { get; set; }
-        public string _openingMark;
+        private string _openingMark;
         public string OpeningMark
         {
             get => _openingMark;
@@ -103,7 +103,7 @@ namespace ViewModels
                 }
             }
         }
-        public string _systemType;
+        private string _systemType;
         public string SystemType
         {
             get => _systemType;
@@ -116,7 +116,7 @@ namespace ViewModels
                 }
             }
         }
-        public string _fireRating;
+        private string _fireRating;
         public string FireRating
         {
             get => _fireRating;

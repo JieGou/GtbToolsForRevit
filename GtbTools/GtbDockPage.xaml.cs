@@ -25,6 +25,7 @@ using System.Threading;
 using GUI;
 using System.Windows.Threading;
 using Functions;
+using CuttingElementTool;
 
 namespace GtbTools.Forms
 {
@@ -49,20 +50,20 @@ namespace GtbTools.Forms
         ExternalEvent _mepExtract;
         ExternalEvent _copyElevations;
         RevitOpenedViews _revitOpenedViews;
+        CuttingElementSearch _cuttingElementSearch;
 
-
-        private Guid m_targetGuid;
-        private DockPosition m_position = DockPosition.Bottom;
-        private int m_left = 1;
-        private int m_right = 1;
-        private int m_top = 1;
-        private int m_bottom = 1;
+        //private Guid m_targetGuid;
+        //private DockPosition m_position = DockPosition.Bottom;
+        //private int m_left = 1;
+        //private int m_right = 1;
+        //private int m_top = 1;
+        //private int m_bottom = 1;
         #endregion
         public GtbDockPage(string plugInVersion, ExternalEvent exEventCopyCoords, ExternalEvent exEventOpenViews,
                             ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel,
                                 ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel,
                                     ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,
-                                        ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost)
+                                        ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost, CuttingElementSearch cuttingElementSearch)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -78,6 +79,7 @@ namespace GtbTools.Forms
             _copyElevations = copyElevations;
             _revitOpenedViews = revitOpenedViews;
             CopyParameterFromHost = copyParameterFromHost;
+            _cuttingElementSearch = cuttingElementSearch;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -100,15 +102,15 @@ namespace GtbTools.Forms
             //Log.Message("***Intial docking parameters***");
             //Log.Message(APIUtility.GetDockStateSummary(data.InitialState));
         }
-        public void SetInitialDockingParameters(int left, int right, int top, int bottom, DockPosition position, Guid targetGuid)
-        {
-            m_position = position;
-            m_left = left;
-            m_right = right;
-            m_top = top;
-            m_bottom = bottom;
-            m_targetGuid = targetGuid;
-        }
+        //public void SetInitialDockingParameters(int left, int right, int top, int bottom, DockPosition position, Guid targetGuid)
+        //{
+        //    m_position = position;
+        //    m_left = left;
+        //    m_right = right;
+        //    m_top = top;
+        //    m_bottom = bottom;
+        //    m_targetGuid = targetGuid;
+        //}
 
         private void DockableDialogs_Loaded(object sender, RoutedEventArgs e)
         {
@@ -226,6 +228,12 @@ namespace GtbTools.Forms
         private void CopyPasteParameters_Click(object sender, RoutedEventArgs e)
         {
             CopyParameterFromHost.InitializeEvent.Raise();
+        }
+
+        private void FixDiameterBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _cuttingElementSearch.ToolAction = CutElementToolAction.Initialize;
+            _cuttingElementSearch.TheEvent.Raise();
         }
     }
 }

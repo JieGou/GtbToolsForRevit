@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Commands.cs" />
+    <Compile Include="CuttingElementTool\CutElementToolAction.cs" />
     <Compile Include="CuttingElementTool\CuttingElementType.cs" />
     <Compile Include="CuttingElementTool\CutSearchOpeningModel.cs" />
     <Compile Include="CuttingElementTool\CuttingElement.cs" />
@@ -167,6 +168,9 @@
     </Compile>
     <Compile Include="GUI\CopyPasteWindow.xaml.cs">
       <DependentUpon>CopyPasteWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\DiameterFixWindow.xaml.cs">
+      <DependentUpon>DiameterFixWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\DurchbruchRotationFixWindow.xaml.cs">
       <DependentUpon>DurchbruchRotationFixWindow.xaml</DependentUpon>
@@ -273,6 +277,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\CopyPasteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\DiameterFixWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

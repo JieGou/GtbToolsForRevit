@@ -49,6 +49,7 @@ namespace GtbTools
         public Functions.DurchbruchRotationFix DurchbruchRotationFix { get; set; }
         public Functions.RevitOpenedViews RevitOpenedViews { get; set; }
         public Functions.CopyParameterFromHost CopyParameterFromHost { get; set; }
+        public Functions.CuttingElementSearch CuttingElementSearch { get; set; }
 
         //fields to cotnrol show hide button and dock panel visibility
         RibbonItem _button;
@@ -69,6 +70,7 @@ namespace GtbTools
             DurchbruchRotationFix = new Functions.DurchbruchRotationFix();
             RevitOpenedViews = new Functions.RevitOpenedViews();
             CopyParameterFromHost = new Functions.CopyParameterFromHost();
+            CuttingElementSearch = new Functions.CuttingElementSearch();
             string path = Assembly.GetExecutingAssembly().Location;
 
             //Creating ribbon in Add-ins tab
@@ -227,10 +229,13 @@ namespace GtbTools
             ExternalEvent exEventCopyParameter = ExternalEvent.Create(eventHandlerCopyParameter);
             CopyParameterFromHost.SetEvents(exEventCopyParameter);
 
-            DockablePaneProviderData data = new DockablePaneProviderData();
+            IExternalEventHandler eventHandlerFixDiameter = new ExternalEventFixDiameter();
+            ExternalEvent exEventFixDiameter = ExternalEvent.Create(eventHandlerFixDiameter);
+            CuttingElementSearch.SetEvent(exEventFixDiameter);
 
             GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, 
-                                                                DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11, RevitOpenedViews, CopyParameterFromHost);
+                                                                DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11,
+                                                                    RevitOpenedViews, CopyParameterFromHost, CuttingElementSearch);
 
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             

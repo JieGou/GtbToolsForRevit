@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using CuttingElementTool;
 using DurchbruchRotationFix;
 using ExStorage;
 using FamilyTools;
@@ -8,6 +9,8 @@ using Functions;
 using GtbTools.GUI;
 using GUI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using ViewModels;
 
@@ -775,6 +778,59 @@ namespace GtbTools
         public string GetName()
         {
             return "Copy parameter form host";
+        }
+    }
+
+    /// <summary>
+    /// Fix opening diameter with pipe slope
+    /// </summary>
+    class ExternalEventFixDiameter : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Fix pipe slope addition to diameter");
+            try
+            {
+                CuttingElementSearch cuttingElementSearch = App.Instance.CuttingElementSearch;
+                if(cuttingElementSearch.ToolAction == CutElementToolAction.Initialize)
+                {
+                    cuttingElementSearch.InitializeDocument(uiapp.ActiveUIDocument.Document);
+                    cuttingElementSearch.SetCuttingElements();
+                    cuttingElementSearch.SetOpeningModels();
+                    cuttingElementSearch.SetLinks();
+                    cuttingElementSearch.DisplayWindow();
+                }
+                if (cuttingElementSearch.ToolAction == CutElementToolAction.SearchLinks)
+                {
+                    cuttingElementSearch.SetLinkedDoc();
+                    cuttingElementSearch.SetLinkedCuttingElements();
+                    cuttingElementSearch.SetOpeningModels();
+                    cuttingElementSearch.SignalEvent.Set();
+                }
+                if (cuttingElementSearch.ToolAction == CutElementToolAction.SelectItems)
+                {
+                    List<ElementId> elementIds = new List<ElementId>();
+                    elementIds = cuttingElementSearch.Selection.Select(e => e.FamilyInstance.Id as ElementId).ToList();
+                    uiapp.ActiveUIDocument.Selection.SetElementIds(new List<ElementId>());
+                    uiapp.ActiveUIDocument.Selection.SetElementIds(elementIds);
+                }
+                if (cuttingElementSearch.ToolAction == CutElementToolAction.FixSelected)
+                {
+                    cuttingElementSearch.FixSelection();
+                    cuttingElementSearch.SignalEvent.Set();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "Fix pipe slope addition to diameter";
         }
     }
 }
