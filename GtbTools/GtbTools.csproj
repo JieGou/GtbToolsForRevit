@@ -245,6 +245,8 @@
     <Compile Include="OpeningSymbol\ViewDiscipline.cs" />
     <Compile Include="OpeningSymbol\WarningWindowResult.cs" />
     <Compile Include="OwnerSearch\WindowHandleSearch.cs" />
+    <Compile Include="PipeFlowTool\ConnectorModel.cs" />
+    <Compile Include="PipeFlowTool\PipeDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GtbDockPage.xaml.cs">
       <DependentUpon>GtbDockPage.xaml</DependentUpon>

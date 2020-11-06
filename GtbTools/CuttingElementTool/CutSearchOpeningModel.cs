@@ -86,39 +86,24 @@ namespace CuttingElementTool
                 double distance2 = ce.CenterLine.Distance(_originPoint);
                 double distance3 = ce.CenterLine.Distance(_endPoint);
 
-                if (distance1 < D.AsDouble() * 0.5)
+                if (distance1 < D.AsDouble() * 0.25)
                 {
                     CuttingElement = ce;
                     result = true;
                     break;
                 }
-                if (distance2 < D.AsDouble() * 0.5)
+                if (distance2 < D.AsDouble() * 0.25)
                 {
                     CuttingElement = ce;
                     result = true;
                     break;
                 }
-                if (distance3 < D.AsDouble() * 0.5)
+                if (distance3 < D.AsDouble() * 0.25)
                 {
                     CuttingElement = ce;
                     result = true;
                     break;
                 }
-                //test
-                //must compute distance between center lines of opening and pipe
-                //IList<ClosestPointsPairBetweenTwoCurves> list
-                //ce.CenterLine.ComputeClosestPoints(OpCenterLine, true, true, true, out IList<ClosestPointsPairBetweenTwoCurves> list);
-                //foreach (ClosestPointsPairBetweenTwoCurves item in list)
-                //{
-                //    double distance2 = item.Distance;
-                //    if(distance2 < 0.01)
-                //    {
-                //        CuttingElement = ce;
-                //        result = true;
-                //        break;
-                //    }
-                //}
-                //test
             }
             if (result == true)
             {
