@@ -99,7 +99,12 @@ namespace Functions
                 TaskDialog.Show("Info", notFound);
                 return;
             }
+#if DEBUG2018 || RELEASE2018
+            RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TileWindows);
+
+#else
             RevitCommandId commandId = RevitCommandId.LookupPostableCommandId(PostableCommand.TileViews);
+#endif
             _uiapp.PostCommand(commandId);
             foreach (UIView item in _uidoc.GetOpenUIViews())
             {

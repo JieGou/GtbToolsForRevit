@@ -1,0 +1,81 @@
+﻿<Window x:Class="GUI.PipeFlowTagWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Title="PipeFlowTagWindow" Height="500" Width="800" Background="Gray">
+    <Grid Margin="5" Background="WhiteSmoke">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Button Content="Analyze View" HorizontalAlignment="Center" Margin="0,31,0,0" VerticalAlignment="Top" Width="120" Click="Btn_Click_Analyze"/>
+        <Button Content="Tag Elements" HorizontalAlignment="Center" Margin="0,56,0,0" VerticalAlignment="Top" Width="120" Click="Btn_Click_TagThemAll"/>
+        <Button Content="Default Directions" HorizontalAlignment="Center" Margin="0,93,0,0" VerticalAlignment="Top" Width="120" Click="Btn_Click_DefaultDirections"/>
+
+        <ComboBox x:Name="ComBoxViaUp" HorizontalAlignment="Center" Margin="0,31,0,0" Grid.Column="1" VerticalAlignment="Top" Width="150"/>
+        <ComboBox x:Name="ComBoxViaDown" HorizontalAlignment="Center" Margin="0,86,0,0" Grid.Column="1" VerticalAlignment="Top" Width="150"/>
+        <Label Content="Durchgehend, abwärts" Grid.Column="1" HorizontalAlignment="Center" Margin="10,60,10,10" VerticalAlignment="Top"/>
+        <Label Content="Durchgehend, aufwärts" Grid.Column="1" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Top"/>
+
+        <ComboBox x:Name="ComBoxNachOben" HorizontalAlignment="Center" Margin="0,31,0,0" Grid.Column="2" VerticalAlignment="Top" Width="150"/>
+        <ComboBox x:Name="ComBoxNachUnten" HorizontalAlignment="Center" Margin="0,86,0,0" Grid.Column="2" VerticalAlignment="Top" Width="150"/>
+        <Label Content="Nach Oben" Grid.Column="2" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Top"/>
+        <Label Content="Nach Unten" Grid.Column="2" HorizontalAlignment="Center" Margin="10,60,10,10" VerticalAlignment="Top"/>
+
+        <ComboBox x:Name="ComBoxVonOben" HorizontalAlignment="Center" Margin="0,31,0,0" Grid.Column="3" VerticalAlignment="Top" Width="150"/>
+        <ComboBox x:Name="ComBoxVonUnten" HorizontalAlignment="Center" Margin="0,86,0,0" Grid.Column="3" VerticalAlignment="Top" Width="150"/>
+        <Label Content="Von Oben" Grid.Column="3" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Top"/>
+        <Label Content="Von Unten" Grid.Column="3" HorizontalAlignment="Center" Margin="10,60,10,10" VerticalAlignment="Top"/>
+        <DataGrid x:Name="MyDataGrid" Grid.ColumnSpan="5" ItemsSource="{Binding LineViewModels}" Margin="10,139,10,10" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn IsReadOnly="True" Header="Ref Pipe" Binding="{Binding Path=ReferencePipe}"/>
+                <DataGridTextColumn IsReadOnly="True" Header="Goes Above" Binding="{Binding Path=GoesAbove}"/>
+                <DataGridTextColumn IsReadOnly="True" Header="Goes Below" Binding="{Binding Path=GoesBelow}"/>
+                <DataGridTextColumn IsReadOnly="True" Header="Tag Holder" Binding="{Binding Path=TagHolder}"/>
+                <DataGridTemplateColumn Header="AboveElements">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Width="50" Height="23" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding AboveElements}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Below Elements">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Width="50" Height="23" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding BelowElements}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Reducing Elements">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Width="50" Height="23" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding ReducingElements}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Via Elements">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Width="50" Height="23" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding ViaElements}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="End Elements">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox Width="50" Height="23" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding EndElements}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

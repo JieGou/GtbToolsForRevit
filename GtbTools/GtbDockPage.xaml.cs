@@ -51,6 +51,7 @@ namespace GtbTools.Forms
         ExternalEvent _copyElevations;
         RevitOpenedViews _revitOpenedViews;
         CuttingElementSearch _cuttingElementSearch;
+        PipeFlowTagger _pipeFlowTagger;
 
         //private Guid m_targetGuid;
         //private DockPosition m_position = DockPosition.Bottom;
@@ -63,7 +64,7 @@ namespace GtbTools.Forms
                             ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel,
                                 ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel,
                                     ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,
-                                        ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost, CuttingElementSearch cuttingElementSearch)
+                                        ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost, CuttingElementSearch cuttingElementSearch, PipeFlowTagger pipeFlowTagger)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -80,6 +81,7 @@ namespace GtbTools.Forms
             _revitOpenedViews = revitOpenedViews;
             CopyParameterFromHost = copyParameterFromHost;
             _cuttingElementSearch = cuttingElementSearch;
+            _pipeFlowTagger = pipeFlowTagger;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -234,6 +236,12 @@ namespace GtbTools.Forms
         {
             _cuttingElementSearch.ToolAction = CutElementToolAction.Initialize;
             _cuttingElementSearch.TheEvent.Raise();
+        }
+
+        private void Btn_Click_AnnotateVerticalStacks(object sender, RoutedEventArgs e)
+        {
+            _pipeFlowTagger.Action = PipeFlowTool.PipeFlowToolAction.Initialize;
+            _pipeFlowTagger.StartEvent.Raise();
         }
     }
 }

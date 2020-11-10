@@ -37,6 +37,18 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug2018|x64' ">
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug2018\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;DEBUG2018</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release2021|x64'">
     <OutputPath>bin\x64\Release2021\</OutputPath>
     <Optimize>true</Optimize>
@@ -162,12 +174,16 @@
     <Compile Include="Functions\CopyParameterFromHost.cs" />
     <Compile Include="Functions\CuttingElementSearch.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
+    <Compile Include="Functions\PipeFlowTagger.cs" />
     <Compile Include="Functions\RevitOpenedViews.cs" />
     <Compile Include="GUI\CopyElevationWindow.xaml.cs">
       <DependentUpon>CopyElevationWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\CopyPasteWindow.xaml.cs">
       <DependentUpon>CopyPasteWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CustomDirectionsWindow.xaml.cs">
+      <DependentUpon>CustomDirectionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\DiameterFixWindow.xaml.cs">
       <DependentUpon>DiameterFixWindow.xaml</DependentUpon>
@@ -214,6 +230,9 @@
     <Compile Include="GUI\OpeningsMainWindow.xaml.cs">
       <DependentUpon>OpeningsMainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\PipeFlowTagWindow.xaml.cs">
+      <DependentUpon>PipeFlowTagWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ProcessWindow.xaml.cs">
       <DependentUpon>ProcessWindow.xaml</DependentUpon>
     </Compile>
@@ -245,8 +264,16 @@
     <Compile Include="OpeningSymbol\ViewDiscipline.cs" />
     <Compile Include="OpeningSymbol\WarningWindowResult.cs" />
     <Compile Include="OwnerSearch\WindowHandleSearch.cs" />
+    <Compile Include="PipeFlowTool\DefaultDirections.cs" />
+    <Compile Include="PipeFlowTool\FlowDirection.cs" />
+    <Compile Include="PipeFlowTool\FlowToolFlag.cs" />
     <Compile Include="PipeFlowTool\ConnectorModel.cs" />
+    <Compile Include="PipeFlowTool\FloorSystemElements.cs" />
+    <Compile Include="PipeFlowTool\LineViewModel.cs" />
     <Compile Include="PipeFlowTool\PipeDirection.cs" />
+    <Compile Include="PipeFlowTool\PipeFlowToolAction.cs" />
+    <Compile Include="PipeFlowTool\TagOption.cs" />
+    <Compile Include="PipeFlowTool\VerticalPipingLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GtbDockPage.xaml.cs">
       <DependentUpon>GtbDockPage.xaml</DependentUpon>
@@ -279,6 +306,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\CopyPasteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\CustomDirectionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -319,6 +350,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\OpeningsMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\PipeFlowTagWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

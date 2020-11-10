@@ -12,7 +12,7 @@
             <RowDefinition Height="100"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Background="White">
-            <TabControl Background="White" Margin="0" SelectedIndex="3">
+            <TabControl Background="White" Margin="0" SelectedIndex="4">
                 <TabItem Header="Ansicht Tools">
                     <Grid Background="White">
                         <Grid.RowDefinitions>
@@ -54,7 +54,6 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
-
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -66,6 +65,18 @@
                         <Button x:Name="CopyElevations" Content="Copy Elevation to Op.Elevation" HorizontalAlignment="Center" Grid.Row="5" VerticalAlignment="Center" Width="200" Click="CopyElevations_Click"/>
                         <Button x:Name="CopyPasteParameters" Content="Copy Paste Parameters" HorizontalAlignment="Center" Grid.Row="6" VerticalAlignment="Center" Width="200" Click="CopyPasteParameters_Click"/>
                         <Button x:Name="FixDiameterBtn" Content="Diameter fix" HorizontalAlignment="Center" Grid.Row="7" VerticalAlignment="Center" Width="200" Click="FixDiameterBtn_Click"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Beschriftung">
+                    <Grid Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Button Content="Annotate vertical stacks" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="200" Click="Btn_Click_AnnotateVerticalStacks"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">

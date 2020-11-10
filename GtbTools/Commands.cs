@@ -833,4 +833,45 @@ namespace GtbTools
             return "Fix pipe slope addition to diameter";
         }
     }
+
+    /// <summary>
+    /// Annotate vertical stacks to show flow direction of the medium through active plan view
+    /// </summary>
+    class ExternalEventAnnotateStacks : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Annotate vertical stacks");
+            try
+            {
+                PipeFlowTagger pipeFlowTagger = App.Instance.PipeFlowTagger;
+                if(pipeFlowTagger.Action == PipeFlowTool.PipeFlowToolAction.Initialize)
+                {
+                    pipeFlowTagger.Initialize(uiapp.ActiveUIDocument);
+                    pipeFlowTagger.DisplayWindow();
+                }
+                if (pipeFlowTagger.Action == PipeFlowTool.PipeFlowToolAction.Analyze)
+                {
+                    pipeFlowTagger.AnalyzeView();
+                    pipeFlowTagger.SignalEvent.Set();
+                }
+                if (pipeFlowTagger.Action == PipeFlowTool.PipeFlowToolAction.Tag)
+                {
+                    pipeFlowTagger.TagAllLines();
+                    pipeFlowTagger.SignalEvent.Set();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "VerticalStackAnnotation";
+        }
+    }
 }

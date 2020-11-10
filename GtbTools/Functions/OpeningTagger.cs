@@ -64,7 +64,12 @@ namespace Functions
                     LocationPoint lp = fi.Location as LocationPoint;
                     XYZ xyz = lp.Point;
                     Reference reference = new Reference(element);
+#if DEBUG2018 || RELEASE2018
+                    IndependentTag newTag = IndependentTag.Create(Document, Document.ActiveView.Id, reference, true, TagMode.TM_ADDBY_CATEGORY, TagOrientation.Horizontal, xyz);
+                    newTag.ChangeTypeId(wallTagId);
+#else
                     IndependentTag newTag = IndependentTag.Create(Document, wallTagId, Document.ActiveView.Id, reference, true, TagOrientation.Horizontal, xyz);
+#endif
                     newTagsCount++;
                 }
                 foreach (FamilyInstance fi in deckenInstances)
@@ -75,7 +80,12 @@ namespace Functions
                     LocationPoint lp = fi.Location as LocationPoint;
                     XYZ xyz = lp.Point;
                     Reference reference = new Reference(element);
+#if DEBUG2018 || RELEASE2018
+                    IndependentTag newTag = IndependentTag.Create(Document, Document.ActiveView.Id, reference, true, TagMode.TM_ADDBY_CATEGORY, TagOrientation.Horizontal, xyz);
+                    newTag.ChangeTypeId(ceilingTagId);
+#else
                     IndependentTag newTag = IndependentTag.Create(Document, ceilingTagId, Document.ActiveView.Id, reference, true, TagOrientation.Horizontal, xyz);
+#endif
                     XYZ thPos = newTag.TagHeadPosition;
                     XYZ newPosition = new XYZ(thPos.X, thPos.Y + 0.1, thPos.Z);
                     newTag.TagHeadPosition = newPosition;
@@ -89,7 +99,12 @@ namespace Functions
                     LocationPoint lp = fi.Location as LocationPoint;
                     XYZ xyz = lp.Point;
                     Reference reference = new Reference(element);
+#if DEBUG2018 || RELEASE2018
+                    IndependentTag newTag = IndependentTag.Create(Document, Document.ActiveView.Id, reference, true, TagMode.TM_ADDBY_CATEGORY, TagOrientation.Horizontal, xyz);
+                    newTag.ChangeTypeId(floorTagId);
+#else
                     IndependentTag newTag = IndependentTag.Create(Document, floorTagId, Document.ActiveView.Id, reference, true, TagOrientation.Horizontal, xyz);
+#endif
                     newTagsCount++;
                 }
                 tx.Commit();
