@@ -453,6 +453,7 @@ namespace PipeFlowTool
                     }
                 }
             }
+            //summary
             if (result != null)
             {
                 if (!IsConnectorVertical(result)) return null;
@@ -460,6 +461,10 @@ namespace PipeFlowTool
                 AboveLineElements.Add(element);
                 GoesAbove = CheckAboveNextElement(result);
                 if (GoesAbove) return null;
+            }
+            else
+            {
+                return null;
             }
             if (lastConnector == null || result.Origin.Z > lastConnector.Origin.Z)
             {
@@ -536,6 +541,7 @@ namespace PipeFlowTool
                     }
                 }
             }
+            //summary
             if (result != null)
             {
                 if (!IsConnectorVertical(result)) return null;
@@ -543,6 +549,10 @@ namespace PipeFlowTool
                 BelowLineElements.Add(element);
                 GoesBelow = CheckBelowNextElement(result);
                 if (GoesBelow) return null;
+            }
+            else
+            {
+                return null;
             }
             if (lastConnector == null || result.Origin.Z < lastConnector.Origin.Z)
             {
