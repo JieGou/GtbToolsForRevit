@@ -29,7 +29,6 @@ namespace GUI
         {
             SetOwner();
             PipeFlowTagger = pipeFlowTagger;
-            PipeFlowTagger.DefaultDirections = new DefaultDirections();
             InitializeComponent();
             SetComBoxes();
         }
@@ -75,11 +74,10 @@ namespace GUI
 
         private void Btn_Click_Analyze(object sender, RoutedEventArgs e)
         {
-            PipeFlowTagger.Action = PipeFlowTool.PipeFlowToolAction.Analyze;
+            PipeFlowTagger.Action = PipeFlowToolAction.Analyze;
             PipeFlowTagger.StartEvent.Raise();
             PipeFlowTagger.SignalEvent.WaitOne();
             PipeFlowTagger.SignalEvent.Reset();
-            MyDataGrid.DataContext = PipeFlowTagger;
             PipeFlowTagger.SelectedTags = new List<FamilySymbol>();
             try
             {
@@ -89,6 +87,13 @@ namespace GUI
                 PipeFlowTagger.SelectedTags.Add(ComBoxNachUnten.SelectedItem as FamilySymbol);
                 PipeFlowTagger.SelectedTags.Add(ComBoxVonOben.SelectedItem as FamilySymbol);
                 PipeFlowTagger.SelectedTags.Add(ComBoxVonUnten.SelectedItem as FamilySymbol);
+                Btn_TagThem.IsEnabled = true;
+                //sort the list of tags
+                PipeFlowTagger.SetTaggedElementIds();
+                PipeFlowTagger.CheckExistingTags();
+                PipeFlowTagger.SetViewModelList();
+                MyDataGrid.DataContext = PipeFlowTagger;
+                MyDataGrid.Items.Refresh();
             }
             catch
             {
@@ -102,12 +107,22 @@ namespace GUI
             PipeFlowTagger.StartEvent.Raise();
             PipeFlowTagger.SignalEvent.WaitOne();
             PipeFlowTagger.SignalEvent.Reset();
+            Btn_TagThem.IsEnabled = false; ;
         }
 
         private void Btn_Click_DefaultDirections(object sender, RoutedEventArgs e)
         {
             CustomDirectionsWindow window = new CustomDirectionsWindow(PipeFlowTagger.DefaultDirections, this);
             window.ShowDialog();
+        }
+
+        private void MyDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LineViewModel item = MyDataGrid.SelectedItem as LineViewModel;
+            if (item == null) return;
+            PipeFlowTagger.SelectedItem = item.ReferencePipeId;
+            PipeFlowTagger.Action = PipeFlowToolAction.Show;
+            PipeFlowTagger.StartEvent.Raise();
         }
     }
 }

@@ -861,6 +861,11 @@ namespace GtbTools
                     pipeFlowTagger.TagAllLines();
                     pipeFlowTagger.SignalEvent.Set();
                 }
+                if (pipeFlowTagger.Action == PipeFlowTool.PipeFlowToolAction.Show)
+                {
+                    uiapp.ActiveUIDocument.Selection.SetElementIds(new List<ElementId>());
+                    pipeFlowTagger.SelectElement();
+                }
             }
             catch (Exception ex)
             {

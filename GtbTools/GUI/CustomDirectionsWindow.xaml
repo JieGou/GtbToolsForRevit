@@ -30,7 +30,7 @@
         <Label Content="SAN Kaltwasser:" HorizontalAlignment="Right" Margin="0,87,0,0" VerticalAlignment="Top"/>
         <Label Content="SAN Warmwasser:" HorizontalAlignment="Right" Margin="0,114,0,0" VerticalAlignment="Top"/>
         <Label Content="SAN Zirkulation:" HorizontalAlignment="Right" Margin="0,141,0,0" VerticalAlignment="Top"/>
-        <Label Content="HZG_Vorlauf:" HorizontalAlignment="Right" Margin="0,167,0,0" VerticalAlignment="Top"/>
+        <Label Content="HZG Vorlauf:" HorizontalAlignment="Right" Margin="0,167,0,0" VerticalAlignment="Top"/>
         <Label Content="HZG Rucklauf:" HorizontalAlignment="Right" Margin="0,195,0,0" VerticalAlignment="Top"/>
         <Label Content="KAE Vorlauf:" HorizontalAlignment="Right" Margin="0,222,0,0" VerticalAlignment="Top"/>
         <Label Content="KAE Rucklauf:" HorizontalAlignment="Right" Margin="0,249,141,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>

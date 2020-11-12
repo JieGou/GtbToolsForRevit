@@ -26,6 +26,7 @@ namespace PipeFlowTool
         public Element TagHolder { get; set; }
         public FlowToolFlag FlowToolFlag { get; set; }
         public TagOption TagOption { get; set; }
+        public bool IsTagged { get; set; } = false;
 
         double _topLevel;
         double _bottomLevel;
@@ -54,15 +55,15 @@ namespace PipeFlowTool
             return result;
         }
 
-        public void TagTheLine(List<FamilySymbol> selectedTags, Document doc, DefaultDirections defaultDirections)
+        public bool TagTheLine(List<FamilySymbol> selectedTags, Document doc, DefaultDirections defaultDirections)
         {
             SetTagOption(defaultDirections);
-            if (TagOption == TagOption.None) return;
-            if (TagHolder == null) return;
+            if (IsTagged || TagOption == TagOption.None || TagHolder == null) return false;
             FamilySymbol theTag = selectedTags[(int)TagOption];
             ElementId theTagId = theTag.Id;
             Reference reference = new Reference(TagHolder);
             IndependentTag.Create(doc, theTagId, doc.ActiveView.Id, reference, false, TagOrientation.Horizontal, _originCoords);
+            return true;
         }
 
         public void SetTagOption(DefaultDirections defaultDirections)
@@ -351,11 +352,13 @@ namespace PipeFlowTool
         private void LoopAboveElements()
         {
             Element element = ReferencePipe as Element;
+            Parameter systemTypeParameter = ReferencePipe.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM);
+            string systemTypeName = systemTypeParameter.AsValueString();
             Connector lastConnector = null;
             do
             {
                 Connector connector = FindAboveConnector(element, lastConnector);
-                element = FindConnectorOwner(connector, element);
+                element = FindConnectorOwner(connector, element, systemTypeName);
                 lastConnector = connector;
             }
             while (element != null);
@@ -364,11 +367,13 @@ namespace PipeFlowTool
         private void LoopBelowElements()
         {
             Element element = ReferencePipe as Element;
+            Parameter systemTypeParameter = ReferencePipe.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM);
+            string systemTypeName = systemTypeParameter.AsValueString();
             Connector lastConnector = null;
             do
             {
                 Connector connector = FindBelowConnector(element, lastConnector);
-                element = FindConnectorOwner(connector, element);
+                element = FindConnectorOwner(connector, element, systemTypeName);
                 lastConnector = connector;
             }
             while (element != null);
@@ -585,7 +590,7 @@ namespace PipeFlowTool
             return result;
         }
 
-        private Element FindConnectorOwner(Connector connector, Element lastElement)
+        private Element FindConnectorOwner(Connector connector, Element lastElement, string systemTypeName)
         {
             Element result = null;
             if (connector == null) return null;
@@ -594,8 +599,18 @@ namespace PipeFlowTool
             foreach (Connector c in cs)
             {
                 Element e = c.Owner;
+                if(e.Category.Id.IntegerValue == (int)BuiltInCategory.OST_PipeCurves)
+                {
+                    Pipe pipe = e as Pipe;
+                    Parameter parameter = pipe.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM);
+                    string name = parameter.AsValueString();
+                    if (name != systemTypeName) continue;
+
+                }
                 ElementId id = e.Id;
-                if (id == ElementId.InvalidElementId || id.IntegerValue == lastElement.Id.IntegerValue) continue;
+                if (id == ElementId.InvalidElementId || id.IntegerValue == lastElement.Id.IntegerValue 
+                    || e.Category.Id.IntegerValue == (int)BuiltInCategory.OST_PipeInsulations
+                        || e.Category.Id.IntegerValue == (int)BuiltInCategory.OST_PipingSystem) continue;
                 result = e;
             }
             return result;

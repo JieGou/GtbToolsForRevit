@@ -6,6 +6,7 @@ namespace PipeFlowTool
         None,
         Initialize,
         Analyze,
-        Tag
+        Tag,
+        Show
     }
 }

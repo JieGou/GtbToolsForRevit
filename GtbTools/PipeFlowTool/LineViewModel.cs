@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.Revit.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace PipeFlowTool
 {
     public class LineViewModel
     {
+        public ElementId ReferencePipeId { get; set; }
         public string ReferencePipe { get; set; }
         public List<string> AboveElements { get; set; }
         public List<string> BelowElements { get; set; }
@@ -17,6 +19,7 @@ namespace PipeFlowTool
         public string GoesAbove { get; set; }
         public string GoesBelow { get; set; }
         public string TagHolder { get; set; }
+        public string IsTagged { get; set; }
 
         VerticalPipingLine _verticalPipingLine;
 
@@ -35,10 +38,12 @@ namespace PipeFlowTool
 
         private void SetViewModel()
         {
+            ReferencePipeId = _verticalPipingLine.ReferencePipe.Id;
             ReferencePipe = _verticalPipingLine.ReferencePipe.Id.IntegerValue.ToString();
             GoesAbove = _verticalPipingLine.GoesAbove.ToString();
             GoesBelow = _verticalPipingLine.GoesBelow.ToString();
-            if(_verticalPipingLine.TagHolder != null)
+            IsTagged = _verticalPipingLine.IsTagged.ToString();
+            if (_verticalPipingLine.TagHolder != null)
             {
                 TagHolder = _verticalPipingLine.TagHolder.Id.IntegerValue.ToString();
             }
