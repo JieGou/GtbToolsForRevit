@@ -25,12 +25,12 @@ namespace GtbTools
 		public bool RemoveLog { get; set; } = true;
 		
 		
-		public ErrorLog()
+		public ErrorLog(string plugInVersion)
 		{
 			CreatePersonalDirectory();
 			SetLogName();
 			SetFilePath();
-			CreateLog();
+			CreateLog(plugInVersion);
 		}
 		
 		public void WriteToLog(string content)
@@ -43,13 +43,14 @@ namespace GtbTools
 			if(LogCreated && RemoveLog) File.Delete(FilePath);
 		}
 		
-		private void CreateLog()
+		private void CreateLog(string plugInVersion)
 		{
 			if(LogCreated)
 			{
 				try 
 				{
 					File.WriteAllText(FilePath, "Log initiated:" + Environment.NewLine + Environment.NewLine);
+					File.AppendAllText(FilePath, plugInVersion + Environment.NewLine);
 				} 
 				catch (Exception ex) 
 				{

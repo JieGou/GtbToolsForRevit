@@ -66,7 +66,7 @@ namespace GtbTools
         public Result OnStartup(UIControlledApplication application)
         {
             _app = this;
-            ErrorLog = new ErrorLog();
+            ErrorLog = new ErrorLog(PlugInVersion);
             DurchbruchMemoryViewModel = new DurchbruchMemoryViewModel();
             DurchbruchRotationFix = new Functions.DurchbruchRotationFix();
             RevitOpenedViews = new Functions.RevitOpenedViews();
