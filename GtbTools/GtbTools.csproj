@@ -171,6 +171,8 @@
     <Compile Include="ExStorage\OpeningMemoryString.cs" />
     <Compile Include="ExStorage\SymbolToolString.cs" />
     <Compile Include="FamilyTools\CheckboxLabelReplace.cs" />
+    <Compile Include="FamilyTools\ConnectorParameters.cs" />
+    <Compile Include="FamilyTools\FamilyModel.cs" />
     <Compile Include="Functions\CopyParameterFromHost.cs" />
     <Compile Include="Functions\CuttingElementSearch.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />

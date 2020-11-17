@@ -1,6 +1,7 @@
 ﻿using FamilyTools;
 using OwnerSearch;
 using System.Windows;
+using System.Windows.Media;
 
 namespace GUI
 {
@@ -10,9 +11,11 @@ namespace GUI
     public partial class FamilyToolsWindow : Window
     {
         CheckboxLabelReplace _checkboxLabelReplace;
-        public FamilyToolsWindow(CheckboxLabelReplace checkboxLabelReplace)
+        ConnectorParameters _connectorParameters;
+        public FamilyToolsWindow(CheckboxLabelReplace checkboxLabelReplace, ConnectorParameters connectorParameters)
         {
             _checkboxLabelReplace = checkboxLabelReplace;
+            _connectorParameters = connectorParameters;
             SetOwner();
             InitializeComponent();
         }
@@ -48,6 +51,20 @@ namespace GUI
         private void Btn_Click_FindTypesByVisibility(object sender, RoutedEventArgs e)
         {
             _checkboxLabelReplace.AlignTypesByVisibility();
+        }
+
+        private void Btn_Click_ConSharedPar(object sender, RoutedEventArgs e)
+        {
+            bool result = int.TryParse(StepNo.Text, out int stepNo);
+            if(result == true)
+            {
+                _connectorParameters.Initialize(stepNo);
+                _connectorParameters.SetParameters();
+            }
+            else
+            {
+                StepNo.Foreground = Brushes.Red;
+            }
         }
     }
 }

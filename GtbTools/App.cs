@@ -25,7 +25,7 @@ namespace GtbTools
         public const string AssemblyYear = "2021";
 #endif
         public const string AssemblyMinorVersion = "3";
-        public const string AssemblyBuildVersion = "4";
+        public const string AssemblyBuildVersion = "5";
         public const string AssemblyRevisionVersion = "3";
         #endregion
 

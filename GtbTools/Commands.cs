@@ -55,8 +55,10 @@ namespace GtbTools
             errorLog.WriteToLog("FamilyEdit Tool");
             try
             {
+                DefinitionFile definitionFile = commandData.Application.Application.OpenSharedParameterFile();
+                ConnectorParameters connectorParameters = new ConnectorParameters(commandData.Application.ActiveUIDocument.Document, definitionFile);                
                 CheckboxLabelReplace checkboxLabelReplace = new CheckboxLabelReplace(commandData.Application.ActiveUIDocument.Document);
-                FamilyToolsWindow window = new FamilyToolsWindow(checkboxLabelReplace);
+                FamilyToolsWindow window = new FamilyToolsWindow(checkboxLabelReplace, connectorParameters);
                 window.ShowDialog();
                 return Result.Succeeded;
             }
