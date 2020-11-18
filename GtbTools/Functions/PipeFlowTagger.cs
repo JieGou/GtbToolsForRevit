@@ -50,6 +50,7 @@ namespace Functions
         }
 
         Dictionary<string, List<XYZ>> _systemUsedCoordinates;
+        Dictionary<XYZ, List<Pipe>> _sameCoordinatePipes;
         List<IndependentTag> _allViewTags;
         List<IndependentTag> _pipeFlowTags;
         List<ElementId> _taggedElementIds;
@@ -88,6 +89,7 @@ namespace Functions
         {
             UsedCoordinates = new List<XYZ>();
             _systemUsedCoordinates = new Dictionary<string, List<XYZ>>();
+            _sameCoordinatePipes = new Dictionary<XYZ, List<Pipe>>();
             SetActiveView(); //added from initialize
             SetViewLevels(); //added from initialize
             SetAnnotationSymbols(); //added from initialize
@@ -309,6 +311,16 @@ namespace Functions
                 List<XYZ> newList = new List<XYZ>() { origin };
                 _systemUsedCoordinates.Add(systemTypeName, newList);
             }
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if the pipe has direct connection with exisitng pipes in the same coordinates
+        /// </summary>
+        private bool HasDirectConnection(Pipe p)
+        {
+            bool result = false;
+
             return result;
         }
 

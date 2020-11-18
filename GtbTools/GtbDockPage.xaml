@@ -77,6 +77,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button Content="Annotate vertical stacks" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="200" Click="Btn_Click_AnnotateVerticalStacks"/>
+                        <Button Content="Add tag holder" IsEnabled="False" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" Width="200" Click="Btn_Click_AddTagHolder" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">

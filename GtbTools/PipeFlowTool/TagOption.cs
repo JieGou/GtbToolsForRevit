@@ -9,6 +9,9 @@ namespace PipeFlowTool
         NachUnten,
         VonOben,
         VonUnten,
+        VentViaUp,
+        VentNachOben,
+        VentVonUnten,
         None,
     }
 }

@@ -95,19 +95,19 @@ namespace PipeFlowTool
                 if (GoesAbove && GoesBelow)
                 {
                     if (defaultDirections.SAN_Ventilation == FlowDirection.Down) TagOption = TagOption.ViaDown;
-                    if (defaultDirections.SAN_Ventilation == FlowDirection.Up) TagOption = TagOption.ViaUp;
+                    if (defaultDirections.SAN_Ventilation == FlowDirection.Up) TagOption = TagOption.VentViaUp;
                 }
                 else
                 {
                     if (GoesAbove)
                     {
                         if (defaultDirections.SAN_Ventilation == FlowDirection.Down) TagOption = TagOption.VonOben;
-                        if (defaultDirections.SAN_Ventilation == FlowDirection.Up) TagOption = TagOption.NachOben;
+                        if (defaultDirections.SAN_Ventilation == FlowDirection.Up) TagOption = TagOption.VentNachOben;
                     }
                     if (GoesBelow)
                     {
                         if (defaultDirections.SAN_Ventilation == FlowDirection.Down) TagOption = TagOption.NachUnten;
-                        if (defaultDirections.SAN_Ventilation == FlowDirection.Up) TagOption = TagOption.VonUnten;
+                        if (defaultDirections.SAN_Ventilation == FlowDirection.Up) TagOption = TagOption.VentVonUnten;
                     }
                 }
             }
@@ -290,7 +290,7 @@ namespace PipeFlowTool
             }
             if(ReducingElements.Count > 1)
             {
-                FlowToolFlag = FlowToolFlag.MultiRedElements;
+                FlowToolFlag = FlowToolFlag.MultiRedElemente;
                 return;
             }
             if(ViaElements.Count > 0)
@@ -303,7 +303,7 @@ namespace PipeFlowTool
                 TagHolder = EndElements.FirstOrDefault();
                 return;
             }
-            FlowToolFlag = FlowToolFlag.NoElements;
+            FlowToolFlag = FlowToolFlag.KeineElemente;
         }
 
         private void CategorizeElements()

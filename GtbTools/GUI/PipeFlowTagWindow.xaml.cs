@@ -64,6 +64,18 @@ namespace GUI
             ComBoxVonUnten.ItemsSource = PipeFlowTagger.PipeFittingTags;
             ComBoxVonUnten.DisplayMemberPath = "Name";
             SetSelectedValue(ComBoxVonUnten, "von", "unten");
+
+            ComBoxDurchVent.ItemsSource = PipeFlowTagger.PipeFittingTags;
+            ComBoxDurchVent.DisplayMemberPath = "Name";
+            SetSelectedValue(ComBoxDurchVent, "ventilation", "durchgehend");
+
+            ComBoxNachObenVent.ItemsSource = PipeFlowTagger.PipeFittingTags;
+            ComBoxNachObenVent.DisplayMemberPath = "Name";
+            SetSelectedValue(ComBoxNachObenVent, "ventilation", "oben");
+
+            ComBoxVonUntenVent.ItemsSource = PipeFlowTagger.PipeFittingTags;
+            ComBoxVonUntenVent.DisplayMemberPath = "Name";
+            SetSelectedValue(ComBoxVonUntenVent, "ventilation", "unten");
         }
 
         private void SetSelectedValue(ComboBox cbox, string filter1, string filter2)
@@ -87,6 +99,10 @@ namespace GUI
                 PipeFlowTagger.SelectedTags.Add(ComBoxNachUnten.SelectedItem as FamilySymbol);
                 PipeFlowTagger.SelectedTags.Add(ComBoxVonOben.SelectedItem as FamilySymbol);
                 PipeFlowTagger.SelectedTags.Add(ComBoxVonUnten.SelectedItem as FamilySymbol);
+                PipeFlowTagger.SelectedTags.Add(ComBoxDurchVent.SelectedItem as FamilySymbol);
+                PipeFlowTagger.SelectedTags.Add(ComBoxNachObenVent.SelectedItem as FamilySymbol);
+                PipeFlowTagger.SelectedTags.Add(ComBoxVonUntenVent.SelectedItem as FamilySymbol);
+
                 Btn_TagThem.IsEnabled = true;
                 //sort the list of tags
                 PipeFlowTagger.SetTaggedElementIds();

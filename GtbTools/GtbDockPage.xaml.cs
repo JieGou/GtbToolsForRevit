@@ -243,5 +243,10 @@ namespace GtbTools.Forms
             _pipeFlowTagger.Action = PipeFlowTool.PipeFlowToolAction.Initialize;
             _pipeFlowTagger.StartEvent.Raise();
         }
+
+        private void Btn_Click_AddTagHolder(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
