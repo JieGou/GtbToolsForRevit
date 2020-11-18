@@ -104,8 +104,8 @@ namespace FamilyTools
             int maxStepNo = stepNo;
             FilteredElementCollector ficol = new FilteredElementCollector(_doc);
             _pipeFittingFamilies = ficol.OfClass(typeof(Family)).Select(e => e as Family)
-                                            .Where(e => e.FamilyCategoryId.IntegerValue == (int)BuiltInCategory.OST_PipeFitting 
-                                                && CheckPartType(e) && !ParametersExist(e) && !SkipFamily(e) && HasConnectors(e)).ToList();
+                                            .Where(e => e.FamilyCategoryId.IntegerValue == (int)BuiltInCategory.OST_PipeFitting
+                                                && !SkipFamily(e) && CheckPartType(e) && !ParametersExist(e) && HasConnectors(e)).ToList();
             if (stepNo > _pipeFittingFamilies.Count) maxStepNo = _pipeFittingFamilies.Count;
             _pipeFittingFamilies = _pipeFittingFamilies.OrderBy(e => e.Name).ToList().Take(stepNo).ToList();
         }

@@ -39,7 +39,7 @@ namespace GtbTools
                                 AssemblyBuildVersion,
                                 AssemblyRevisionVersion);
             }
-        }
+        }       
 
         public static string ExecutingAssemblyPath { get { return Assembly.GetExecutingAssembly().Location; } }
         public ErrorLog ErrorLog { get; set; }

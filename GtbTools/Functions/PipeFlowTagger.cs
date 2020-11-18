@@ -88,6 +88,9 @@ namespace Functions
         {
             UsedCoordinates = new List<XYZ>();
             _systemUsedCoordinates = new Dictionary<string, List<XYZ>>();
+            SetActiveView(); //added from initialize
+            SetViewLevels(); //added from initialize
+            SetAnnotationSymbols(); //added from initialize
             CheckFlags();
             FindReferencePipes();
             CreatePipingLines();
@@ -178,7 +181,28 @@ namespace Functions
         private  void FindReferencePipes()
         {
             FilteredElementCollector ficol = new FilteredElementCollector(Document, _activeView.Id);
-            ReferencePipes = ficol.OfClass(typeof(Pipe)).Select(x => x as Pipe).Where(p => IsPipeVertical(p) && !IsLocationUsedBySystem(p)).ToList();
+            ReferencePipes = ficol.OfClass(typeof(Pipe)).Select(x => x as Pipe).Where(p => IsPipeVertical(p) && !IsLocationUsedBySystem(p) && !ConnectorsOutOfRange(p)).ToList();
+        }
+
+        private bool ConnectorsOutOfRange(Pipe pipe)
+        {
+            bool result = false;
+            ConnectorManager cm = pipe.ConnectorManager;
+            ConnectorSet cs = cm.Connectors;
+            List<Connector> cList = new List<Connector>();
+            double zConnector1;
+            double zConnector2;
+
+            foreach (Connector c in cs)
+            {
+                cList.Add(c);
+            }
+            zConnector1 = cList[0].Origin.Z;
+            zConnector2 = cList[1].Origin.Z;
+
+            if (zConnector1 > _topLevel && zConnector2 > _topLevel) result = true;
+            if (zConnector1 < _bottomLevel && zConnector2 < _bottomLevel) result = true;
+            return result;
         }
 
         private void SetActiveView()
