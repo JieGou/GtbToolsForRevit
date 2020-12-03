@@ -49,6 +49,7 @@ namespace GtbTools.Forms
         ExternalEvent _cutOpeningMemory;
         ExternalEvent _mepExtract;
         ExternalEvent _copyElevations;
+        ExternalEvent _raumbuchExEvent;
         RevitOpenedViews _revitOpenedViews;
         CuttingElementSearch _cuttingElementSearch;
         PipeFlowTagger _pipeFlowTagger;
@@ -64,7 +65,8 @@ namespace GtbTools.Forms
                             ExternalEvent exEventSaveCoords, ExternalEvent exEventLoadCoords, ExternalEvent exEventExcel,
                                 ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel,
                                     ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,
-                                        ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost, CuttingElementSearch cuttingElementSearch, PipeFlowTagger pipeFlowTagger)
+                                        ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost,
+                                        CuttingElementSearch cuttingElementSearch, PipeFlowTagger pipeFlowTagger, ExternalEvent raumbuchExEvent)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -82,6 +84,7 @@ namespace GtbTools.Forms
             CopyParameterFromHost = copyParameterFromHost;
             _cuttingElementSearch = cuttingElementSearch;
             _pipeFlowTagger = pipeFlowTagger;
+            _raumbuchExEvent = raumbuchExEvent;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -246,7 +249,13 @@ namespace GtbTools.Forms
 
         private void Btn_Click_AddTagHolder(object sender, RoutedEventArgs e)
         {
+            _pipeFlowTagger.Action = PipeFlowTool.PipeFlowToolAction.InsertTagHolder;
+            _pipeFlowTagger.StartEvent.Raise();
+        }
 
+        private void Btn_Click_AokRaumbuch(object sender, RoutedEventArgs e)
+        {
+            _raumbuchExEvent.Raise();
         }
     }
 }

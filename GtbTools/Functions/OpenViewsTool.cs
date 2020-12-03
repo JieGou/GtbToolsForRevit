@@ -121,11 +121,16 @@ namespace GtbTools
 			uiViewsStay.Add(GetUIView(_activeView));
 			//uiViewsRemove = uiViewList.Except(uiViewsStay).ToList();
 			
-			uiViewsRemove = uiViewList.Where(x => !uiViewsStay.Any(y => x.ViewId.IntegerValue == y.ViewId.IntegerValue)).ToList();
+			uiViewsRemove = uiViewList.Where(x => !uiViewsStay.Any(y => x != null && x.ViewId.IntegerValue == y.ViewId.IntegerValue)).ToList();
 			
 			//TaskDialog.Show("test", uiViewsRemove.Count.ToString());
 			foreach (UIView uiView in uiViewsRemove) 
 			{
+				if(uiView == null)
+                {
+					TaskDialog.Show("Warnung!", "Bitte schließen Sie die Ansichten nicht, bevor ich fertig bin!");
+					continue;
+                }
 				uiView.Close();
 			}
 		}

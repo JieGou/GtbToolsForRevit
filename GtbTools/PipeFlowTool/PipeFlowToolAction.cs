@@ -7,6 +7,7 @@ namespace PipeFlowTool
         Initialize,
         Analyze,
         Tag,
-        Show
+        Show,
+        InsertTagHolder
     }
 }

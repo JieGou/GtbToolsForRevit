@@ -67,6 +67,14 @@
     <PlatformTarget>x64</PlatformTarget>
     <DefineConstants>RELEASE;TRACE;RELEASE2019</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release2018|x64'">
+    <OutputPath>bin\x64\Release2018\</OutputPath>
+    <DefineConstants>RELEASE;TRACE;RELEASE2018</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug2021' Or '$(Configuration)' == 'Release2021'">
     <ProjectGuid>{7C6686D0-91F9-4807-B013-532F77086E60}</ProjectGuid>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
@@ -176,8 +184,13 @@
     <Compile Include="Functions\CopyParameterFromHost.cs" />
     <Compile Include="Functions\CuttingElementSearch.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
+    <Compile Include="Functions\PipeBreaker.cs" />
     <Compile Include="Functions\PipeFlowTagger.cs" />
+    <Compile Include="Functions\RaumBuchExport.cs" />
     <Compile Include="Functions\RevitOpenedViews.cs" />
+    <Compile Include="GUI\AokRaumbuchExport.xaml.cs">
+      <DependentUpon>AokRaumbuchExport.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\CopyElevationWindow.xaml.cs">
       <DependentUpon>CopyElevationWindow.xaml</DependentUpon>
     </Compile>
@@ -244,6 +257,9 @@
     <Compile Include="GUI\SymbolToolWarning.xaml.cs">
       <DependentUpon>SymbolToolWarning.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\VentileFixWindow.xaml.cs">
+      <DependentUpon>VentileFixWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ViewSelection.xaml.cs">
       <DependentUpon>ViewSelection.xaml</DependentUpon>
     </Compile>
@@ -274,12 +290,15 @@
     <Compile Include="PipeFlowTool\LineViewModel.cs" />
     <Compile Include="PipeFlowTool\PipeDirection.cs" />
     <Compile Include="PipeFlowTool\PipeFlowToolAction.cs" />
+    <Compile Include="PipeFlowTool\SameCoordinatePipes.cs" />
     <Compile Include="PipeFlowTool\TagOption.cs" />
     <Compile Include="PipeFlowTool\VerticalPipingLine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GtbDockPage.xaml.cs">
       <DependentUpon>GtbDockPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RaumBuch\ExcelOperations.cs" />
+    <Compile Include="RaumBuch\ExportedRoom.cs" />
     <Compile Include="ViewModels\DurchbruchMemoryAction.cs" />
     <Compile Include="ViewModels\DurchbruchMemoryViewModel.cs" />
     <Compile Include="ViewModels\DurchbruchShape.cs" />
@@ -303,6 +322,10 @@
     <EmbeddedResource Include="Resources\GtbInactive.png" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="GUI\AokRaumbuchExport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\CopyElevationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -368,6 +391,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\SymbolToolWarning.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\VentileFixWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

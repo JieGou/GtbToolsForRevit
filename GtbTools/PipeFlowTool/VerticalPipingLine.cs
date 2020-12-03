@@ -62,7 +62,12 @@ namespace PipeFlowTool
             FamilySymbol theTag = selectedTags[(int)TagOption];
             ElementId theTagId = theTag.Id;
             Reference reference = new Reference(TagHolder);
+#if DEBUG2018 || RELEASE2018
+            IndependentTag newTag = IndependentTag.Create(doc, doc.ActiveView.Id, reference, false, TagMode.TM_ADDBY_CATEGORY, TagOrientation.Horizontal, _originCoords);
+            newTag.ChangeTypeId(theTagId);
+#else
             IndependentTag.Create(doc, theTagId, doc.ActiveView.Id, reference, false, TagOrientation.Horizontal, _originCoords);
+#endif
             return true;
         }
 
@@ -396,6 +401,7 @@ namespace PipeFlowTool
         private Connector FindAboveConnector(Element element, Connector lastConnector)
         {
             Connector result = null;
+            LineElements.Add(element);
             //is pipe
             if (element.Category.Id.IntegerValue == (int)BuiltInCategory.OST_PipeCurves)
             {
@@ -462,7 +468,6 @@ namespace PipeFlowTool
             if (result != null)
             {
                 if (!IsConnectorVertical(result)) return null;
-                LineElements.Add(element);
                 AboveLineElements.Add(element);
                 GoesAbove = CheckAboveNextElement(result);
                 if (GoesAbove) return null;
@@ -484,6 +489,7 @@ namespace PipeFlowTool
         private Connector FindBelowConnector(Element element, Connector lastConnector)
         {
             Connector result = null;
+            LineElements.Add(element);
             //is pipe
             if (element.Category.Id.IntegerValue == (int)BuiltInCategory.OST_PipeCurves)
             {
@@ -550,7 +556,7 @@ namespace PipeFlowTool
             if (result != null)
             {
                 if (!IsConnectorVertical(result)) return null;
-                LineElements.Add(element);
+
                 BelowLineElements.Add(element);
                 GoesBelow = CheckBelowNextElement(result);
                 if (GoesBelow) return null;

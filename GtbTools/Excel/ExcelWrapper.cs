@@ -20,6 +20,7 @@ namespace GtbTools.Excel
             {
                 object[,] ar = sheet.UsedRange.Value;
                 result.Add(sheet.Name, ar);
+                Marshal.ReleaseComObject(sheet);
             }
             excelBook.Close();
             excelApp.Quit();
@@ -37,6 +38,7 @@ namespace GtbTools.Excel
             {
                 worksheet.Cells[value.Row, value.Column] = value.Value;
             }
+            Marshal.ReleaseComObject(worksheet);
             excelBook.Close();
             excelApp.Quit();
         }

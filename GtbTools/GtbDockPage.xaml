@@ -38,9 +38,11 @@
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button Content="Excel Cell Data Insert" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_ExcelDataImport"/>
-                        <Button Content="MEP System extract" Margin="5,5,6,5" Grid.Row="2" Click="Button_Click"/>
+                        <Button Content="MEP System Extract" Margin="5,5,6,5" Grid.Row="2" Click="Button_Click"/>
+                        <Button Content="AOK RaumBuch Export" Margin="5,5,6,5" Grid.Row="3" Click="Btn_Click_AokRaumbuch"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Durchbrüche">
@@ -77,7 +79,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button Content="Annotate vertical stacks" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="200" Click="Btn_Click_AnnotateVerticalStacks"/>
-                        <Button Content="Add tag holder" IsEnabled="False" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" Width="200" Click="Btn_Click_AddTagHolder" />
+                        <Button Content="Add tag holder" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" Width="200" Click="Btn_Click_AddTagHolder" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">

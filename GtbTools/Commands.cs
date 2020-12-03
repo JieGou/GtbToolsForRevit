@@ -3,7 +3,6 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CuttingElementTool;
 using DurchbruchRotationFix;
-using ExStorage;
 using FamilyTools;
 using Functions;
 using GtbTools.GUI;
@@ -868,6 +867,40 @@ namespace GtbTools
                     uiapp.ActiveUIDocument.Selection.SetElementIds(new List<ElementId>());
                     pipeFlowTagger.SelectElement();
                 }
+                if (pipeFlowTagger.Action == PipeFlowTool.PipeFlowToolAction.InsertTagHolder)
+                {
+                    Document doc = uiapp.ActiveUIDocument.Document;
+                    ElementId pipeId = pipeFlowTagger.SelectedItem;
+                    if (pipeId == null) return;
+                    FamilySymbol familySymbol = doc.GetElement(new ElementId(9594169)) as FamilySymbol;
+
+                    PipeBreaker pipeBreaker = PipeBreaker.Initialize(pipeId, doc);
+                    if(pipeBreaker != null) pipeBreaker.UnionCreate(familySymbol, pipeFlowTagger.GeneratingLevel);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "VerticalStackAnnotation";
+        }
+    }
+
+    class ExternalEventRaumBuch : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Annotate vertical stacks");
+            try
+            {
+                RaumBuchExport raumBuchExport = RaumBuchExport.Initialize(uiapp.ActiveUIDocument.Document);
+                raumBuchExport.DisplayWindow();
             }
             catch (Exception ex)
             {
