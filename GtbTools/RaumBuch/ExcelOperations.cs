@@ -18,8 +18,9 @@ namespace RaumBuch
 
         }
 
-		public static Dictionary<string, List<int>> GetExcelDataModel(string path)
+		public static Dictionary<string, List<int>> GetExcelDataModel(string path, out Dictionary<string, string> dictConstants)
 		{
+			dictConstants = new Dictionary<string, string>();
 			Dictionary<string, List<int>> result = new Dictionary<string, List<int>>();
 			Application excelApp = new Application();
 			Workbook excelBook = excelApp.Workbooks.Open(path);
@@ -49,6 +50,17 @@ namespace RaumBuch
 						}
 					}
 				}
+				Worksheet constants = excelBook.Sheets["Parameters&Constants"];
+                for (int i = 3; i < 101; i++)
+                {
+					string cell = (string)constants.Cells[i, 2].Text;
+					string value = (string)constants.Cells[i, 3].Text;
+					if (cell == null || cell == "") continue;
+					if (value == null) value = "";
+					dictConstants.Add(cell, value);
+                }
+
+				Marshal.ReleaseComObject(constants);
 				Marshal.ReleaseComObject(worksheet);
 				excelBook.Close(false);
 				excelApp.Quit();
@@ -65,17 +77,18 @@ namespace RaumBuch
 
 		}
 
-		public static string WriteToSheets(List<ExportedRoom> exportedRooms, string templatePath)
+		public static string WriteToSheets(List<ExportedRoom> exportedRooms, string templatePath, Dictionary<string, string> constants)
         {
 			string result = templatePath + Environment.NewLine;
 			Application excelApp = new Application();
 			Workbook excelBook = excelApp.Workbooks.Open(templatePath);
 			foreach (Worksheet worksheet in excelBook.Sheets)
             {
-				if (!TestTheSheet(worksheet))
+				int rowCorrection = 0;
+				if (!TestTheSheet(worksheet, out rowCorrection))
 				{
-					result += "Tabelle: " + worksheet.Name + ", hat ein anderes Format." + Environment.NewLine;
-					continue;
+					result += "Tabelle: " + worksheet.Name + ", hat ein anderes Format. Berechnete Zeilenkorrektur ist: " + rowCorrection.ToString() + Environment.NewLine;
+					if (rowCorrection == -1) continue;
 				}
 				ExportedRoom exportedRoom = exportedRooms.Where(e => e.MepRoomNumber == worksheet.Name).FirstOrDefault();
 				if(exportedRoom == null)
@@ -89,29 +102,34 @@ namespace RaumBuch
                 foreach (KeyValuePair<string, List<FamilyInstance>> pair in exportedRoom.ExportItems)
                 {
 					List<int> rowcol = ReadCellAddress(pair.Key);
-					int row = rowcol[0];
+					int row = rowcol[0] + rowCorrection;
 					int column = rowcol[1];
 					string fillText = pair.Value.Count.ToString();
 					worksheet.Cells[row, column] = fillText;
+					worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
 					if (pair.Key == "H69" || pair.Key == "H82" || pair.Key == "H84") kaltwasser += pair.Value.Count;
 					if (pair.Key == "H69" || pair.Key == "H82") warmwasser += pair.Value.Count;
 				}
 				if(kaltwasser > 0)
                 {
 					List<int> rowcol = ReadCellAddress("H87");
-					int row = rowcol[0];
+					int row = rowcol[0] + rowCorrection;
 					int column = rowcol[1];
 					string fillText = kaltwasser.ToString();
 					worksheet.Cells[row, column] = fillText;
+					worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
 				}
 				if (warmwasser > 0)
 				{
 					List<int> rowcol = ReadCellAddress("H88");
-					int row = rowcol[0];
+					int row = rowcol[0] + rowCorrection;
 					int column = rowcol[1];
 					string fillText = warmwasser.ToString();
 					worksheet.Cells[row, column] = fillText;
+					worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
 				}
+				WriteConstants(worksheet, constants, rowCorrection);
+				WriteParameters(worksheet, exportedRoom, rowCorrection);
 				Marshal.ReleaseComObject(worksheet);
 			}
 			string date = DateTime.Now.ToString("dd.MM.yy HH-mm-ss");
@@ -126,22 +144,53 @@ namespace RaumBuch
 			return result;
 		}
 
-		private static bool TestTheSheet(Worksheet worksheet)
+		private static bool TestTheSheet(Worksheet worksheet, out int correction)
         {
+			correction = -1;
 			bool result = false;
-				try
+			string value1 = (string)worksheet.Cells[174, 3].Text;
+
+			if (value1 != null)
+			{
+				if (value1.Contains("RJ45"))
 				{
-					string value1 = (string)worksheet.Cells[174, 3].Value;
-					if (value1 != null)
-					{
-						if (value1.Contains("RJ45")) result = true;												
-					}
-					return result;
+					result = true;
+					correction = 0;
 				}
-				catch (Exception)
-				{
-					return result;
-				}			
+				else
+                {
+					result = false;
+					object[,] ar = worksheet.UsedRange.Value;
+					int rows = worksheet.UsedRange.Rows.Count;
+					for (int i = 1; i < rows + 1; i++)
+					{
+						string check = (string)worksheet.Cells[i, 3].Text;
+						if (check == null) continue;
+						if (check == "2-fach Datendose RJ45 KAT 6")
+						{
+							correction = i - 174;
+						}
+					}
+				}
+			}
+			else
+            {
+				result = false;
+				object[,] ar = worksheet.UsedRange.Value;
+				int rows = worksheet.UsedRange.Rows.Count;
+                for (int i = 1; i < rows + 1; i++)
+                {
+					string check = (string)worksheet.Cells[i, 3].Text;
+					if (check == null) continue;
+					if(check == "2-fach Datendose RJ45 KAT 6")
+                    {
+						correction = i - 174;
+                    }
+				}
+			}
+			return result;
+				
+					
 		}
 
 		private static List<int> ReadCellAddress(string address)
@@ -157,6 +206,58 @@ namespace RaumBuch
 			return result;
         }
 
-		
+		private static void WriteConstants(Worksheet worksheet, Dictionary<string, string> constants, int rowCorrection)
+        {
+            foreach (KeyValuePair<string, string> pair in constants)
+            {
+				List<int> rowcol = ReadCellAddress(pair.Key);
+				int row = rowcol[0] + rowCorrection;
+				int column = rowcol[1];
+				worksheet.Cells[row, column] = pair.Value;
+				worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+			}
+        }
+
+		private static void WriteParameters(Worksheet worksheet, ExportedRoom space, int rowCorrection)
+        {
+			//abluft H53
+			Autodesk.Revit.DB.Parameter abluft = space.MepRoom.get_Parameter(BuiltInParameter.ROOM_ACTUAL_EXHAUST_AIRFLOW_PARAM);
+			if(abluft != null)
+            {
+				double abluftValue = abluft.AsDouble();
+				double abluftValueMetric = UnitUtils.ConvertFromInternalUnits(abluftValue, DisplayUnitType.DUT_CUBIC_METERS_PER_HOUR);
+				List<int> abRowCol = ReadCellAddress("H53");
+				int abrow = abRowCol[0] + rowCorrection;
+				int abcolumn = abRowCol[1];
+				worksheet.Cells[abrow, abcolumn] = abluftValueMetric.ToString();
+				worksheet.Cells[abrow, abcolumn].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+			}
+
+			//zuluft H54
+			Autodesk.Revit.DB.Parameter zuluft = space.MepRoom.get_Parameter(BuiltInParameter.ROOM_ACTUAL_SUPPLY_AIRFLOW_PARAM);
+			if(zuluft != null)
+            {
+				double zuluftValue = zuluft.AsDouble();
+				double zuluftValueMetric = UnitUtils.ConvertFromInternalUnits(zuluftValue, DisplayUnitType.DUT_CUBIC_METERS_PER_HOUR);
+				List<int> zuRowCol = ReadCellAddress("H54");
+				int zurow = zuRowCol[0] + rowCorrection;
+				int zucolumn = zuRowCol[1];
+				worksheet.Cells[zurow, zucolumn] = zuluftValueMetric.ToString();
+				worksheet.Cells[zurow, zucolumn].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+			}
+
+			//heizung temp O45
+			Autodesk.Revit.DB.Parameter raumTemparaturHeizung = space.MepRoom.get_Parameter(new Guid("11f8c67d-73c6-4e07-bb62-b941038dd3fa"));
+			if(raumTemparaturHeizung != null)
+            {
+				double raumTemperatur = raumTemparaturHeizung.AsDouble();
+				double raumTemperaturMetric = UnitUtils.ConvertFromInternalUnits(raumTemperatur, DisplayUnitType.DUT_CELSIUS);
+				List<int> htRowCol = ReadCellAddress("O45");
+				int htrow = htRowCol[0] + rowCorrection;
+				int htcolumn = htRowCol[1];
+				worksheet.Cells[htrow, htcolumn] = raumTemperaturMetric.ToString();
+				worksheet.Cells[htrow, htcolumn].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+			}
+		}
 	}
 }

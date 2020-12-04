@@ -42,7 +42,7 @@
                         </Grid.RowDefinitions>
                         <Button Content="Excel Cell Data Insert" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_ExcelDataImport"/>
                         <Button Content="MEP System Extract" Margin="5,5,6,5" Grid.Row="2" Click="Button_Click"/>
-                        <Button Content="AOK RaumBuch Export" Margin="5,5,6,5" Grid.Row="3" Click="Btn_Click_AokRaumbuch"/>
+                        <Button Content="RaumBuch Export" Margin="5,5,6,5" Grid.Row="3" Click="Btn_Click_AokRaumbuch"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Durchbrüche">

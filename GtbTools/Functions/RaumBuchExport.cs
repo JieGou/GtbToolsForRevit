@@ -14,6 +14,7 @@ namespace Functions
     public class RaumBuchExport
     {
         public List<ExportedRoom> ExportedRooms { get; set; }
+        public Dictionary<string, string> Constants { get; set; }
         public string ExportExcelTemplatePath { get; set; }
         public string ExportDataModelPath { get; set; }
 
@@ -45,7 +46,7 @@ namespace Functions
 
         public void SaveToExcel()
         {
-            string content = ExcelOperations.WriteToSheets(ExportedRooms, ExportExcelTemplatePath);
+            string content = ExcelOperations.WriteToSheets(ExportedRooms, ExportExcelTemplatePath, Constants);
             string directory = Path.GetDirectoryName(ExportExcelTemplatePath);
             string logName = Path.GetFileNameWithoutExtension(ExportExcelTemplatePath) + ".log";
             string saveLogPath = Path.Combine(directory, logName);
@@ -76,7 +77,9 @@ namespace Functions
 
         public bool SetExcelDataModel()
         {
-            _excelDataModel = ExcelOperations.GetExcelDataModel(ExportDataModelPath);
+            Dictionary<string, string> constants = new Dictionary<string, string>();
+            _excelDataModel = ExcelOperations.GetExcelDataModel(ExportDataModelPath, out constants);
+            Constants = constants;
             if(_excelDataModel == null)
             {
                 return false;
