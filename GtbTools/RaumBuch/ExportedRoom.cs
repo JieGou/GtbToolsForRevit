@@ -12,6 +12,7 @@ namespace RaumBuch
     public class ExportedRoom
     {
         public string MepRoomNumber { get; set; }
+        public string MepSpaceNumber { get; set; }
         public Space MepRoom { get; set; }
         public Dictionary<string, List<FamilyInstance>> ExportItems { get; set; }
         public Dictionary<string, List<FamilyInstance>> SortedItems { get; set; }
@@ -27,6 +28,7 @@ namespace RaumBuch
             _allElements = allElements;
             MepRoom = mepRoom;
             MepRoomNumber = MepRoom.get_Parameter(BuiltInParameter.SPACE_ASSOC_ROOM_NUMBER).AsString();
+            MepSpaceNumber = MepRoom.get_Parameter(BuiltInParameter.ROOM_NUMBER).AsString();
         }
 
         public void SortContainingElements(Dictionary<string, List<int>> excelDataModel)

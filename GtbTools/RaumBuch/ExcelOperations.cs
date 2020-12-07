@@ -91,7 +91,8 @@ namespace RaumBuch
 					if (rowCorrection == -1) continue;
 				}
 				ExportedRoom exportedRoom = exportedRooms.Where(e => e.MepRoomNumber == worksheet.Name).FirstOrDefault();
-				if(exportedRoom == null)
+				if(exportedRoom == null) exportedRoom = exportedRooms.Where(e => e.MepSpaceNumber == worksheet.Name).FirstOrDefault();
+				if (exportedRoom == null)
                 {
 					result += "Tabelle: " + worksheet.Name + ", kann keinen entsprechenden MepRaum im Projekt finden." + Environment.NewLine;
 					continue;
@@ -99,16 +100,54 @@ namespace RaumBuch
 				// if goes through tests then fill up the sheet
 				int kaltwasser = 0;
 				int warmwasser = 0;
-                foreach (KeyValuePair<string, List<FamilyInstance>> pair in exportedRoom.ExportItems)
+				string kaltWasFlow = "";
+				string warmWasFlow = "";
+				foreach (KeyValuePair<string, List<FamilyInstance>> pair in exportedRoom.ExportItems)
                 {
 					List<int> rowcol = ReadCellAddress(pair.Key);
 					int row = rowcol[0] + rowCorrection;
 					int column = rowcol[1];
+					if(pair.Value.Count == 0)
+                    {
+						worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+						continue;
+					}
 					string fillText = pair.Value.Count.ToString();
 					worksheet.Cells[row, column] = fillText;
 					worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
-					if (pair.Key == "H69" || pair.Key == "H82" || pair.Key == "H84") kaltwasser += pair.Value.Count;
-					if (pair.Key == "H69" || pair.Key == "H82") warmwasser += pair.Value.Count;
+					if (pair.Key == "H69" || pair.Key == "H82" || pair.Key == "H84")
+					{
+						kaltwasser += pair.Value.Count;
+						if(pair.Key == "H69")
+                        {
+                            foreach (FamilyInstance fi in pair.Value)
+                            {
+								if(fi.Id.IntegerValue == 2823259 || fi.Id.IntegerValue == 13112762)
+								{
+									kaltWasFlow += "+0.07";
+								}
+								else
+                                {
+									kaltWasFlow += "+0.07";
+									warmWasFlow += "+0.07";
+								}
+
+							}
+						}
+						if (pair.Key == "H82")
+						{
+							kaltWasFlow += "+" + pair.Value.Count.ToString() + "*0.15";
+							warmWasFlow += "+" + pair.Value.Count.ToString() + "*0.15";
+						}
+						if (pair.Key == "H84")
+						{
+							kaltWasFlow += "+" + pair.Value.Count.ToString() + "*0.1";
+						}
+					}
+					if (pair.Key == "H69" || pair.Key == "H82")
+					{
+						warmwasser += pair.Value.Count;
+					}
 				}
 				if(kaltwasser > 0)
                 {
@@ -118,7 +157,16 @@ namespace RaumBuch
 					string fillText = kaltwasser.ToString();
 					worksheet.Cells[row, column] = fillText;
 					worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
-				}
+
+                    //add formula to calculate kaltwasser flow
+                    string flow = "=" + kaltWasFlow.Substring(1);
+                    worksheet.Cells[row, column + 1].Formula = flow;
+                    worksheet.Cells[row, column + 1].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+
+                    //check that abwasser is in the room
+                    worksheet.Cells[row + 9, column] = "x";
+                    worksheet.Cells[row + 9, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+                }
 				if (warmwasser > 0)
 				{
 					List<int> rowcol = ReadCellAddress("H88");
@@ -127,7 +175,12 @@ namespace RaumBuch
 					string fillText = warmwasser.ToString();
 					worksheet.Cells[row, column] = fillText;
 					worksheet.Cells[row, column].HorizontalAlignment = XlHAlign.xlHAlignCenter;
-				}
+
+                    //add formula to calculate kaltwasser flow
+                    string flow = "=" + warmWasFlow.Substring(1);
+                    worksheet.Cells[row, column + 1].Formula = flow;
+                    worksheet.Cells[row, column + 1].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+                }
 				WriteConstants(worksheet, constants, rowCorrection);
 				WriteParameters(worksheet, exportedRoom, rowCorrection);
 				Marshal.ReleaseComObject(worksheet);
