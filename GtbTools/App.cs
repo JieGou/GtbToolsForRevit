@@ -51,6 +51,7 @@ namespace GtbTools
         public Functions.CopyParameterFromHost CopyParameterFromHost { get; set; }
         public Functions.CuttingElementSearch CuttingElementSearch { get; set; }
         public Functions.PipeFlowTagger PipeFlowTagger { get; set; }
+        public Functions.VentileFix VentileFix { get; set; }
 
         //fields to cotnrol show hide button and dock panel visibility
         RibbonItem _button;
@@ -73,6 +74,7 @@ namespace GtbTools
             CopyParameterFromHost = new Functions.CopyParameterFromHost();
             CuttingElementSearch = new Functions.CuttingElementSearch();
             PipeFlowTagger = new Functions.PipeFlowTagger();
+            VentileFix = new Functions.VentileFix();
             string path = Assembly.GetExecutingAssembly().Location;
 
             //Creating ribbon in Add-ins tab
@@ -242,9 +244,13 @@ namespace GtbTools
             IExternalEventHandler raumbuch = new ExternalEventRaumBuch();
             ExternalEvent raumbuchExEvent = ExternalEvent.Create(raumbuch);
 
+            IExternalEventHandler ventileFix = new ExEventVentileFix();
+            ExternalEvent ventileFixEvent = ExternalEvent.Create(ventileFix);
+            VentileFix.SetStartEvent(ventileFixEvent);
+
             GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, 
                                                                 DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11,
-                                                                    RevitOpenedViews, CopyParameterFromHost, CuttingElementSearch, PipeFlowTagger, raumbuchExEvent);
+                                                                    RevitOpenedViews, CopyParameterFromHost, CuttingElementSearch, PipeFlowTagger, raumbuchExEvent, VentileFix);
 
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             

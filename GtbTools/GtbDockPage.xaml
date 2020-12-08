@@ -69,10 +69,11 @@
                         <Button x:Name="FixDiameterBtn" Content="Diameter fix" HorizontalAlignment="Center" Grid.Row="7" VerticalAlignment="Center" Width="200" Click="FixDiameterBtn_Click"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Beschriftung">
+                <TabItem Header="SAN Tools">
                     <Grid Background="White">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="10"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
@@ -80,6 +81,7 @@
                         </Grid.RowDefinitions>
                         <Button Content="Annotate vertical stacks" HorizontalAlignment="Center" Margin="0" Grid.Row="1" VerticalAlignment="Center" Width="200" Click="Btn_Click_AnnotateVerticalStacks"/>
                         <Button Content="Add tag holder" HorizontalAlignment="Center" Margin="0" Grid.Row="2" VerticalAlignment="Center" Width="200" Click="Btn_Click_AddTagHolder" />
+                        <Button Content="Ventile fix tool" HorizontalAlignment="Center" Margin="0" Grid.Row="3" VerticalAlignment="Center" Width="200" Click="Btn_Click_VentileFix" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">

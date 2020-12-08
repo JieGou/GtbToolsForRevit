@@ -891,12 +891,15 @@ namespace GtbTools
         }
     }
 
+    /// <summary>
+    /// Export elements to excel, specifically to aok raumbuch
+    /// </summary>
     class ExternalEventRaumBuch : IExternalEventHandler
     {
         public void Execute(UIApplication uiapp)
         {
             ErrorLog errorLog = App.Instance.ErrorLog;
-            errorLog.WriteToLog("Annotate vertical stacks");
+            errorLog.WriteToLog("Raumbuch export");
             try
             {
                 RaumBuchExport raumBuchExport = RaumBuchExport.Initialize(uiapp.ActiveUIDocument.Document);
@@ -911,7 +914,59 @@ namespace GtbTools
         }
         public string GetName()
         {
-            return "VerticalStackAnnotation";
+            return "RaumbuchExport";
+        }
+    }
+
+    /// <summary>
+    /// Tool to fix valve types after san systems calculations
+    /// </summary>
+    class ExEventVentileFix : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Ventile Fix");
+            try
+            {
+                VentileFix ventileFix = App.Instance.VentileFix;
+                if (ventileFix.Action == VentileSizeFix.VentileFixAction.Refresh)
+                {
+                    ventileFix.Initialize(uiapp.ActiveUIDocument.Document);
+                    ventileFix.SignalEvent.Set();
+                }
+                if (ventileFix.Action == VentileSizeFix.VentileFixAction.Initialize)
+                {
+                    ventileFix.Initialize(uiapp.ActiveUIDocument.Document);
+                    ventileFix.DisplayWindow();
+                }
+                if (ventileFix.Action == VentileSizeFix.VentileFixAction.Show)
+                {
+                    if (ventileFix.SelectedItem != null) uiapp.ActiveUIDocument.Selection.SetElementIds(new List<ElementId>() { ventileFix.SelectedItem });
+                }
+                if (ventileFix.Action == VentileSizeFix.VentileFixAction.Zoom)
+                {
+                    if (ventileFix.SelectedItem != null) uiapp.ActiveUIDocument.ShowElements(ventileFix.SelectedItem);
+                }
+                if (ventileFix.Action == VentileSizeFix.VentileFixAction.FixSelected)
+                {
+                    if (ventileFix.SelectedValves != null) ventileFix.FixSelected();
+                }
+                if (ventileFix.Action == VentileSizeFix.VentileFixAction.FixAll)
+                {
+                    ventileFix.FixAll();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "VentileFix";
         }
     }
 }

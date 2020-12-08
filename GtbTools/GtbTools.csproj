@@ -188,6 +188,7 @@
     <Compile Include="Functions\PipeFlowTagger.cs" />
     <Compile Include="Functions\RaumBuchExport.cs" />
     <Compile Include="Functions\RevitOpenedViews.cs" />
+    <Compile Include="Functions\VentileFix.cs" />
     <Compile Include="GUI\AokRaumbuchExport.xaml.cs">
       <DependentUpon>AokRaumbuchExport.xaml</DependentUpon>
     </Compile>
@@ -299,6 +300,9 @@
     </Compile>
     <Compile Include="RaumBuch\ExcelOperations.cs" />
     <Compile Include="RaumBuch\ExportedRoom.cs" />
+    <Compile Include="VentileSizeFix\ChangedValve.cs" />
+    <Compile Include="VentileSizeFix\VentileFixAction.cs" />
+    <Compile Include="VentileSizeFix\VentileFixViewModel.cs" />
     <Compile Include="ViewModels\DurchbruchMemoryAction.cs" />
     <Compile Include="ViewModels\DurchbruchMemoryViewModel.cs" />
     <Compile Include="ViewModels\DurchbruchShape.cs" />
