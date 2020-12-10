@@ -31,10 +31,12 @@ namespace GtbTools.Forms
         ExternalEvent _mepExtract;
         ExternalEvent _copyElevations;
         ExternalEvent _raumbuchExEvent;
+        ExternalEvent _rotateElements;
         RevitOpenedViews _revitOpenedViews;
         CuttingElementSearch _cuttingElementSearch;
         PipeFlowTagger _pipeFlowTagger;
         VentileFix _ventileFix;
+        PipesInWallSearch _pipesInWallSearch;
 
         //private Guid m_targetGuid;
         //private DockPosition m_position = DockPosition.Bottom;
@@ -48,7 +50,8 @@ namespace GtbTools.Forms
                                 ExternalEvent exEventSymbols, ExternalEvent tagAllOpenings, DurchbruchMemoryViewModel durchbruchMemoryViewModel,
                                     ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,
                                         ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost,
-                                        CuttingElementSearch cuttingElementSearch, PipeFlowTagger pipeFlowTagger, ExternalEvent raumbuchExEvent, VentileFix ventileFix)
+                                        CuttingElementSearch cuttingElementSearch, PipeFlowTagger pipeFlowTagger, ExternalEvent raumbuchExEvent, VentileFix ventileFix,
+                                            ExternalEvent rotateElements, PipesInWallSearch pipesInWallSearch)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -68,6 +71,8 @@ namespace GtbTools.Forms
             _pipeFlowTagger = pipeFlowTagger;
             _raumbuchExEvent = raumbuchExEvent;
             _ventileFix = ventileFix;
+            _rotateElements = rotateElements;
+            _pipesInWallSearch = pipesInWallSearch;
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -224,6 +229,17 @@ namespace GtbTools.Forms
         {
             _ventileFix.Action = VentileSizeFix.VentileFixAction.Initialize;
             _ventileFix.TheEvent.Raise();
+        }
+
+        private void Btn_Click_RotateElements(object sender, RoutedEventArgs e)
+        {
+            _rotateElements.Raise();
+        }
+
+        private void PipesInWallBtn_Click(object sender, RoutedEventArgs e)
+        {
+            _pipesInWallSearch.Action = PipesInWall.PipesInWallAction.Initialize;
+            _pipesInWallSearch.TheEvent.Raise();
         }
     }
 }

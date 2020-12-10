@@ -183,11 +183,15 @@
     <Compile Include="FamilyTools\FamilyModel.cs" />
     <Compile Include="Functions\CopyParameterFromHost.cs" />
     <Compile Include="Functions\CuttingElementSearch.cs" />
+    <Compile Include="Functions\ForceConnection.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
     <Compile Include="Functions\PipeBreaker.cs" />
     <Compile Include="Functions\PipeFlowTagger.cs" />
+    <Compile Include="Functions\PipesInWallSearch.cs" />
     <Compile Include="Functions\RaumBuchExport.cs" />
     <Compile Include="Functions\RevitOpenedViews.cs" />
+    <Compile Include="Functions\SanRotation.cs" />
+    <Compile Include="Functions\SelectionFilter.cs" />
     <Compile Include="Functions\VentileFix.cs" />
     <Compile Include="GUI\AokRaumbuchExport.xaml.cs">
       <DependentUpon>AokRaumbuchExport.xaml</DependentUpon>
@@ -240,6 +244,9 @@
       <DependentUpon>FamilyToolsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\GtbWindowResult.cs" />
+    <Compile Include="GUI\InputDialog.xaml.cs">
+      <DependentUpon>InputDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MemoryFunctionOptimisation.xaml.cs">
       <DependentUpon>MemoryFunctionOptimisation.xaml</DependentUpon>
     </Compile>
@@ -248,6 +255,9 @@
     </Compile>
     <Compile Include="GUI\PipeFlowTagWindow.xaml.cs">
       <DependentUpon>PipeFlowTagWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\PipesInWallWindow.xaml.cs">
+      <DependentUpon>PipesInWallWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\ProcessWindow.xaml.cs">
       <DependentUpon>ProcessWindow.xaml</DependentUpon>
@@ -294,6 +304,12 @@
     <Compile Include="PipeFlowTool\SameCoordinatePipes.cs" />
     <Compile Include="PipeFlowTool\TagOption.cs" />
     <Compile Include="PipeFlowTool\VerticalPipingLine.cs" />
+    <Compile Include="PipesInWall\PipeModel.cs" />
+    <Compile Include="PipesInWall\PipesInWallAction.cs" />
+    <Compile Include="PipesInWall\PipesInWallViewModel.cs" />
+    <Compile Include="PipesInWall\PipeStatus.cs" />
+    <Compile Include="PipesInWall\PipeViewModel.cs" />
+    <Compile Include="PipesInWall\WallFamily.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GtbDockPage.xaml.cs">
       <DependentUpon>GtbDockPage.xaml</DependentUpon>
@@ -374,6 +390,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\InputDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\MemoryFunctionOptimisation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -383,6 +403,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\PipeFlowTagWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\PipesInWallWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -417,5 +441,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\FamilyEdit.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

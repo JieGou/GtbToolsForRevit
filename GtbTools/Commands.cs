@@ -969,4 +969,89 @@ namespace GtbTools
             return "VentileFix";
         }
     }
+
+    /// <summary>
+    /// Rotates elements around pipe fitting left right axis
+    /// </summary>
+    class ExEventRotateElements : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("SAN Rotate elements");
+            try
+            {
+                SelectionFilter selectionFilter = new SelectionFilter();
+                SanRotation sanRotation = new SanRotation(uiapp.ActiveUIDocument);
+                sanRotation.RotateElements(selectionFilter, errorLog);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "SanRotateElements";
+        }
+    }
+
+    /// <summary>
+    /// Force connection between two fittings (its open connectors)
+    /// </summary>
+    class ExEventForceConnection : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("SAN Force Connection");
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "SanForceConnection";
+        }
+    }
+
+    /// <summary>
+    /// Search pipes in walls and assigns specific status
+    /// </summary>
+    class ExEventPipesInWall : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Pipes in Wall search tool");
+            try
+            {
+                PipesInWallSearch pipesInWallSearch = App.Instance.PipesInWallSearch;
+                if(pipesInWallSearch.Action == PipesInWall.PipesInWallAction.Initialize)
+                {
+                    pipesInWallSearch.Initialize(uiapp.ActiveUIDocument);
+                    pipesInWallSearch.DisplayWindow();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "PipesInWallSearch";
+        }
+    }
 }
