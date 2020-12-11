@@ -18,6 +18,8 @@ namespace PipesInWall
         public List<Wall> WallInstances { get; set; }
         public List<PipeModel> PipeModels { get; set; }
         public List<PipeViewModel> PipeViewModels { get; set; }
+        public ElementId SelectedElement { get; set; }
+        public string ExcludeSystemString { get; set; } = "";
 
         Document _document;
         Document _linkedDocument;
@@ -35,6 +37,19 @@ namespace PipesInWall
             result.SetLinks();
 
             return result;
+        }
+
+        public void SetPipeDescriptions()
+        {
+            using(Transaction tx = new Transaction(_document, "Setting pipe descriptions"))
+            {
+                tx.Start();
+                foreach (PipeModel pm in PipeModels)
+                {
+                    pm.SetParameters();
+                }
+                tx.Commit();
+            }
         }
 
         public void SetLinks()
@@ -76,7 +91,6 @@ namespace PipesInWall
             {
                 if(wf.IsSelected)
                 {
-                    TaskDialog.Show("info", wf.FamilyName + " is selected");
                     foreach (WallType wt in wf.WallTypes)
                     {
                         SelectedWallTypeIds.Add(wt.Id);
@@ -89,7 +103,6 @@ namespace PipesInWall
         {
             FilteredElementCollector ficol = new FilteredElementCollector(_linkedDocument).OfClass(typeof(Wall));
             WallInstances = ficol.Select(e => e as Wall).Where(e => SelectedWallTypeIds.Contains(e.GetTypeId())).ToList();
-            TaskDialog.Show("info", WallInstances.Count.ToString());
         }
 
         public void AnalyzePipes()
@@ -100,23 +113,22 @@ namespace PipesInWall
             {
                 foreach (Pipe pipe in _nonVericalPipes)
                 {
-                    if(OnePointIsInside(wall, pipe))
+                    if (OnePointIsInside(wall, pipe))
                     {
-                        TaskDialog.Show("info", "one inside");
-
                         PipeModel pipeModel = new PipeModel(pipe);
                         pipeModel.SetProperties();
                         pipeModel.PipeStatus = PipeStatus.OnePoint;
+                        pipeModel.SetConnectorModels(wall);
+                        pipeModel.SetEndResult();
                         PipeModels.Add(pipeModel);
                     }
                     if (BothPointsInsideWall(wall, pipe))
                     {
-                        TaskDialog.Show("info", "two inside");
-
-
                         PipeModel pipeModel = new PipeModel(pipe);
                         pipeModel.SetProperties();
                         pipeModel.PipeStatus = PipeStatus.TwoPointsIn;
+                        pipeModel.SetConnectorModels(wall);
+                        pipeModel.SetEndResult();
                         PipeModels.Add(pipeModel);
                     }
                 }
@@ -133,15 +145,12 @@ namespace PipesInWall
                 model.SetViewModel();
                 PipeViewModels.Add(model);
             }
-            TaskDialog.Show("pipe view models", PipeViewModels.Count.ToString());
-
         }
 
         private void GetAllNonVerticalPipes()
         {
             FilteredElementCollector ficol = new FilteredElementCollector(_document).OfClass(typeof(Pipe));
-            _nonVericalPipes = ficol.Select(e => e as Pipe).Where(e => !IsPipeVertical(e)).ToList();
-            TaskDialog.Show("non vertical", _nonVericalPipes.Count.ToString());
+            _nonVericalPipes = ficol.Select(e => e as Pipe).Where(e => !IsPipeVertical(e) && !IsOfBlzSystem(e)).ToList();
         }
 
         private bool IsPipeVertical(Pipe pipe)
@@ -152,6 +161,15 @@ namespace PipesInWall
             XYZ direction = l.Direction;
             double test = Math.Sin(Math.PI / 180 * 89);
             if (Math.Abs(direction.Z) >= test) result = true;
+            return result;
+        }
+
+        private bool IsOfBlzSystem(Pipe pipe)
+        {
+            bool result = false;
+            Parameter p = pipe.get_Parameter(BuiltInParameter.RBS_PIPING_SYSTEM_TYPE_PARAM);
+            string test = p.AsValueString().ToUpper();
+            if (test.Contains("BLZ")) result = true;
             return result;
         }
 
@@ -199,6 +217,13 @@ namespace PipesInWall
             Line line = lc.Curve as Line;
             IList<XYZ> points = line.Tessellate();
 
+            ConnectorSet cs = pipe.ConnectorManager.Connectors;
+            List<Connector> connectors = new List<Connector>();
+            foreach (Connector c in cs)
+            {
+                connectors.Add(c);
+            }
+
             XYZ point1 = points[0];
             XYZ point2 = points[1];
 
@@ -233,5 +258,7 @@ namespace PipesInWall
                 return false;
             }
         }
+
+
     }
 }

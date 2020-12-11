@@ -1041,6 +1041,15 @@ namespace GtbTools
                     pipesInWallSearch.Initialize(uiapp.ActiveUIDocument);
                     pipesInWallSearch.DisplayWindow();
                 }
+                if (pipesInWallSearch.Action == PipesInWall.PipesInWallAction.Show)
+                {
+                    pipesInWallSearch.SelectElement();
+                }
+                if (pipesInWallSearch.Action == PipesInWall.PipesInWallAction.Apply)
+                {
+                    pipesInWallSearch.PipesInWallViewModel.SetPipeDescriptions();
+                    pipesInWallSearch.SignalEvent.Set();
+                }
             }
             catch (Exception ex)
             {

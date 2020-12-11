@@ -1,4 +1,6 @@
 ﻿using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Functions;
 using OwnerSearch;
 using PipesInWall;
 using System;
@@ -22,12 +24,12 @@ namespace GUI
     /// </summary>
     public partial class PipesInWallWindow : Window
     {
-        public PipesInWallViewModel PipesInWallViewModel { get; set; }
+        PipesInWallSearch PipesInWallSearch { get; set; }
 
-        public PipesInWallWindow(PipesInWallViewModel pipesInWallViewModel)
+        public PipesInWallWindow(PipesInWallSearch pipesInWallSearch)
         {
-            PipesInWallViewModel = pipesInWallViewModel;
-            this.DataContext = this;
+            PipesInWallSearch = pipesInWallSearch;
+            this.DataContext = pipesInWallSearch;
             SetOwner();
             InitializeComponent();
         }
@@ -41,16 +43,17 @@ namespace GUI
         private void Btn_Click_ArcAnalyze(object sender, RoutedEventArgs e)
         {
             //logic
-            PipesInWallViewModel.GetSelectedWallTypes();
-            PipesInWallViewModel.GetAllWallInstances();
+            PipesInWallSearch.PipesInWallViewModel.GetSelectedWallTypes();
+            PipesInWallSearch.PipesInWallViewModel.GetAllWallInstances();
             BtnTgaAnalyze.IsEnabled = true;
+            MessageBox.Show("Architecture model has been analyzed!");
         }
 
         private void ComboBoxLinks_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            PipesInWallViewModel.SelectedLink = ComboBoxLinks.SelectedItem as RevitLinkInstance;
-            PipesInWallViewModel.SetWallFamilies();
-            WallFamiliesBox.ItemsSource = PipesInWallViewModel.WallFamilies;
+            PipesInWallSearch.PipesInWallViewModel.SelectedLink = ComboBoxLinks.SelectedItem as RevitLinkInstance;
+            PipesInWallSearch.PipesInWallViewModel.SetWallFamilies();
+            WallFamiliesBox.ItemsSource = PipesInWallSearch.PipesInWallViewModel.WallFamilies;
             BtnArcAnalyze.IsEnabled = true;
             BtnTgaAnalyze.IsEnabled = false;
             BtnApply.IsEnabled = false;
@@ -59,15 +62,28 @@ namespace GUI
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
             //logic
-
+            PipesInWallSearch.Action = PipesInWallAction.Apply;
+            PipesInWallSearch.TheEvent.Raise();
+            PipesInWallSearch.SignalEvent.WaitOne();
+            PipesInWallSearch.SignalEvent.Reset();
+            MessageBox.Show("Pipes have been updated!");
         }
 
         private void BtnTgaAnalyze_Click(object sender, RoutedEventArgs e)
         {
             //logic
-            PipesInWallViewModel.AnalyzePipes();
-            DataGridControlList.ItemsSource = PipesInWallViewModel.PipeViewModels;
+            PipesInWallSearch.PipesInWallViewModel.AnalyzePipes();
+            DataGridControlList.ItemsSource = PipesInWallSearch.PipesInWallViewModel.PipeViewModels;
             BtnApply.IsEnabled = true;
+        }
+
+        private void DataGridControlList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PipeViewModel item = DataGridControlList.SelectedItem as PipeViewModel;
+            if (item == null) return;
+            PipesInWallSearch.PipesInWallViewModel.SelectedElement = item.PipeModel.ElementId;
+            PipesInWallSearch.Action = PipesInWallAction.Show;
+            PipesInWallSearch.TheEvent.Raise();
         }
     }
 }

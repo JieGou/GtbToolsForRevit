@@ -304,6 +304,9 @@
     <Compile Include="PipeFlowTool\SameCoordinatePipes.cs" />
     <Compile Include="PipeFlowTool\TagOption.cs" />
     <Compile Include="PipeFlowTool\VerticalPipingLine.cs" />
+    <Compile Include="PipesInWall\ConnectorResult.cs" />
+    <Compile Include="PipesInWall\ConnectorModel.cs" />
+    <Compile Include="PipesInWall\EndResult.cs" />
     <Compile Include="PipesInWall\PipeModel.cs" />
     <Compile Include="PipesInWall\PipesInWallAction.cs" />
     <Compile Include="PipesInWall\PipesInWallViewModel.cs" />
