@@ -62,19 +62,23 @@ namespace GUI
         private void BtnApply_Click(object sender, RoutedEventArgs e)
         {
             //logic
+            LblProcessing.Visibility = System.Windows.Visibility.Visible;
             PipesInWallSearch.Action = PipesInWallAction.Apply;
             PipesInWallSearch.TheEvent.Raise();
             PipesInWallSearch.SignalEvent.WaitOne();
             PipesInWallSearch.SignalEvent.Reset();
+            LblProcessing.Visibility = System.Windows.Visibility.Hidden;
             MessageBox.Show("Pipes have been updated!");
         }
 
         private void BtnTgaAnalyze_Click(object sender, RoutedEventArgs e)
         {
             //logic
+            LblProcessing.Visibility = System.Windows.Visibility.Visible;
             PipesInWallSearch.PipesInWallViewModel.AnalyzePipes();
             DataGridControlList.ItemsSource = PipesInWallSearch.PipesInWallViewModel.PipeViewModels;
             BtnApply.IsEnabled = true;
+            LblProcessing.Visibility = System.Windows.Visibility.Hidden;
         }
 
         private void DataGridControlList_SelectionChanged(object sender, SelectionChangedEventArgs e)

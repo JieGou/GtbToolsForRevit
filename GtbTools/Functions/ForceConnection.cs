@@ -12,7 +12,6 @@ namespace Functions
     public class ForceConnection
     {
         Document _document;
-        ElementId _levelId; // get this for different view types
         public ForceConnection(Document document)
         {
             _document = document;
@@ -28,7 +27,7 @@ namespace Functions
             if(references.Count == 2)
             {
                 fi1 = _document.GetElement(references[0]) as FamilyInstance;
-                fi2 = _document.GetElement(references[0]) as FamilyInstance;
+                fi2 = _document.GetElement(references[1]) as FamilyInstance;
                 if (fi1 == null || fi2 == null) return;
             }
             else
@@ -69,13 +68,26 @@ namespace Functions
             if(c1 != null && c2 != null)
             {
                 ElementId id = _document.GetDefaultElementTypeId(ElementTypeGroup.PipeType);
+                ElementId levelId = GetLevel(fi1);
                 
                 using(Transaction tx = new Transaction(_document, "ForceConnection"))
                 {
                     tx.Start();
-                    Pipe.Create(_document, id, _levelId, c1, c2);
+                    Pipe.Create(_document, id, levelId, c1, c2);
                     tx.Commit();
                 }
+            }
+        }
+
+        private ElementId GetLevel(FamilyInstance familyInstance)
+        {
+            if(_document.ActiveView.ViewType == ViewType.FloorPlan)
+            {
+                return _document.ActiveView.GenLevel.Id;
+            }
+            else
+            {
+                return familyInstance.LevelId;
             }
         }
     }

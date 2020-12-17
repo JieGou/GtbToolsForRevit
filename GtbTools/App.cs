@@ -257,10 +257,13 @@ namespace GtbTools
             ExternalEvent pipiesInWallExEvent = ExternalEvent.Create(pipesInWallSearch);
             PipesInWallSearch.SetEvent(pipiesInWallExEvent);
 
+            IExternalEventHandler forceConnection = new ExEventForceConnection();
+            ExternalEvent forceConnectionEvent = ExternalEvent.Create(forceConnection);
+
             GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, 
                                                                 DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11,
                                                                     RevitOpenedViews, CopyParameterFromHost, CuttingElementSearch, PipeFlowTagger,
-                                                                        raumbuchExEvent, VentileFix, rotateElementsExEvent, PipesInWallSearch);
+                                                                        raumbuchExEvent, VentileFix, rotateElementsExEvent, PipesInWallSearch, forceConnectionEvent);
 
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             

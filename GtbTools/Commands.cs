@@ -1,6 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.UI.Selection;
 using CuttingElementTool;
 using DurchbruchRotationFix;
 using FamilyTools;
@@ -1009,7 +1010,19 @@ namespace GtbTools
             errorLog.WriteToLog("SAN Force Connection");
             try
             {
-                
+                IList<Reference> references = null;
+                SelectionFilter selectionFilter = new SelectionFilter();
+                try
+                {
+                    references = uiapp.ActiveUIDocument.Selection.PickObjects(ObjectType.Element, selectionFilter, "Choose elements!");
+                }
+                catch
+                {
+                    errorLog.WriteToLog("User cancelled selection.");
+                }
+            if (references == null) return;
+                ForceConnection forceConnection = new ForceConnection(uiapp.ActiveUIDocument.Document);
+                forceConnection.ConnectElements(references);
             }
             catch (Exception ex)
             {

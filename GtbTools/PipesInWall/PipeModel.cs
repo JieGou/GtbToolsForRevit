@@ -48,24 +48,41 @@ namespace PipesInWall
 
         public void SetEndResult()
         {
+            //Parameter length = _pipe.get_Parameter(BuiltInParameter.CURVE_ELEM_LENGTH);
+            //double metricLength = UnitUtils.ConvertFromInternalUnits(length.AsDouble(), DisplayUnitType.DUT_MILLIMETERS);
+
             ConnectorResult cr1 = ConnectorModel1.ConnectorResult;
             ConnectorResult cr2 = ConnectorModel2.ConnectorResult;
             EndResult = EndResult.KeineIdee;
 
             //only pipe fittings
+            if(PipeStatus == PipeStatus.OnePoint)
+            {
+                if (cr1 == ConnectorResult.Rohrformteil_in && cr2 == ConnectorResult.Rohrformteil_out)
+                {
+                    EndResult = EndResult.Durchbruch;
+                }
+                if (cr1 == ConnectorResult.Rohrformteil_out && cr2 == ConnectorResult.Rohrformteil_in)
+                {
+                    EndResult = EndResult.Durchbruch;
+                }
+            }
+            if (PipeStatus == PipeStatus.TwoPointsIn)
+            {
+                if (cr1 == ConnectorResult.Rohrformteil_in && cr2 == ConnectorResult.Rohrformteil_out)
+                {
+                    EndResult = EndResult.KeinDurchbruch;
+                }
+                if (cr1 == ConnectorResult.Rohrformteil_out && cr2 == ConnectorResult.Rohrformteil_in)
+                {
+                    EndResult = EndResult.KeinDurchbruch;
+                }
+            }
             if (cr1 == ConnectorResult.Rohrformteil_in && cr2 == ConnectorResult.Rohrformteil_in)
             {
                 EndResult = EndResult.KeinDurchbruch;
             }
             if (cr1 == ConnectorResult.Rohrformteil_out && cr2 == ConnectorResult.Rohrformteil_out)
-            {
-                EndResult = EndResult.Durchbruch;
-            }
-            if (cr1 == ConnectorResult.Rohrformteil_in && cr2 == ConnectorResult.Rohrformteil_out)
-            {
-                EndResult = EndResult.Durchbruch;
-            }
-            if (cr1 == ConnectorResult.Rohrformteil_out && cr2 == ConnectorResult.Rohrformteil_in)
             {
                 EndResult = EndResult.Durchbruch;
             }
@@ -170,15 +187,14 @@ namespace PipesInWall
         {
             if(EndResult == EndResult.Anschluss)
             {
-                Parameter sud = _pipe.LookupParameter("xxx");
-                Parameter anschluss = _pipe.LookupParameter("_SUD_Hinweise_Rohre");
-                if (sud != null) sud.Set("Kein Sud");
-                if(anschluss != null) anschluss.Set("Objekt Anschluss");
+                //Parameter sud = _pipe.LookupParameter("_SuD_nicht_notwendig");
+                Parameter hinweise = _pipe.LookupParameter("_SUD_Hinweise_Rohre");
+                if(hinweise != null) hinweise.Set("Objekt Anschluss");
             }
             if (EndResult == EndResult.KeinDurchbruch)
             {
-                Parameter sud = _pipe.LookupParameter("xxx");
-                if (sud != null) sud.Set("Kein Sud");
+                Parameter hinweise = _pipe.LookupParameter("_SUD_Hinweise_Rohre");
+                if (hinweise != null) hinweise.Set("Kein Sud");
             }
         }
     }

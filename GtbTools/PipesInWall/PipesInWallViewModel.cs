@@ -41,7 +41,7 @@ namespace PipesInWall
 
         public void SetPipeDescriptions()
         {
-            using(Transaction tx = new Transaction(_document, "Setting pipe descriptions"))
+            using(Transaction tx = new Transaction(_document, "Set Pipes Hinweise"))
             {
                 tx.Start();
                 foreach (PipeModel pm in PipeModels)

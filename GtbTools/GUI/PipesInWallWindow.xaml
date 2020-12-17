@@ -14,7 +14,7 @@
         <Label Content="Linked ARC Model:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Linked Model Wandfamilien:" HorizontalAlignment="Left" Margin="10,0,0,415" VerticalAlignment="Bottom"/>
         <Label Content="Kontrollliste:" HorizontalAlignment="Right" Margin="0,0,535,415" VerticalAlignment="Bottom"/>
-
+        <Label x:Name="LblProcessing" Visibility="Hidden" Content="Processing Data..." HorizontalAlignment="Right" Margin="0,0,508,446" VerticalAlignment="Bottom"/>
 
         <Button x:Name="BtnArcAnalyze" IsEnabled="False" Content="Architecture Model analysieren" HorizontalAlignment="Left" Margin="10,63,0,0" VerticalAlignment="Top" Width="200" Click="Btn_Click_ArcAnalyze"/>
         <Button x:Name="BtnTgaAnalyze" IsEnabled="False" Content="TGA Model analysieren" HorizontalAlignment="Right" Margin="0,36,10,0" VerticalAlignment="Top" Width="600" Click="BtnTgaAnalyze_Click"/>
