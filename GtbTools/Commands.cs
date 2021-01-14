@@ -55,6 +55,8 @@ namespace GtbTools
             errorLog.WriteToLog("FamilyEdit Tool");
             try
             {
+                TaskDialogResult result = TaskDialog.Show("Warning", "Process should be run on Revit EN Version! Don't do it directly on any project! Are you sure you want to continue?", TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No);
+                if (result != TaskDialogResult.Yes) return Result.Cancelled;
                 DefinitionFile definitionFile = commandData.Application.Application.OpenSharedParameterFile();
                 ConnectorParameters connectorParameters = new ConnectorParameters(commandData.Application.ActiveUIDocument.Document, definitionFile);                
                 CheckboxLabelReplace checkboxLabelReplace = new CheckboxLabelReplace(commandData.Application.ActiveUIDocument.Document);
@@ -873,8 +875,9 @@ namespace GtbTools
                     Document doc = uiapp.ActiveUIDocument.Document;
                     ElementId pipeId = pipeFlowTagger.SelectedItem;
                     if (pipeId == null) return;
-                    FamilySymbol familySymbol = doc.GetElement(new ElementId(9594169)) as FamilySymbol;
-
+                    FilteredElementCollector ficol = new FilteredElementCollector(doc);
+                    FamilySymbol familySymbol = ficol.OfClass(typeof(FamilySymbol)).Select(e => e as FamilySymbol).Where(e => e.Family.Name.Contains("Taghalter")).FirstOrDefault();
+                    if (familySymbol == null) return;            
                     PipeBreaker pipeBreaker = PipeBreaker.Initialize(pipeId, doc);
                     if(pipeBreaker != null) pipeBreaker.UnionCreate(familySymbol, pipeFlowTagger.GeneratingLevel);
                 }

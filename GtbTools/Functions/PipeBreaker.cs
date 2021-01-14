@@ -101,6 +101,8 @@ namespace Functions
             ConnectorSet unionConnectors = (union.MEPModel as MechanicalFitting).ConnectorManager.Connectors;
             ElementId pipeTypeId = _pipe.GetTypeId();
             ElementId levelId = _pipe.ReferenceLevel.Id;
+            ElementId systemTypeId = (_pipe.MEPSystem as PipingSystem).GetTypeId();
+
             if (connector.IsConnected)
             {
                 Connector refElConnector = FindRefConnector(connector);
@@ -108,6 +110,7 @@ namespace Functions
                 Pipe pipe = Pipe.Create(_document, pipeTypeId, levelId, unionConnector, refElConnector);
                 Parameter pipeDN = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM);
                 pipeDN.Set(_pipe.Diameter);
+                pipe.SetSystemType(systemTypeId);
             }
             else
             {
@@ -116,6 +119,7 @@ namespace Functions
                 Pipe pipe = Pipe.Create(_document, pipeTypeId , levelId, unionConnector, endPoint);
                 Parameter pipeDN = pipe.get_Parameter(BuiltInParameter.RBS_PIPE_DIAMETER_PARAM);
                 pipeDN.Set(_pipe.Diameter);
+                pipe.SetSystemType(systemTypeId);
             }
         }
 

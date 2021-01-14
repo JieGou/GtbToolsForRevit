@@ -24,6 +24,7 @@ namespace GUI
     {
         SanRotation _sanRotation;
         bool _focused = false;
+        double _rotationAngle;
         public InputDialog(SanRotation sanRotation)
         {
             _sanRotation = sanRotation;
@@ -40,9 +41,9 @@ namespace GUI
 
         private bool ValidateInput()
         {
-            string expression = @"^\d+$";
-            Match match = Regex.Match(AngleBox.Text, expression);
-            return match.Success;
+            string convert = AngleBox.Text.Replace(",", ".");
+            bool isValid = double.TryParse(convert, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out _rotationAngle);
+            return isValid;
         }
 
         private void AngleBox_GotFocus(object sender, RoutedEventArgs e)
@@ -70,9 +71,7 @@ namespace GUI
 
         private void OK_Click(object sender, RoutedEventArgs e)
         {
-            int rotationAngle;
-            Int32.TryParse(AngleBox.Text, out rotationAngle);
-            _sanRotation.RotationAngle = rotationAngle;
+            _sanRotation.RotationAngle = _rotationAngle;
             Close();
         }
     }

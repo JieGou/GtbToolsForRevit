@@ -13,7 +13,7 @@ namespace Functions
 {
     public class SanRotation
     {
-        public int RotationAngle { get; set; }
+        public double RotationAngle { get; set; }
         UIDocument _uIDocument;
 
         public SanRotation(UIDocument uIDocument)
