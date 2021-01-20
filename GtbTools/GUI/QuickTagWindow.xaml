@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="QuickTagWindow" Height="250" Width="300" ResizeMode="NoResize">
+        Title="QuickTagWindow" Height="300" Width="300" ResizeMode="NoResize">
     <Grid>
         <ComboBox x:Name ="cmBoxWand" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top" Width="252"/>
         <Label Content="Wanddurchbruch Beschriftung Typ" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
@@ -15,6 +15,7 @@
         <ComboBox x:Name ="cmBoxDecken" HorizontalAlignment="Left" Margin="10,142,0,0" VerticalAlignment="Top" Width="252"/>
         <Label Content="Deckendurchbruch Beschriftung Typ" HorizontalAlignment="Left" Margin="10,116,0,0" VerticalAlignment="Top"/>
         <Button x:Name="BtnApply" Content="Einfügen" HorizontalAlignment="Center" Margin="0,179,0,0" VerticalAlignment="Top" Width="75" Click="BtnApply_Click"/>
-
+        <ComboBox x:Name="ComBoxLinked" IsEnabled="False" SelectionChanged="ComBoxLinked_SelectionChanged" HorizontalAlignment="Left" Margin="10,0,10,10" VerticalAlignment="Bottom" Width="252"/>
+        <CheckBox x:Name="CheckboxLinked" Checked="CheckboxLinked_Checked" Unchecked="CheckboxLinked_Unchecked" Content="Is opening model linked" HorizontalAlignment="Left" Margin="10,0,0,37" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

@@ -14,7 +14,17 @@ namespace Functions
     public class OpeningTagger
     {
         public Document Document { get; set; }
+        public Document LinkedDocument { get; set; }
+
         public List<FamilySymbol> GenericModelTags { get; set; }
+        public bool IsOpeningModelLinked { get; set; } = false;
+        public List<RevitLinkInstance> Links { get; set; }
+        public List<XYZ> TagHeadPositions { get; set; }
+
+        double _absoluteCutPlane;
+        double _absoluteBotomPlane;
+        double _absoluteUpperPlane;
+        List<FamilyInstance> _linkedOpenings;
 
         List<FamilyInstance> wallInstances;
         List<FamilyInstance> bodenInstances;
@@ -29,6 +39,7 @@ namespace Functions
         List<ElementId> taggedCeilingIds;
 
         int newTagsCount = 0;
+        RevitLinkInstance _selectedLinkInstance;
 
         private OpeningTagger()
         {
@@ -39,12 +50,14 @@ namespace Functions
         {
             OpeningTagger result = new OpeningTagger();
             result.Document = document;
+            result.SetRevitLinks();
             result.SetGenericModelTags();
             result.SetOpenings();
+
             return result;
         }
 
-        public  void TagThemAll()
+        public void TagThemAll()
         {
             GetAllTaggedIds();
             if (wallTagId == null || floorTagId == null || ceilingTagId == null)
@@ -113,13 +126,179 @@ namespace Functions
 
         public GtbWindowResult DisplayWindow()
         {
-            QuickTagWindow quickTagWindow = new QuickTagWindow(GenericModelTags);
+            QuickTagWindow quickTagWindow = new QuickTagWindow(GenericModelTags, Links);
             quickTagWindow.SetLists();
             quickTagWindow.ShowDialog();
             wallTagId = quickTagWindow.WandSymbol;
             floorTagId = quickTagWindow.BodenSymbol;
             ceilingTagId = quickTagWindow.DeckenSymbol;
+            IsOpeningModelLinked = quickTagWindow.IsOpeningModelLinked;
+            if(IsOpeningModelLinked && quickTagWindow.SelectedLinkInstance != null)
+            {
+                LinkedDocument = quickTagWindow.SelectedLinkInstance.GetLinkDocument();
+                _selectedLinkInstance = quickTagWindow.SelectedLinkInstance;
+            }
             return quickTagWindow.WindowResult;
+        }
+
+        public void AnnotateLinkedOpenings()
+        {
+            SetViewPlanesValues();
+            GetTaggedPositions();
+            GetLinkedOpenings();
+
+            using (Transaction tx = new Transaction(Document, "Multi tagging"))
+            {
+                tx.Start();
+                foreach (FamilyInstance fi in _linkedOpenings)
+                {
+                    ElementId categoryId = fi.Host.Category.Id;
+                    if (categoryId.IntegerValue == (int)BuiltInCategory.OST_Walls)
+                    {
+
+                        Reference reference = new Reference(fi).CreateLinkReference(_selectedLinkInstance);                      
+                        XYZ origin = (fi.Location as LocationPoint).Point;
+                        if (IsOpeningOnView(fi))
+                        {
+#if DEBUG2018 || RELEASE2018
+                            IndependentTag newTag = IndependentTag.Create(Document, Document.ActiveView.Id, reference, true, TagMode.TM_ADDBY_CATEGORY, TagOrientation.Horizontal, origin);
+                            newTag.ChangeTypeId(wallTagId);
+#else
+                            IndependentTag newTag = IndependentTag.Create(Document, wallTagId, Document.ActiveView.Id, reference, true, TagOrientation.Horizontal, origin);
+#endif
+                            if(IsPositionTaken(newTag))
+                            {
+                                Document.Delete(newTag.Id);
+                            }
+                            else
+                            {
+                                newTagsCount++;
+                            }
+                        }
+                    }
+
+                    if (categoryId.IntegerValue == (int)BuiltInCategory.OST_Floors || categoryId.IntegerValue == (int)BuiltInCategory.OST_Ceilings)
+                    {
+
+                        Reference reference = new Reference(fi).CreateLinkReference(_selectedLinkInstance);
+                        XYZ origin = (fi.Location as LocationPoint).Point;
+                        ElementId tagId;
+                        if (origin.Z > _absoluteCutPlane)
+                        {
+                            tagId = ceilingTagId;
+                        }
+                        else
+                        {
+                            tagId = floorTagId;
+                        }
+                        
+                        if (IsOpeningOnView(fi))
+                        {
+#if DEBUG2018 || RELEASE2018
+                            IndependentTag newTag = IndependentTag.Create(Document, Document.ActiveView.Id, reference, true, TagMode.TM_ADDBY_CATEGORY, TagOrientation.Horizontal, origin);
+                            newTag.ChangeTypeId(tagId);
+#else
+                            IndependentTag newTag = IndependentTag.Create(Document, tagId, Document.ActiveView.Id, reference, true, TagOrientation.Horizontal, origin);
+#endif
+                            if (IsPositionTaken(newTag))
+                            {
+                                Document.Delete(newTag.Id);
+                            }
+                            else
+                            {
+                                newTagsCount++;
+                            }
+                        }
+                    }
+                }
+                tx.Commit();
+            }
+        }
+
+        private void GetLinkedOpenings()
+        {
+            _linkedOpenings = new List<FamilyInstance>();
+            FilteredElementCollector ficol = new FilteredElementCollector(LinkedDocument);
+            List<FamilyInstance> genModelInstances = ficol.OfClass(typeof(FamilyInstance)).Select(e => e as FamilyInstance).Where(e => e.Category.Id.IntegerValue == (int)BuiltInCategory.OST_GenericModel).ToList();
+            foreach (FamilyInstance fi in genModelInstances)
+            {
+                Parameter gtbParameter = fi.get_Parameter(new Guid("4a581041-cc9c-4be4-8ab3-156d7b8e17a6"));
+                if (gtbParameter != null && gtbParameter.AsString() != "GTB_Tools_location_marker")
+                {
+                    _linkedOpenings.Add(fi);
+                }
+            }
+        }
+
+        private bool IsOpeningOnView(FamilyInstance familyInstance)
+        {
+            BoundingBoxXYZ viewBox = Document.ActiveView.get_BoundingBox(null);
+            XYZ origin = (familyInstance.Location as LocationPoint).Point;
+            bool x = true;
+            bool y = true;
+            bool z = true;
+            if (origin.X < viewBox.Min.X || origin.X > viewBox.Max.X) x = false;
+            if (origin.Y < viewBox.Min.Y || origin.Y > viewBox.Max.Y) y = false;
+            if (origin.Z < _absoluteBotomPlane - 0.001 || origin.Z > _absoluteUpperPlane + 0.001) z = false;
+            return x & y & z;
+        }
+
+        private bool IsPositionTaken(IndependentTag newTag)
+        {
+            bool result = false;
+            XYZ position = newTag.TagHeadPosition;
+            foreach (XYZ tagHead in TagHeadPositions)
+            {
+                if (position.DistanceTo(tagHead) < 0.0001) result = true;
+            }
+            return result;
+        }
+
+        private void GetTaggedPositions()
+        {
+            List<IndependentTag> genericModelTags = new FilteredElementCollector(Document, Document.ActiveView.Id).OfClass(typeof(IndependentTag))
+                                                        .Select(e => e as IndependentTag).Where(e => e.Category.Id.IntegerValue == (int)BuiltInCategory.OST_GenericModelTags).ToList();
+            TagHeadPositions = new List<XYZ>();
+            foreach (IndependentTag tag in genericModelTags)
+            {
+                TagHeadPositions.Add(tag.TagHeadPosition);
+            }
+        }
+
+        private void SetViewPlanesValues()
+        {
+            View activeView = Document.ActiveView;
+            ViewPlan viewPlan = activeView as ViewPlan;
+            PlanViewRange planViewRange = viewPlan.GetViewRange();
+            ElementId cutPlaneId = planViewRange.GetLevelId(PlanViewPlane.CutPlane);
+            double cutPlaneOffset = planViewRange.GetOffset(PlanViewPlane.CutPlane);
+            ElementId topPlaneId = planViewRange.GetLevelId(PlanViewPlane.TopClipPlane);
+            double topPlaneOffset = planViewRange.GetOffset(PlanViewPlane.TopClipPlane);
+            ElementId bottomPlaneId = planViewRange.GetLevelId(PlanViewPlane.BottomClipPlane);
+            double bottomPlaneOffset = planViewRange.GetOffset(PlanViewPlane.BottomClipPlane);
+            if (cutPlaneId.IntegerValue > 0)
+            {
+                Level level = Document.GetElement(cutPlaneId) as Level;
+                double elevation = level.Elevation;
+                _absoluteCutPlane = elevation + cutPlaneOffset;
+            }
+            if (topPlaneId.IntegerValue > 0)
+            {
+                Level level = Document.GetElement(topPlaneId) as Level;
+                double elevation = level.Elevation;
+                _absoluteUpperPlane = elevation + topPlaneOffset;
+            }
+            if (bottomPlaneId.IntegerValue > 0)
+            {
+                Level level = Document.GetElement(bottomPlaneId) as Level;
+                double elevation = level.Elevation;
+                _absoluteBotomPlane = elevation + bottomPlaneOffset;
+            }
+        }
+
+        private void SetRevitLinks()
+        {
+            Links = new FilteredElementCollector(Document).OfClass(typeof(RevitLinkInstance)).Select(e => e as RevitLinkInstance).ToList();
         }
 
         private void SetGenericModelTags()
@@ -188,6 +367,7 @@ namespace Functions
             taggedFloorIds = floorTags.Select(x => x.TaggedLocalElementId).ToList();
             taggedCeilingIds = ceilingTags.Select(x => x.TaggedLocalElementId).ToList();
         }
+
         public static bool IsValidViewType(Document doc)
         {
             bool result = false;

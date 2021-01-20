@@ -25,15 +25,21 @@ namespace GUI
         public ElementId WandSymbol { get; set; }
         public ElementId DeckenSymbol { get; set; }
         public ElementId BodenSymbol { get; set; }
+        public bool IsOpeningModelLinked { get; set; } = false;
+        public RevitLinkInstance SelectedLinkInstance { get; set; }
 
         List<FamilySymbol> _genericModelTags { get; set; }
         List<TagSymbol> _tagSymbols;
+        List<RevitLinkInstance> _links;
 
-        public QuickTagWindow(List<FamilySymbol> genericModelTags)
+        public QuickTagWindow(List<FamilySymbol> genericModelTags, List<RevitLinkInstance> links)
         {
             _genericModelTags = genericModelTags;
+            _links = links;
             SetOwner();
             InitializeComponent();
+            ComBoxLinked.ItemsSource = _links;
+            ComBoxLinked.DisplayMemberPath = "Name";           
         }
 
         private void BtnApply_Click(object sender, RoutedEventArgs e)
@@ -95,6 +101,23 @@ namespace GUI
         {
             public string Name { get; set; }
             public ElementId Id { get; set; }
+        }
+
+        private void CheckboxLinked_Checked(object sender, RoutedEventArgs e)
+        {
+            ComBoxLinked.IsEnabled = true;
+            IsOpeningModelLinked = true;
+        }
+
+        private void CheckboxLinked_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ComBoxLinked.IsEnabled = false;
+            IsOpeningModelLinked = false;
+        }
+
+        private void ComBoxLinked_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SelectedLinkInstance = (RevitLinkInstance)ComBoxLinked.SelectedItem;
         }
     }
 }

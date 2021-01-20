@@ -165,6 +165,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\CustomFunction.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="CuttingElementTool\CutElementToolAction.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="Functions\RevitOpenedViews.cs" />
     <Compile Include="Functions\SanRotation.cs" />
     <Compile Include="Functions\SelectionFilter.cs" />
+    <Compile Include="Functions\SystemTypeChanger.cs" />
     <Compile Include="Functions\VentileFix.cs" />
     <Compile Include="GUI\AokRaumbuchExport.xaml.cs">
       <DependentUpon>AokRaumbuchExport.xaml</DependentUpon>
@@ -267,6 +269,9 @@
     </Compile>
     <Compile Include="GUI\SymbolToolWarning.xaml.cs">
       <DependentUpon>SymbolToolWarning.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SystemTypeWindow.xaml.cs">
+      <DependentUpon>SystemTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\VentileFixWindow.xaml.cs">
       <DependentUpon>VentileFixWindow.xaml</DependentUpon>
@@ -422,6 +427,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\SymbolToolWarning.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\SystemTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

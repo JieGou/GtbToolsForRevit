@@ -357,9 +357,18 @@ namespace GtbTools
                     GtbWindowResult gtbWindowResult =  openingTagger.DisplayWindow();
                     if(gtbWindowResult == GtbWindowResult.Apply)
                     {
-                        openingTagger.TagThemAll();
-                        openingTagger.ShowNewTagsInfo();
+                        if(!openingTagger.IsOpeningModelLinked)
+                        {
+                            openingTagger.TagThemAll();
+                            openingTagger.ShowNewTagsInfo();
+                        }
+                        else
+                        {
+                            openingTagger.AnnotateLinkedOpenings();
+                            openingTagger.ShowNewTagsInfo();
+                        }
                     }
+                    
                 }
                 else
                 {
@@ -1077,6 +1086,42 @@ namespace GtbTools
         public string GetName()
         {
             return "PipesInWallSearch";
+        }
+    }
+
+    /// <summary>
+    /// Force piping system to change
+    /// </summary>
+    class ExEventPipingSystem : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("Piping system changer");
+            try
+            {
+                SystemTypeChanger systemTypeChanger = App.Instance.SystemTypeChanger;
+                if (systemTypeChanger.Action == Functions.Action.Initialize)
+                {
+                    systemTypeChanger.Initialize(uiapp.ActiveUIDocument);
+                    systemTypeChanger.DisplayWindow();
+                }
+                if (systemTypeChanger.Action == Functions.Action.Apply)
+                {
+                    systemTypeChanger.ChangeType();
+                    systemTypeChanger.SignalEvent.Set();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "PipingSystemChange";
         }
     }
 }

@@ -80,6 +80,7 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="10"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
@@ -88,6 +89,7 @@
                         <Button Content="Ventile fix tool" HorizontalAlignment="Center" Margin="0" Grid.Row="3" VerticalAlignment="Center" Width="200" Click="Btn_Click_VentileFix" />
                         <Button Content="Rotate elements" HorizontalAlignment="Center" Margin="0" Grid.Row="4" VerticalAlignment="Center" Width="200" Click="Btn_Click_RotateElements" />
                         <Button Content="Force connection" HorizontalAlignment="Center" Margin="0" Grid.Row="5" VerticalAlignment="Center" Width="200" Click="Btn_Click_ForceConnection" />
+                        <Button Content="Change System Type" HorizontalAlignment="Center" Margin="0" Grid.Row="6" VerticalAlignment="Center" Width="200" Click="BtnClick_ChangeSystemType" />
                     </Grid>
                 </TabItem>
                 <TabItem Header="Info">

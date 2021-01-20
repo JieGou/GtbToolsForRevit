@@ -38,6 +38,7 @@ namespace GtbTools.Forms
         VentileFix _ventileFix;
         PipesInWallSearch _pipesInWallSearch;
         ExternalEvent _forceConnection;
+        SystemTypeChanger _systemTypeChanger;
 
         //private Guid m_targetGuid;
         //private DockPosition m_position = DockPosition.Bottom;
@@ -52,7 +53,7 @@ namespace GtbTools.Forms
                                     ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,
                                         ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost,
                                         CuttingElementSearch cuttingElementSearch, PipeFlowTagger pipeFlowTagger, ExternalEvent raumbuchExEvent, VentileFix ventileFix,
-                                            ExternalEvent rotateElements, PipesInWallSearch pipesInWallSearch, ExternalEvent forceConnection)
+                                            ExternalEvent rotateElements, PipesInWallSearch pipesInWallSearch, ExternalEvent forceConnection, SystemTypeChanger systemTypeChanger)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -75,6 +76,8 @@ namespace GtbTools.Forms
             _rotateElements = rotateElements;
             _pipesInWallSearch = pipesInWallSearch;
             _forceConnection = forceConnection;
+            _systemTypeChanger = systemTypeChanger;
+
             InitializeComponent();
             LblVersion.Content += plugInVersion;
         }
@@ -247,6 +250,12 @@ namespace GtbTools.Forms
         private void Btn_Click_ForceConnection(object sender, RoutedEventArgs e)
         {
             _forceConnection.Raise();
+        }
+
+        private void BtnClick_ChangeSystemType(object sender, RoutedEventArgs e)
+        {
+            _systemTypeChanger.Action = Action.Initialize;
+            _systemTypeChanger.TheEvent.Raise();
         }
     }
 }
