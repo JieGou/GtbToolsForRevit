@@ -7,6 +7,7 @@ using GUI;
 using System.Windows.Threading;
 using Functions;
 using CuttingElementTool;
+using ExternalLinkControl;
 
 namespace GtbTools.Forms
 {
@@ -39,6 +40,7 @@ namespace GtbTools.Forms
         PipesInWallSearch _pipesInWallSearch;
         ExternalEvent _forceConnection;
         SystemTypeChanger _systemTypeChanger;
+        ExternalLinkTool _externalLinkTool;
 
         //private Guid m_targetGuid;
         //private DockPosition m_position = DockPosition.Bottom;
@@ -53,7 +55,7 @@ namespace GtbTools.Forms
                                     ExternalEvent cutOpeningMemory, ExternalEvent mepExtract, Functions.DurchbruchRotationFix rotationFix,
                                         ExternalEvent copyElevations, RevitOpenedViews revitOpenedViews, CopyParameterFromHost copyParameterFromHost,
                                         CuttingElementSearch cuttingElementSearch, PipeFlowTagger pipeFlowTagger, ExternalEvent raumbuchExEvent, VentileFix ventileFix,
-                                            ExternalEvent rotateElements, PipesInWallSearch pipesInWallSearch, ExternalEvent forceConnection, SystemTypeChanger systemTypeChanger)
+                                            ExternalEvent rotateElements, PipesInWallSearch pipesInWallSearch, ExternalEvent forceConnection, SystemTypeChanger systemTypeChanger, ExternalLinkTool externalLinkTool)
         {
             _exEventCopyCoords = exEventCopyCoords;
             _exEventOpenViews = exEventOpenViews;
@@ -77,6 +79,7 @@ namespace GtbTools.Forms
             _pipesInWallSearch = pipesInWallSearch;
             _forceConnection = forceConnection;
             _systemTypeChanger = systemTypeChanger;
+            _externalLinkTool = externalLinkTool;
 
             InitializeComponent();
             LblVersion.Content += plugInVersion;
@@ -256,6 +259,12 @@ namespace GtbTools.Forms
         {
             _systemTypeChanger.Action = Action.Initialize;
             _systemTypeChanger.TheEvent.Raise();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            _externalLinkTool.Action = ExternalLinkToolAction.Initialize;
+            _externalLinkTool.TheEvent.Raise();
         }
     }
 }

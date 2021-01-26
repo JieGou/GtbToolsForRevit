@@ -23,6 +23,8 @@
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
                             <RowDefinition Height="30"></RowDefinition>
+                            <RowDefinition Height="15"></RowDefinition>
+                            <RowDefinition Height="30"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Button Content="Ansichten Öffnen" Margin="5,5,6,5" Grid.Row="1" Click="Button_Click_OpenViews"/>
                         <Button Content="Koordinaten laden aus" Margin="5,5,6,5" Grid.Row="2" Click="Button_Click_LoadCoords"/>
@@ -30,6 +32,7 @@
                         <Button Content="Koordinaten kopieren in alle Ansichten" Margin="5,5,6,5" Grid.Row="4" Click="Button_Click_CopyCoords"/>
                         <Button Content="Save all opened views" Margin="5,5,6,5" Grid.Row="5" Click="Btn_Click_SaveAllOpenedViews"/>
                         <Button Content="Load saved views" Margin="5,5,6,5" Grid.Row="6" Click="Btn_Click_LoadAllSaved"/>
+                        <Button Content="External Links Control" Margin="5,5,6,5" Grid.Row="8" Click="Button_Click_1"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Daten Tools">

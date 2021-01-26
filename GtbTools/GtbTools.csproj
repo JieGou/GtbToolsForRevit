@@ -179,11 +179,16 @@
     <Compile Include="DurchbruchRotationFix\WindowDecision.cs" />
     <Compile Include="ExStorage\OpeningMemoryString.cs" />
     <Compile Include="ExStorage\SymbolToolString.cs" />
+    <Compile Include="ExternalLinkControl\ExternalLinkToolAction.cs" />
+    <Compile Include="ExternalLinkControl\ExternalLinkToolViewModel.cs" />
+    <Compile Include="ExternalLinkControl\RevitLinkViewModel.cs" />
+    <Compile Include="ExternalLinkControl\RevitViewModel.cs" />
     <Compile Include="FamilyTools\CheckboxLabelReplace.cs" />
     <Compile Include="FamilyTools\ConnectorParameters.cs" />
     <Compile Include="FamilyTools\FamilyModel.cs" />
     <Compile Include="Functions\CopyParameterFromHost.cs" />
     <Compile Include="Functions\CuttingElementSearch.cs" />
+    <Compile Include="Functions\ExternalLinkTool.cs" />
     <Compile Include="Functions\ForceConnection.cs" />
     <Compile Include="Functions\GetSetElevation.cs" />
     <Compile Include="Functions\PipeBreaker.cs" />
@@ -241,6 +246,12 @@
     </Compile>
     <Compile Include="GUI\ExcelDataImport.xaml.cs">
       <DependentUpon>ExcelDataImport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ExternalLinksWindow.xaml.cs">
+      <DependentUpon>ExternalLinksWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ExternalLinkViewsWindow.xaml.cs">
+      <DependentUpon>ExternalLinkViewsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\FamilyToolsWindow.xaml.cs">
       <DependentUpon>FamilyToolsWindow.xaml</DependentUpon>
@@ -391,6 +402,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GUI\ExcelDataImport.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\ExternalLinksWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GUI\ExternalLinkViewsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

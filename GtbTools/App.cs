@@ -25,7 +25,7 @@ namespace GtbTools
         public const string AssemblyYear = "2021";
 #endif
         public const string AssemblyMinorVersion = "3";
-        public const string AssemblyBuildVersion = "6";
+        public const string AssemblyBuildVersion = "7";
         public const string AssemblyRevisionVersion = "1";
         #endregion
 
@@ -54,6 +54,7 @@ namespace GtbTools
         public Functions.VentileFix VentileFix { get; set; }
         public Functions.PipesInWallSearch PipesInWallSearch { get; set; }
         public Functions.SystemTypeChanger SystemTypeChanger { get; set; }
+        public Functions.ExternalLinkTool ExternalLinkTool { get; set; }
 
         //fields to cotnrol show hide button and dock panel visibility
         RibbonItem _button;
@@ -79,6 +80,7 @@ namespace GtbTools
             VentileFix = new Functions.VentileFix();
             PipesInWallSearch = new Functions.PipesInWallSearch();
             SystemTypeChanger = new Functions.SystemTypeChanger();
+            ExternalLinkTool = new Functions.ExternalLinkTool();
             string path = Assembly.GetExecutingAssembly().Location;
 
             //Creating ribbon in Add-ins tab
@@ -266,10 +268,15 @@ namespace GtbTools
             ExternalEvent pipingSystemExEvent = ExternalEvent.Create(systemTypeChange);
             SystemTypeChanger.SetEvent(pipingSystemExEvent);
 
+            IExternalEventHandler externalLinks = new ExEventExternalLinks();
+            ExternalEvent externalLinksExEvent = ExternalEvent.Create(externalLinks);
+            ExternalLinkTool.SetEvent(externalLinksExEvent);
+
             GtbDockPage GtbDockableWindow = new GtbDockPage(PlugInVersion, exEvent, exEvent2, exEvent3, exEvent4, exEvent5, exEvent6, exEvent7, 
                                                                 DurchbruchMemoryViewModel, exEvent9, exEvent10, DurchbruchRotationFix, exEvent11,
                                                                     RevitOpenedViews, CopyParameterFromHost, CuttingElementSearch, PipeFlowTagger,
-                                                                        raumbuchExEvent, VentileFix, rotateElementsExEvent, PipesInWallSearch, forceConnectionEvent, SystemTypeChanger);
+                                                                        raumbuchExEvent, VentileFix, rotateElementsExEvent, PipesInWallSearch, forceConnectionEvent, SystemTypeChanger,
+                                                                        ExternalLinkTool);
 
             DockablePaneId dpid = new DockablePaneId(new Guid("{9F702FC8-EC07-4A80-846F-04AFA5AC8820}"));
             

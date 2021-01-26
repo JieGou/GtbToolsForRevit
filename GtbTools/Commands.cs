@@ -1124,4 +1124,40 @@ namespace GtbTools
             return "PipingSystemChange";
         }
     }
+
+    /// <summary>
+    /// External Links Control
+    /// </summary>
+    class ExEventExternalLinks : IExternalEventHandler
+    {
+        public void Execute(UIApplication uiapp)
+        {
+            ErrorLog errorLog = App.Instance.ErrorLog;
+            errorLog.WriteToLog("ExternalLinkControl");
+            try
+            {
+                ExternalLinkTool externalLinkTool = App.Instance.ExternalLinkTool;
+                if(externalLinkTool.Action == ExternalLinkControl.ExternalLinkToolAction.Initialize)
+                {
+                    externalLinkTool.Initialize(uiapp.ActiveUIDocument);
+                    externalLinkTool.DisplayWindow();
+                }
+                if (externalLinkTool.Action == ExternalLinkControl.ExternalLinkToolAction.Modify)
+                {
+                    externalLinkTool.ExternalLinkToolViewModel.ApplyChangesToViewModel();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Es ist ein Fehler aufgetreten. Error log wurde gespeichert.");
+                errorLog.WriteToLog(ex.ToString());
+                errorLog.RemoveLog = false;
+            }
+        }
+        public string GetName()
+        {
+            return "ExternalLinkControl";
+        }
+    }
 }
