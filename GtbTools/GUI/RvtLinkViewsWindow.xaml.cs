@@ -19,13 +19,13 @@ namespace GUI
     /// <summary>
     /// Interaction logic for ExternalLinkViewsWindow.xaml
     /// </summary>
-    public partial class ExternalLinkViewsWindow : Window
+    public partial class RvtLinkViewsWindow : Window
     {
         public RevitLinkViewModel RevitLinkViewModel { get; set; }
         public bool ApplyChanges = false;
         ExternalLinkTool _externalLinkTool;
 
-        public ExternalLinkViewsWindow(Window owner, RevitLinkViewModel revitLinkViewModel, ExternalLinkTool externalLinkTool)
+        public RvtLinkViewsWindow(Window owner, RevitLinkViewModel revitLinkViewModel, ExternalLinkTool externalLinkTool)
         {
             _externalLinkTool = externalLinkTool;
             Owner = owner;
@@ -73,8 +73,8 @@ namespace GUI
 
         private void BtnClick_Apply(object sender, RoutedEventArgs e)
         {
-            _externalLinkTool.ExternalLinkToolViewModel.EditedLinkViewModel = RevitLinkViewModel;
-            _externalLinkTool.Action = ExternalLinkToolAction.Modify;
+            _externalLinkTool.ExternalLinkToolViewModel.EditedRvtLinkViewModel = RevitLinkViewModel;
+            _externalLinkTool.Action = ExternalLinkToolAction.ModifyRvtLink;
             _externalLinkTool.TheEvent.Raise();
         }
     }

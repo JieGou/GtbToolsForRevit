@@ -1142,9 +1142,13 @@ namespace GtbTools
                     externalLinkTool.Initialize(uiapp.ActiveUIDocument);
                     externalLinkTool.DisplayWindow();
                 }
-                if (externalLinkTool.Action == ExternalLinkControl.ExternalLinkToolAction.Modify)
+                if (externalLinkTool.Action == ExternalLinkControl.ExternalLinkToolAction.ModifyRvtLink)
                 {
-                    externalLinkTool.ExternalLinkToolViewModel.ApplyChangesToViewModel();
+                    externalLinkTool.ExternalLinkToolViewModel.ApplyChangesInRvtLinks();
+                }
+                if (externalLinkTool.Action == ExternalLinkControl.ExternalLinkToolAction.ModifyCadLink)
+                {
+                    externalLinkTool.ExternalLinkToolViewModel.ApplyChangesInCadLinks();
                 }
 
             }

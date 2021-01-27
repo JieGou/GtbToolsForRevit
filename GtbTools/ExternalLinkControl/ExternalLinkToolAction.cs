@@ -4,6 +4,7 @@
     {
         None,
         Initialize,
-        Modify
+        ModifyRvtLink,
+        ModifyCadLink
     }
 }

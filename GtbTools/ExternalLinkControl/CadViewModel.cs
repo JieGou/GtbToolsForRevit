@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace ExternalLinkControl
 {
-    public class RevitViewModel : INotifyPropertyChanged
+    public class CadViewModel : INotifyPropertyChanged
     {
         public ElementId ViewId { get; set; }
         public View View { get; set; }
-        public RevitLinkType RevitLinkType { get; set; }
+        public CADLinkType CadLinkType { get; set; }
+        public bool CategoryExistsInView = true;
         private bool _isVisible;
         public bool IsVisible
         {
@@ -29,23 +30,23 @@ namespace ExternalLinkControl
         }
         public string ViewType { get; set; }
         public bool IsTemplate { get; set; }
-
-        private RevitViewModel()
-        {
-
-        }
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public static RevitViewModel Initialize(View view, RevitLinkType revitLinkType)
+        private CadViewModel()
         {
-            RevitViewModel result = new RevitViewModel();
+
+        }
+
+        public static CadViewModel Initialize(View view, CADLinkType cadLinkType)
+        {
+            CadViewModel result = new CadViewModel();
             result.View = view;
             result.ViewId = view.Id;
-            result.RevitLinkType = revitLinkType;
+            result.CadLinkType = cadLinkType;
             result.CheckVisibility();
             result.SetViewType();
             result.IsTemplate = result.View.IsTemplate;
@@ -54,27 +55,27 @@ namespace ExternalLinkControl
 
         public void TurnVisibilityOn(Document document)
         {
-            if (!View.IsTemplate && IsRvtControlledByTemplate(document)) return;
-            using(Transaction tx = new Transaction(document, RevitLinkType.Name + " unhidden on " + View.Name))
+            if (!View.IsTemplate && IsCadControlledByTemplate(document)) return;
+            using (Transaction tx = new Transaction(document, CadLinkType.Name + " unhidden on " + View.Name))
             {
                 tx.Start();
-                View.UnhideElements(new List<ElementId>() { RevitLinkType.Id });
+                View.SetCategoryHidden(CadLinkType.Category.Id, false);
                 tx.Commit();
             }
         }
 
         public void TurnVisibilityOff(Document document)
         {
-            if (!View.IsTemplate && IsRvtControlledByTemplate(document)) return;
-            using (Transaction tx = new Transaction(document, RevitLinkType.Name + " hidden on " + View.Name))
+            if (!View.IsTemplate && IsCadControlledByTemplate(document)) return;
+            using (Transaction tx = new Transaction(document, CadLinkType.Name + " hidden on " + View.Name))
             {
                 tx.Start();
-                View.HideElements(new List<ElementId>() { RevitLinkType.Id });
+                View.SetCategoryHidden(CadLinkType.Category.Id, true);
                 tx.Commit();
             }
         }
 
-        private bool IsRvtControlledByTemplate(Document doc)
+        private bool IsCadControlledByTemplate(Document doc)
         {
             bool result = false;
             ElementId viewTemplateId = View.ViewTemplateId;
@@ -82,7 +83,7 @@ namespace ExternalLinkControl
             {
                 View viewTemplate = doc.GetElement(viewTemplateId) as View;
                 List<int> nonControlledParameters = viewTemplate.GetNonControlledTemplateParameterIds().Select(e => e.IntegerValue).ToList();
-                if (!nonControlledParameters.Contains((int)BuiltInParameter.VIS_GRAPHICS_RVT_LINKS))
+                if (!nonControlledParameters.Contains((int)BuiltInParameter.VIS_GRAPHICS_IMPORT))
                 {
                     result = true;
                 }
@@ -92,7 +93,15 @@ namespace ExternalLinkControl
 
         private void CheckVisibility()
         {
-            IsVisible = !RevitLinkType.IsHidden(View);
+            try
+            {
+                IsVisible = CadLinkType.Category.get_Visible(View);
+            }
+            catch
+            {
+                CategoryExistsInView = false;
+                //TaskDialog.Show("Error!", View.Name + "- Can't identify visibility of: " + CadLinkType.Name);               
+            }
         }
 
         private void SetViewType()

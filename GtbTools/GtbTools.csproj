@@ -179,6 +179,8 @@
     <Compile Include="DurchbruchRotationFix\WindowDecision.cs" />
     <Compile Include="ExStorage\OpeningMemoryString.cs" />
     <Compile Include="ExStorage\SymbolToolString.cs" />
+    <Compile Include="ExternalLinkControl\CadLinkViewModel.cs" />
+    <Compile Include="ExternalLinkControl\CadViewModel.cs" />
     <Compile Include="ExternalLinkControl\ExternalLinkToolAction.cs" />
     <Compile Include="ExternalLinkControl\ExternalLinkToolViewModel.cs" />
     <Compile Include="ExternalLinkControl\RevitLinkViewModel.cs" />
@@ -202,6 +204,9 @@
     <Compile Include="Functions\VentileFix.cs" />
     <Compile Include="GUI\AokRaumbuchExport.xaml.cs">
       <DependentUpon>AokRaumbuchExport.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CadLinkViewsWindow.xaml.cs">
+      <DependentUpon>CadLinkViewsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\CopyElevationWindow.xaml.cs">
       <DependentUpon>CopyElevationWindow.xaml</DependentUpon>
@@ -250,8 +255,8 @@
     <Compile Include="GUI\ExternalLinksWindow.xaml.cs">
       <DependentUpon>ExternalLinksWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GUI\ExternalLinkViewsWindow.xaml.cs">
-      <DependentUpon>ExternalLinkViewsWindow.xaml</DependentUpon>
+    <Compile Include="GUI\RvtLinkViewsWindow.xaml.cs">
+      <DependentUpon>RvtLinkViewsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\FamilyToolsWindow.xaml.cs">
       <DependentUpon>FamilyToolsWindow.xaml</DependentUpon>
@@ -365,6 +370,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\CadLinkViewsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GUI\CopyElevationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -409,7 +418,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="GUI\ExternalLinkViewsWindow.xaml">
+    <Page Include="GUI\RvtLinkViewsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

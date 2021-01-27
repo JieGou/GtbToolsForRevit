@@ -9,7 +9,7 @@
         Title="ExternalLinksControl" Height="400" Width="344.548" Background="WhiteSmoke">
     <Grid Margin="5" Background="White">
         <Border CornerRadius="1" BorderThickness="1" BorderBrush="Gray"/>
-        <TabControl>
+        <TabControl x:Name="TabControl">
             <TabItem Header="Revit Links" TabIndex="0">
                 <DataGrid x:Name="DataGridRevitLinks" ItemsSource="{Binding RevitLinkViewModels}" AutoGenerateColumns="False">
                     <DataGrid.Columns>
@@ -25,7 +25,18 @@
                 </DataGrid>
             </TabItem>
             <TabItem Header="CAD Links" TabIndex="0">
-				
+                <DataGrid x:Name="DataGridCadLinks" ItemsSource="{Binding CadLinkViewModels}" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="LinkName" Binding="{Binding Path=CadLinkType.Name}"/>
+                        <DataGridTemplateColumn Header="View Control">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Edit" HorizontalAlignment="Center" Margin="5" VerticalAlignment="Center" Width="75" Click="BtnClick_ViewControl"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
         

@@ -41,10 +41,21 @@ namespace GUI
 
         private void BtnClick_ViewControl(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            RevitLinkViewModel sendingClass = (RevitLinkViewModel)button.DataContext;
-            ExternalLinkViewsWindow window = new ExternalLinkViewsWindow(this, sendingClass, _externalLinkTool);
-            window.ShowDialog();
+            if(TabControl.SelectedIndex == 0)
+            {
+                Button button = (Button)sender;
+                RevitLinkViewModel sendingClass = (RevitLinkViewModel)button.DataContext;
+                RvtLinkViewsWindow window = new RvtLinkViewsWindow(this, sendingClass, _externalLinkTool);
+                window.ShowDialog();
+            }
+
+            if (TabControl.SelectedIndex == 1)
+            {
+                Button button = (Button)sender;
+                CadLinkViewModel sendingClass = (CadLinkViewModel)button.DataContext;
+                CadLinkViewsWindow window = new CadLinkViewsWindow(this, sendingClass, _externalLinkTool);
+                window.ShowDialog();
+            }
         }
     }
 }
