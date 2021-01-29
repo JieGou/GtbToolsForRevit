@@ -27,7 +27,8 @@ namespace ExternalLinkControl
             RevitLinkViewModels = new List<RevitLinkViewModel>();
             CadLinkViewModels = new List<CadLinkViewModel>();
             List<View> views = GetViews();
-            TemplateControlsTheView(views);
+            //TemplateControlsTheView(views);
+            
             foreach (RevitLinkType rvtLinkType in GetRevitLinkTypes())
             {
                 ExternalFileReference fileReference = rvtLinkType.GetExternalFileReference();
@@ -45,10 +46,22 @@ namespace ExternalLinkControl
                 ExternalFileReference fileReference = cadLinkType.GetExternalFileReference();
                 if(fileReference.GetLinkedFileStatus() == LinkedFileStatus.Loaded)
                 {
-                    if (IsOneViewOnly(cadLinkType)) continue;
-                    CadLinkViewModel model = new CadLinkViewModel(cadLinkType, views);
-                    model.CreateViewModels();
-                    CadLinkViewModels.Add(model);
+                    ElementId ownerViewId = null;
+                    if (IsOneViewOnly(cadLinkType, out ownerViewId))
+                    {
+                        View oneView = _document.GetElement(ownerViewId) as View;
+                        List<View> templatesPlusOne = views.Where(e => e.IsTemplate).ToList();
+                        templatesPlusOne.Add(oneView);
+                        CadLinkViewModel model = new CadLinkViewModel(cadLinkType, templatesPlusOne);
+                        model.CreateViewModels();
+                        CadLinkViewModels.Add(model);
+                    }
+                    else
+                    {
+                        CadLinkViewModel model = new CadLinkViewModel(cadLinkType, views);
+                        model.CreateViewModels();
+                        CadLinkViewModels.Add(model);
+                    }
                 }
             }
         }
@@ -59,6 +72,10 @@ namespace ExternalLinkControl
             {
                 if (model.IsVisible) model.TurnVisibilityOn(_document);
                 if (!model.IsVisible) model.TurnVisibilityOff(_document);
+                if(!model.IsTemplate)
+                {
+                    model.ChangeViewTemplate(_document);
+                }
             }
         }
 
@@ -68,11 +85,16 @@ namespace ExternalLinkControl
             {
                 if (model.IsVisible) model.TurnVisibilityOn(_document);
                 if (!model.IsVisible) model.TurnVisibilityOff(_document);
+                if (!model.IsTemplate)
+                {
+                    model.ChangeViewTemplate(_document);
+                }
             }
         }
 
-        private bool IsOneViewOnly(CADLinkType cadLinkType)
+        private bool IsOneViewOnly(CADLinkType cadLinkType, out ElementId ownerViewId)
         {
+            ownerViewId = null;
             bool result = false;
             FilteredElementCollector ficol = new FilteredElementCollector(_document);
             ImportInstance instance = ficol.OfClass(typeof(ImportInstance)).Select(e => e as ImportInstance).Where(e => e.GetTypeId().IntegerValue == cadLinkType.Id.IntegerValue).FirstOrDefault();
@@ -81,6 +103,7 @@ namespace ExternalLinkControl
                 if(instance.OwnerViewId != null && instance.OwnerViewId != ElementId.InvalidElementId)
                 {
                     result = true;
+                    ownerViewId = instance.OwnerViewId;
                 }
             }
             return result;

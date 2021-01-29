@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GUI"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
-        Title="ExternalLinksControl" Height="400" Width="344.548" Background="WhiteSmoke">
+        Title="ExternalLinksControl" Height="450" Width="450" Background="WhiteSmoke">
     <Grid Margin="5" Background="White">
         <Border CornerRadius="1" BorderThickness="1" BorderBrush="Gray"/>
         <TabControl x:Name="TabControl">

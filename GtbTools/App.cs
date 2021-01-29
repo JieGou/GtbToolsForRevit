@@ -26,7 +26,7 @@ namespace GtbTools
 #endif
         public const string AssemblyMinorVersion = "3";
         public const string AssemblyBuildVersion = "7";
-        public const string AssemblyRevisionVersion = "1";
+        public const string AssemblyRevisionVersion = "2";
         #endregion
 
         public static string PlugInVersion

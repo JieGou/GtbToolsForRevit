@@ -13,6 +13,7 @@ namespace ExternalLinkControl
         public RevitLinkType RevitLinkType { get; set; }
 
         List<View> _views;
+        List<View> _viewTemplates;
         
         public RevitLinkViewModel(RevitLinkType revitLinkType, List<View> views)
         {
@@ -23,10 +24,21 @@ namespace ExternalLinkControl
         public void CreateViewModels()
         {
             RevitViewModels = new List<RevitViewModel>();
-            foreach(View v in _views)
+            _viewTemplates = _views.Where(e => e.IsTemplate).OrderBy(e => e.Name).ToList();
+            foreach (View v in _views)
             {
-                RevitViewModel model = RevitViewModel.Initialize(v, RevitLinkType);
+                RevitViewModel model = RevitViewModel.Initialize(v, RevitLinkType, _viewTemplates);
                 RevitViewModels.Add(model);
+            }
+        }
+
+        public void UpdateModel()
+        {
+            foreach (RevitViewModel model in RevitViewModels)
+            {
+                model.UpdateVisibility();
+                model.UpdatePreselectedTemplate();
+                model.UpdateControlledBy();
             }
         }
     }

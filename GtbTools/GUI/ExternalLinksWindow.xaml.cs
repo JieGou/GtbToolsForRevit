@@ -45,6 +45,7 @@ namespace GUI
             {
                 Button button = (Button)sender;
                 RevitLinkViewModel sendingClass = (RevitLinkViewModel)button.DataContext;
+                sendingClass.UpdateModel();
                 RvtLinkViewsWindow window = new RvtLinkViewsWindow(this, sendingClass, _externalLinkTool);
                 window.ShowDialog();
             }
@@ -53,6 +54,7 @@ namespace GUI
             {
                 Button button = (Button)sender;
                 CadLinkViewModel sendingClass = (CadLinkViewModel)button.DataContext;
+                sendingClass.UpdateModel();
                 CadLinkViewsWindow window = new CadLinkViewsWindow(this, sendingClass, _externalLinkTool);
                 window.ShowDialog();
             }

@@ -13,7 +13,8 @@ namespace ExternalLinkControl
         public CADLinkType CadLinkType { get; set; }
 
         List<View> _views;
-        
+        List<View> _viewTemplates;
+
         public CadLinkViewModel(CADLinkType cadLinkType, List<View> views)
         {
             CadLinkType = cadLinkType;
@@ -23,13 +24,24 @@ namespace ExternalLinkControl
         public void CreateViewModels()
         {
             CadViewModels = new List<CadViewModel>();
+            _viewTemplates = _views.Where(e => e.IsTemplate).ToList();
             foreach (View v in _views)
             {
-                CadViewModel model = CadViewModel.Initialize(v, CadLinkType);
+                CadViewModel model = CadViewModel.Initialize(v, CadLinkType, _viewTemplates);
                 if (model.CategoryExistsInView)
                 {
                     CadViewModels.Add(model);
                 }
+            }
+        }
+
+        public void UpdateModel()
+        {
+            foreach (CadViewModel model in CadViewModels)
+            {
+                model.UpdateVisibility();
+                model.UpdatePreselectedTemplate();
+                model.UpdateControlledBy();
             }
         }
     }

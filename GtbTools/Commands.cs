@@ -1145,10 +1145,12 @@ namespace GtbTools
                 if (externalLinkTool.Action == ExternalLinkControl.ExternalLinkToolAction.ModifyRvtLink)
                 {
                     externalLinkTool.ExternalLinkToolViewModel.ApplyChangesInRvtLinks();
+                    externalLinkTool.SignalEvent.Set();
                 }
                 if (externalLinkTool.Action == ExternalLinkControl.ExternalLinkToolAction.ModifyCadLink)
                 {
                     externalLinkTool.ExternalLinkToolViewModel.ApplyChangesInCadLinks();
+                    externalLinkTool.SignalEvent.Set();
                 }
 
             }
