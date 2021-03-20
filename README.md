@@ -36,3 +36,4 @@ Zadanie polegalo na wyeksportowaniu do poszczegolnych arkuszu liczby urzadzen ok
 
 6. ViewCoordsTool - program zapisuje do pliku, odczytuje z pliku koordynaty 2d i 3d. Kopiuje aktualne koordynaty 2d na inne widoki.
 
+7. FamilyTools - program wstawia parametry shared i wstawia do nich formule przypisujaca wartosc, ktora jest przypisana do konektora wg kolejnosci. Program modyfikuje rodziny w ktorych widocznosc byla kontrolowana przez wiele checkboxow w zaleznosci od typu.
