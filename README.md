@@ -34,4 +34,5 @@ pod uwage w otworowaniu.
 Otrzymalismy od klienta plik excel, w ktorym kazdy arkusz byl przypisany do kazdego pomieszczenia w projekcie.
 Zadanie polegalo na wyeksportowaniu do poszczegolnych arkuszu liczby urzadzen okreslonego typu wystepujacych w danym pomieszczeniu.
 
-6.
+6. ViewCoordsTool - program zapisuje do pliku, odczytuje z pliku koordynaty 2d i 3d. Kopiuje aktualne koordynaty 2d na inne widoki.
+
